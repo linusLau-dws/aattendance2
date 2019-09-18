@@ -30,49 +30,40 @@
                 app:roundedCorners="true" />
         </LinearLayout>
 
-        <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/in_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="4dp"
-            android:enabled="false"
-            android:text="@string/bluetooth_in"
-            app:bootstrapBrand="success"
-            app:bootstrapSize="xl"
-            app:roundedCorners="true" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
-            <!--android:id="@+id/meal_out_button"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="80dp"-->
-            <!--android:layout_marginBottom="4dp"-->
-            <!--android:enabled="false"-->
-            <!--android:text="@string/bluetooth_meal_out"-->
-            <!--app:bootstrapBrand="success"-->
-            <!--app:bootstrapSize="xl"-->
-            <!--app:roundedCorners="true" />-->
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/in_button"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/nfc_in"
+                android:textSize="@dimen/bootstrap_h1_text_size"
+                app:bootstrapBrand="primary"
+                app:bootstrapSize="xl"
+                app:roundedCorners="true" />
 
-        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
-            <!--android:id="@+id/meal_in_button"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="80dp"-->
-            <!--android:layout_marginBottom="4dp"-->
-            <!--android:enabled="false"-->
-            <!--android:text="@string/bluetooth_meal_in"-->
-            <!--app:bootstrapBrand="success"-->
-            <!--app:bootstrapSize="xl"-->
-            <!--app:roundedCorners="true" />-->
-
-        <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/out_button"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="4dp"
-            android:enabled="false"
-            android:text="@string/bluetooth_out"
-            app:bootstrapBrand="success"
-            app:bootstrapSize="xl"
-            app:roundedCorners="true" />
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/out_button"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/nfc_out"
+                android:textSize="@dimen/bootstrap_h1_text_size"
+                app:bootstrapBrand="primary"
+                app:bootstrapSize="xl"
+                app:roundedCorners="true" />
+        </LinearLayout>
 
         <!--<com.evrencoskun.tableview.TableView-->
         <!--android:id="@+id/content_container"-->

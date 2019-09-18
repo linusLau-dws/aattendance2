@@ -30,6 +30,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     static final String BT_Description = "description";
     static final String BT_Name = "name";
     static final String BT_SyncTime = "sync_time";
+    // Added Sep 2019
+    static final String BT_EmployeeNumber = "employee_number";
 
     // Receivers
     static final String BD_Name = "name";
@@ -71,7 +73,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + BT_Status + " INT, "
                     + BT_Description + " VARCHAR, "
                     + BT_Name + " VARCHAR, "
-                    + BT_SyncTime + " VARCHAR)";
+                    + BT_SyncTime + " VARCHAR, "
+                    + BT_EmployeeNumber + " VARCHAR)";
             database.execSQL(CREATE_TABLE7);
 
             String CREATE_TABLE8 = "CREATE TABLE " + TABLE_BLUETOOTH_RECEPTORS + " ("

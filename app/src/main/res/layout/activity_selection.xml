@@ -1,0 +1,75 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context="hk.com.dataworld.leaveapp.SelectionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnLocationRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_autocomplete_separator_start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/content_page_color_botton_a"
+            android:text="LOCATION REGISTRATION"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorButtonText"
+            app:layout_constraintBottom_toTopOf="@+id/btnLeaveApproval"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.583"
+            app:layout_constraintStart_toEndOf="@+id/btnNewworker" />
+
+        <Button
+            android:id="@+id/btnTimecardRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_autocomplete_separator_start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/content_page_color_botton_b"
+            android:text="TIMECARD REGISTRATION"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorButtonText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.583" />
+
+        <Button
+            android:id="@+id/btnPunch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_autocomplete_separator_start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/content_page_color_botton_d"
+            android:text="TIME CARD"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorButtonText"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.583"
+            app:layout_constraintStart_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/btnSupervisorMode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_autocomplete_separator_start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/content_page_color_botton_f"
+            android:text="SUPERVISOR MODE"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorButtonText" />
+    </LinearLayout>
+</ScrollView>

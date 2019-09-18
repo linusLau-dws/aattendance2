@@ -57,6 +57,12 @@
         <activity
             android:name=".ZxingViewActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SelectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SupervisorActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".BootCompleteReceiver"
