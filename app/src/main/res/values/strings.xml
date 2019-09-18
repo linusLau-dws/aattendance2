@@ -177,7 +177,7 @@
     <string name="qrcode">Scan QR Code</string>
     <string name="barcode">Scan Barcode</string>
 
-    <string name="nfc_function_unavailable">Your card does not support NFC.</string>
+    <string name="nfc_function_unavailable">Your device does not support NFC.</string>
     <string name="nfc_not_enabled">NFC is not enabled.</string>
     <string name="nfc_searching">Searching for attendance logger, please wait…</string>
     <string name="nfc_disable_nfc">You may now disable NFC to save power.</string>

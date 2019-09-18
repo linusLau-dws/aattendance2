@@ -3,13 +3,17 @@ package hk.com.dataworld.iattendance;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.MifareClassic;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -88,8 +92,11 @@ import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 
 public class BluetoothNewActivity extends BaseActivity {
 
-    private TableLayout mTableLayout;
     private BluetoothAdapter mBluetoothAdapter;
+    private PendingIntent mPendingIntent;
+    private IntentFilter[] mIntentFilters;
+
+    private TableLayout mTableLayout;
     private CountDownTimer mCountdownTimer;
 
     private String mToken;
@@ -110,6 +117,17 @@ public class BluetoothNewActivity extends BaseActivity {
     private int mInOut = -1;
 
     private BluetoothLeScannerCompat mScanner = BluetoothLeScannerCompat.getScanner();
+
+    private static String[][] mTechList = new String[][]{
+            new String[]{MifareClassic.class.getName()},
+            new String[]{android.nfc.tech.MifareUltralight.class.getName()},
+            new String[]{android.nfc.tech.Ndef.class.getName()},
+            new String[]{android.nfc.tech.NfcA.class.getName()},
+            new String[]{android.nfc.tech.NfcB.class.getName()},
+            new String[]{android.nfc.tech.NfcF.class.getName()},
+            new String[]{android.nfc.tech.NfcV.class.getName()}
+    };
+    private NfcAdapter mNfcAdapter;
 
     private void startAttendanceSyncService() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -162,6 +180,11 @@ public class BluetoothNewActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mBaseURL = extendBaseUrl(prefs.getString(PREF_SERVER_ADDRESS, ""));
         mToken = prefs.getString(PREF_TOKEN, "");
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mPendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mIntentFilters = new IntentFilter[]{};
 
         // Used to be started on SelectionActivity
         startAttendanceSyncService();
@@ -572,6 +595,13 @@ public class BluetoothNewActivity extends BaseActivity {
         mDialog.setCancelable(false);
         mDialog.show();
 
+
+        //region NFC
+        mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mTechList);
+        //endregion
+
+
+        //region Bluetooth
         ScanSettings settings = new ScanSettings.Builder()
                 .setLegacy(false)
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).setReportDelay(0)
@@ -762,6 +792,7 @@ public class BluetoothNewActivity extends BaseActivity {
                 Log.i("Scan", "failed " + errorCode);
             }
         });
+        //endregion
 
         mCountdownTimer = new CountDownTimer(1000 * 30, 1000 * SCAN_TIMEOUT_SECONDS) {
             @Override
