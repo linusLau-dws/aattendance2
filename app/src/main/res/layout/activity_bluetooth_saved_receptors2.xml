@@ -7,30 +7,38 @@
     android:padding="8dp">
 
     <LinearLayout
+        android:id="@+id/header_control"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <com.beardedhen.androidbootstrap.BootstrapLabel
             android:id="@+id/methods_enabled"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/bootstrap_h4_text_size" />
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/qrcode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:bootstrapBrand="primary"/>
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="md" />
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/barcode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:bootstrapBrand="primary"/>
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="md" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/text_and_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/header_control"
+        android:layout_alignBottom="@id/header_control"
         android:orientation="horizontal"
         android:paddingBottom="4dp">
 

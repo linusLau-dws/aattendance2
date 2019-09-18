@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <LinearLayout
+        android:id="@+id/bluetooth_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/instructions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/instructions_txt"
+                android:textSize="@dimen/bootstrap_h3_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/reg_form_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:id="@+id/reg_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/serial_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/serial"
+                            android:text="@string/serial_colon" />
+
+                        <TextView
+                            android:id="@+id/serial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <!--android:text="12:34:45:56 "-->
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/status_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/status_txt"
+                            android:text="@string/status_colon" />
+
+                        <TextView
+                            android:id="@+id/status_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/employee_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/employee_dropdown"
+                            android:text="@string/pls_select_employee" />
+
+                        <hk.com.dataworld.iattendancenfc.EmploymentDropdown
+                            android:id="@+id/employee_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" "
+                            android:textColor="@color/colorWhite"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapSize="md"
+                            app:dropdownResource="@array/placeholder"
+                            app:roundedCorners="true" />
+
+                    </TableRow>
+
+                    <!--<TableRow-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/zone_label"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:labelFor="@+id/employee_dropdown"-->
+                    <!--android:text="@string/zone" />-->
+
+                    <!--<hk.com.dataworld.iattendancenfc.EmploymentDropdown-->
+                    <!--android:id="@+id/zone_dropdown"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text=" "-->
+                    <!--android:textColor="@color/colorWhite"-->
+                    <!--app:bootstrapBrand="primary"-->
+                    <!--app:bootstrapSize="md"-->
+                    <!--app:dropdownResource="@array/placeholder"-->
+                    <!--app:roundedCorners="true" />-->
+
+                    <!--</TableRow>-->
+                    <!--<TableRow-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/station_label"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:labelFor="@+id/employee_dropdown"-->
+                    <!--android:text="@string/pls_select_employee" />-->
+
+                    <!--<hk.com.dataworld.iattendancenfc.EmploymentDropdown-->
+                    <!--android:id="@+id/station_dropdown"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text=" "-->
+                    <!--android:textColor="@color/colorWhite"-->
+                    <!--app:bootstrapBrand="primary"-->
+                    <!--app:bootstrapSize="md"-->
+                    <!--app:dropdownResource="@array/placeholder"-->
+                    <!--app:roundedCorners="true" />-->
+
+                    <!--</TableRow>-->
+                </TableLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:paddingTop="24dp">
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/reassign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:bootstrapBrand="success"
+                        app:bootstrapText="@string/reassign"
+                        app:roundedCorners="true" />
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:bootstrapBrand="success"
+                        app:bootstrapText="@string/register"
+                        app:roundedCorners="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/foundDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text=""
+                android:translationZ="1dp" />
+        </FrameLayout>
+
+        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+        <!--android:id="@+id/meal_out_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:enabled="false"-->
+        <!--android:text="@string/nfc_meal_out"-->
+        <!--app:bootstrapBrand="success"-->
+        <!--app:bootstrapSize="xl"-->
+        <!--app:roundedCorners="true" />-->
+
+        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+        <!--android:id="@+id/meal_in_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:enabled="false"-->
+        <!--android:text="@string/nfc_meal_in"-->
+        <!--app:bootstrapBrand="success"-->
+        <!--app:bootstrapSize="xl"-->
+        <!--app:roundedCorners="true" />-->
+
+        <!--<com.evrencoskun.tableview.TableView-->
+        <!--android:id="@+id/content_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/bluetooth_container2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/regd_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/regd_header"
+            android:textStyle="bold" />
+
+        <com.evrencoskun.tableview.TableView
+            android:id="@+id/employmentTableView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/regd_button_panel"
+            android:layout_below="@+id/regd_header" />
+
+        <LinearLayout
+            android:id="@+id/regd_button_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="end"
+            android:paddingTop="4dp">
+            <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--app:bootstrapBrand="success"-->
+            <!--android:id="@+id/register"-->
+            <!--app:bootstrapText="Register"-->
+            <!--android:layout_marginEnd="4dp"/>-->
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                app:bootstrapBrand="danger"
+                app:bootstrapText="@string/remove_linkage"
+                app:roundedCorners="true" />
+        </LinearLayout>
+
+        <!--<HorizontalScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="gone">-->
+
+        <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<TableLayout-->
+        <!--android:id="@+id/myRecords"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<TableRow-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="@dimen/bootstrap_h4_hori_padding"-->
+        <!--android:text="@string/nfc_record_date_time"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="@dimen/bootstrap_h4_hori_padding"-->
+        <!--android:text="@string/nfc_record_in_out"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView8"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="@dimen/bootstrap_h4_hori_padding"-->
+        <!--android:text="@string/nfc_record_status"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView10"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/nfc_record_sync_time"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--</TableRow>-->
+        <!--</TableLayout>-->
+        <!--</ScrollView>-->
+        <!--</HorizontalScrollView>-->
+    </RelativeLayout>
+</LinearLayout>

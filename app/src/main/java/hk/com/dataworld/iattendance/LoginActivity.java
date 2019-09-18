@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONException;
@@ -70,7 +71,7 @@ public class LoginActivity extends BaseActivity {
     private static SecureRandom rnd = new SecureRandom();
     protected String baseUrl, deviceId;
     private RequestQueue mRequestQueue;
-    private EditText mUsernameEdit, mPasswordEdit;
+    private BootstrapEditText mUsernameEdit, mPasswordEdit;
     private Button mLoginButton;
     private TextView mVersionNameEdit;
     private CheckBox mRememberMe;

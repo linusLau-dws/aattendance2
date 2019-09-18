@@ -175,4 +175,93 @@
     <string name="nfc">NFC</string>
     <string name="qrcode">Scan QR Code</string>
     <string name="barcode">Scan Barcode</string>
+
+    <string name="nfc_function_unavailable">Your card does not support NFC.</string>
+    <string name="nfc_not_enabled">NFC is not enabled.</string>
+    <string name="nfc_searching">Searching for attendance logger, please wait…</string>
+    <string name="nfc_disable_nfc">You may now disable NFC to save power.</string>
+    <string name="nfc_go_to_settings">Go to NFC settings</string>
+
+    <string name="nfc_name">Card NFC Name</string>
+    <string name="nfc_address">NFC Address</string>
+    <string name="nfc_description">Location</string>
+    <string name="nfc_dbm">Strength</string>
+    <string name="nfc_receptor_not_found">List of NFC Discovery</string>
+    <string name="nfc_in">IN</string>
+    <string name="nfc_meal_out">MEAL OUT</string>
+    <string name="nfc_meal_in">MEAL IN</string>
+    <string name="nfc_out">OUT</string>
+    <string name="nfc_check_bd_logo">NFC Discovery List</string>
+
+    <string name="nfc_record_date_time">Date/Time</string>
+    <string name="nfc_record_in_out">In/Out</string>
+    <string name="nfc_record_status">Status</string>
+    <string name="nfc_record_sync_time">Sync Date/Time</string>
+
+    <string name="nfc_saved_receptor">Saved Receptors</string>
+    <string name="nfc_add_to_saved_receptors">{fa_plus} Save Receptor</string>
+
+    <string name="nfc_success">Checked in!</string>
+
+    <string name="nfc_filter">Filter: </string>
+    <string name="nfc_show_searching_card">Show Searching Card</string>
+    <string name="nfc_hide_searching_card">Hide Searching Card</string>
+
+    <string name="supervisor_edition">{fa_users} Supervisor mode</string>
+    <string name="supervisor_edition_plain">Supervisor mode</string>
+    <string name="employment_number_colon">Employment number:</string>
+    <string name="employment_number">Employment number</string>
+
+    <string name="instructions_txt">Please tap zone card on the device to register.</string>
+    <!--<string name="instructions_txt">Please tap employee card on the device to register.</string>-->
+    <string name="serial_colon">Serial: </string>
+    <string name="pls_select_employee">Please select employee: </string>
+    <string name="succ_registered">Card %1$s registered successfully.</string>
+    <string name="succ_reassigned">Card %1$s reassigned successfully.</string>
+    <string name="succ_unregd">Card %s$1 unassigned successfully.</string>
+
+    <string name="register">{fa_user-plus} Register</string>
+    <string name="reassign">{fa_pencil-square} Reassign</string>
+    <string name="remove_linkage">{fa_user-times} Remove linkage</string>
+    <string name="regd_header">Registered time cards</string>
+    <string name="status_colon">Status: </string>
+    <string name="assigned">Assigned to %1$s</string>
+    <string name="unassigned">Unassigned</string>
+    <string name="reassign_warning">Attention! This card has been previously registered, are you sure you want to reassign it?</string>
+
+    <string name="header1">Station Name</string>
+    <!--<string name="header1">English Name</string>-->
+    <string name="header2">Zone Name</string>
+    <!--<string name="header2">Chinese Name</string>-->
+    <string name="header3">Zone #</string>
+    <!--<string name="header3">Employment #</string>-->
+    <string name="header4">Serial</string>
+
+    <string name="station">Station</string>
+    <string name="zone">Zone</string>
+
+    <string name="all_records">{fa_archive} All records</string>
+    <string name="all_records_plain">All records</string>
+
+    <string name="english_name">English Name</string>
+    <string name="chinese_name">Chinese Name</string>
+    <string name="staff_number">Staff Num</string>
+    <string name="user_agent">User Agent</string>
+
+    <string name="timeCardRegistrationTitle">TIME CARD REGISTRATION</string>
+    <string name="zoneRegistrationTitle">ZONE CARD REGISTRATION</string>
+    <string name="punchTitle">PUNCH</string>
+    <string name="settingsTitle">SETTINGS</string>
+    <string name="logoutTitle">LOGOUT</string>
+
+    <string name="TimeCardRegistration">Time Card Registration</string>
+    <string name="TimeCardRegistrationInstructions">Please scan your card on the back of mobile phone.</string>
+    <string name="ZoneCardRegistration">Zone Card Registration</string>
+    <string name="StaffName">Staff Name:</string>
+    <string name="HKID">HKID:</string>
+    <string name="MobilePhone">Mobile Phone:</string>
+    <string name="TimeCardNumber">Time Card number:</string>
+
+    <string name="segmented_supervisor">Supervisor</string>
+    <string name="segmented_self_service">Self-service</string>
 </resources>

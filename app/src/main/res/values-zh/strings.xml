@@ -175,4 +175,95 @@
     <string name="nfc">NFC</string>
     <string name="qrcode">掃瞄二維碼</string>
     <string name="barcode">掃瞄條碼</string>
+
+    <string name="nfc_function_unavailable">你的裝置並不支援NFC。</string>
+    <string name="nfc_not_enabled">NFC並未啟用。</string>
+    <string name="nfc_searching">搜尋簽到裝置中，請稍候……</string>
+    <string name="nfc_disable_nfc">你現在可關閉NFC，以節省電源。</string>
+    <string name="nfc_go_to_settings">前往NFC設定</string>
+
+    <string name="nfc_name">裝置NFC名稱</string>
+    <string name="nfc_address">NFC地址</string>
+    <string name="nfc_description">位置</string>
+    <string name="nfc_dbm">強度</string>
+    <string name="nfc_receptor_not_found">已發現NFC裝置列表</string>
+    <string name="nfc_in">入</string>
+    <string name="nfc_meal_out">午膳外出</string>
+    <string name="nfc_meal_in">午膳歸來</string>
+    <string name="nfc_out">出</string>
+    <string name="nfc_check_bd_logo">已發現NFC裝置列表</string>
+
+    <string name="nfc_record_date_time">日期/時間</string>
+    <string name="nfc_record_in_out">入/出</string>
+    <string name="nfc_record_status">同步狀態</string>
+    <string name="nfc_record_sync_time">同步時間</string>
+
+    <string name="nfc_saved_receptor">已儲存的NFC接收器</string>
+    <string name="nfc_add_to_saved_receptors">儲存NFC接收器</string>
+
+    <string name="nfc_success">已報到！</string>
+
+    <string name="nfc_filter">篩選：</string>
+    <string name="nfc_show_searching_card">顯示尋找裝置</string>
+    <string name="nfc_hide_searching_card">隱藏尋找裝置</string>
+
+    <string name="supervisor_edition">{fa_users} 主管模式</string>
+    <string name="supervisor_edition_plain">主管模式</string>
+    <string name="employment_number_colon">員工編號：</string>
+    <string name="employment_number">員工編號</string>
+
+    <string name="instructions_txt">請拍卡以登記分區</string>
+    <!--<string name="instructions_txt">請拍卡以登記員工</string>-->
+    <string name="serial_colon">卡序號：</string>
+    <string name="pls_select_employee">請選擇分區：</string>
+    <!--<string name="pls_select_employee">請選擇僱員：</string>-->
+    <string name="succ_registered">成功登記僱員卡 %1$s。</string>
+    <string name="succ_reassigned">成功更新僱員卡 %1$s。</string>
+    <string name="succ_unregd">成功移除僱員卡 %1$s 的連結。</string>
+
+    <string name="register">{fa_user-plus} 登記</string>
+    <string name="reassign">{fa_pencil-square} 更換分區</string>
+    <!--<string name="reassign">{fa_pencil-square} 更換僱員</string>-->
+    <string name="remove_linkage">{fa_user-times} 移除連結</string>
+    <string name="regd_header">已登記的考勤卡</string>
+    <string name="status_colon">狀態：</string>
+    <string name="assigned">已連結至 %1$s</string>
+    <string name="unassigned">未連結</string>
+    <string name="reassign_warning">確定要更換成其他僱員嗎？</string>
+
+    <string name="header1">區域名稱</string>
+    <!--<string name="header1">英文名稱</string>-->
+    <string name="header2">分區名稱</string>
+    <!--<string name="header2">中文名稱</string>-->
+    <string name="header3">分區編號</string>
+    <!--<string name="header3">僱員編號</string>-->
+    <string name="header4">卡序號</string>
+
+    <string name="station">區域 (Station): </string>
+    <string name="zone">分區 (Zone): </string>
+
+    <string name="all_records">{fa_archive} 所有出入記錄</string>
+    <string name="all_records_plain">所有出入記錄</string>
+
+    <string name="english_name">英文名稱</string>
+    <string name="chinese_name">中文名稱</string>
+    <string name="staff_number">員工編號</string>
+    <string name="user_agent">手機型號</string>
+
+    <string name="timeCardRegistrationTitle">時卡登記</string>
+    <string name="zoneRegistrationTitle">地卡登記</string>
+    <string name="punchTitle">簽到</string>
+    <string name="settingsTitle">設定</string>
+    <string name="logoutTitle">登出</string>
+
+    <string name="TimeCardRegistration">時卡登記</string>
+    <string name="TimeCardRegistrationInstructions">請把卡片放在手機背面。</string>
+    <string name="ZoneCardRegistration">地卡登記</string>
+    <string name="StaffName">員工名稱：</string>
+    <string name="HKID">身分證號碼：</string>
+    <string name="MobilePhone">手機號碼：</string>
+    <string name="TimeCardNumber">時卡編號：</string>
+
+    <string name="segmented_supervisor">主管模式</string>
+    <string name="segmented_self_service">自助服務</string>
 </resources>

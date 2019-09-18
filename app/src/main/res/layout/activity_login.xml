@@ -1,65 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@drawable/login_page_bg"
+    android:scaleType="fitXY"
+    tools:context="hk.com.dataworld.leaveapp.LoginActivity">
 
-    <EditText
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/etName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96"
+        android:src="@drawable/login_page_icon" />
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="230dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:hint="@string/et_name"
         android:inputType="textPersonName"
         android:paddingLeft="5dp"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/colorDisplayText"
+        android:textSize="@dimen/bootstrap_h2_text_size"
+        app:bootstrapSize="xl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.139"
+        app:roundedCorners="true" />
 
-    <EditText
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:hint="@string/et_password"
         android:inputType="textPassword"
         android:paddingLeft="5dp"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/bootstrap_h2_text_size"
+        app:bootstrapSize="xl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etName"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintVertical_bias="0.034"
+        app:roundedCorners="true" />
 
     <CheckBox
         android:id="@+id/cbRememberMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/remember_me"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.097" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -67,26 +89,22 @@
         android:layout_width="109dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_bg_rounded_corners"
         android:text="@string/btn_login"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/colorButtonText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbRememberMe"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/cbRememberMe"
+        app:layout_constraintEnd_toEndOf="@+id/etPassword" />
 
     <TextView
         android:id="@+id/textView"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/tv_version"
         android:textColor="@color/colorDisplayText"
@@ -97,6 +115,7 @@
 
     <TextView
         android:id="@+id/tvVersionName"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
