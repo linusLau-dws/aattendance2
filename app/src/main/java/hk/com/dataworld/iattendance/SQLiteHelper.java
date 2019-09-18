@@ -15,6 +15,10 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
+    // Offline Users
+    static final String USR_USERNAME = "username";
+    static final String USR_HASH = "hash";
+
     // Actual Record
     static final String BT_DateTime = "datetime";
     static final String BT_Address = "address";
@@ -36,9 +40,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String TAG = SQLiteHelper.class.getSimpleName();
     private static final int VERSION = 1;
 
+    private static final String TABLE_OFFLINE_USERS = "OfflineUsers";
     private static final String TABLE_BLUETOOTH_ATTENDANCE = "BluetoothAttendance";
     private static final String TABLE_BLUETOOTH_RECEPTORS = "BluetoothReceptors";
-    private static final String TABLE_NOTIFICATIONS = "Notifications";
+//    private static final String TABLE_NOTIFICATIONS = "Notifications";
 
     private static String DATABASE_NAME = "HRMSDataBase";
     SQLiteDatabase myDB;
@@ -51,6 +56,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         try {
+            String CREATE_TABLE6 = "CREATE TABLE " + TABLE_OFFLINE_USERS + " ("
+                    + USR_USERNAME + " VARCHAR PRIMARY KEY, "
+                    + USR_HASH + " VARCHAR)";
+            database.execSQL(CREATE_TABLE6);
+
             String CREATE_TABLE7 = "CREATE TABLE " + TABLE_BLUETOOTH_ATTENDANCE + " ("
                     + BT_DateTime + " VARCHAR PRIMARY KEY, "
                     + BT_Address + " VARCHAR, "
@@ -79,6 +89,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Perform DB onUpgrade");
         try {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_USERS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLUETOOTH_ATTENDANCE);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLUETOOTH_RECEPTORS);
             onCreate(db);
@@ -107,6 +118,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
     // region 2019.01.11 Bluetooth Attendance
+
+    String getUsrHash(String usrname) {
+        Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + " FROM " + TABLE_OFFLINE_USERS, new String[]{usrname});
+        cursor.moveToFirst();
+        String h = cursor.getString(0);
+        cursor.close();
+        return h;
+    }
 
     String findZoneCodeByAddress(String address) {
         Cursor cursor = myDB.rawQuery("SELECT " + BD_ZoneCode + " FROM " + TABLE_BLUETOOTH_RECEPTORS + " WHERE " + BD_Address + " = ?", new String[]{address});

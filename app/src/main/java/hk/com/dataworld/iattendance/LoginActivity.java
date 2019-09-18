@@ -905,7 +905,20 @@ public class LoginActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }, getGenericErrorListener(this, pd));
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Cannot reach server, consult SQLite table OfflineUsers instead.
+                DBCreate();
+                dbHelper.openDB();
+                String mHash = dbHelper.getUsrHash(mUsernameEdit.getText().toString());
+                dbHelper.closeDB();
+                if (mHash.equals(md5(mPasswordEdit.getText().toString()))) {
+                    Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });   //getGenericErrorListener(this, pd)
         mRequestQueue.add(nonceRequest);
     }
 

@@ -35,6 +35,8 @@ dependencies {
     implementation 'com.evrencoskun.library:tableview:0.8.7'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     implementation 'no.nordicsemi.android.support.v18:scanner:1.2.0'
+    implementation 'com.google.zxing:core:3.4.0'
+
     implementation files('libs/commons-codec-1.11.jar')
     implementation files('libs/commons-codec-1.11-javadoc.jar')
 }

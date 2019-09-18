@@ -35,6 +35,15 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.multi.ByQuadrantReader;
+import com.google.zxing.multi.GenericMultipleBarcodeReader;
+import com.google.zxing.qrcode.QRCodeReader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -750,6 +759,45 @@ public class BluetoothNewActivity extends BaseActivity {
         Snackbar.make(findViewById(R.id.scrollView), res, Snackbar.LENGTH_SHORT)
                 .show();
     }
+
+    private void readQrcode() {
+        QRCodeReader qrCodeReader = new QRCodeReader();
+        try {
+            qrCodeReader.decode(null);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (ChecksumException e) {
+            e.printStackTrace();
+        } catch (FormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readBarcode() {
+        MultiFormatReader multiReader = new MultiFormatReader();
+        GenericMultipleBarcodeReader byquadReader = new GenericMultipleBarcodeReader(new ByQuadrantReader(multiReader));
+//        Dictionary<DecodeHintType, object> hints = new Dictionary<DecodeHintType, object>();
+//        hints.Add(DecodeHintType.TRY_HARDER, true);
+//        List<BarcodeFormat> formats = new List<BarcodeFormat>();
+//        formats.Add(BarcodeFormat.All_1D);
+//        formats.Add(BarcodeFormat.QR_CODE);
+//        hints.Add(DecodeHintType.POSSIBLE_FORMATS, formats);
+//        byquadresults = byquadReader.decodeMultiple(binaryBitmap, hints);
+//        GenericMultipleBarcodeReader qrCodeReader = new GenericMultipleBarcodeReader();
+
+
+
+//        try {
+//            qrCodeReader.decode(null);
+//        } catch (NotFoundException e) {
+//            e.printStackTrace();
+//        } catch (ChecksumException e) {
+//            e.printStackTrace();
+//        } catch (FormatException e) {
+//            e.printStackTrace();
+//        }
+    }
+
 
     private void trySyncHistory() {
         try {
