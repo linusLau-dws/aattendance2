@@ -494,9 +494,24 @@ public class BluetoothNewActivity extends BaseActivity {
                 qrcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
                 .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
 
+                qrcode_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
+                        startActivity(zxing);
+                    }
+                });
+
                 BootstrapButton barcode_btn = findViewById(R.id.barcode_button);
                 barcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
                         .addFontAwesomeIcon(FontAwesome.FA_BARCODE).addText(getString(R.string.barcode)).build());
+                barcode_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
+                        startActivity(zxing);
+                    }
+                });
 
                 ImageView anim = findViewById(R.id.searching_anim);
                 Glide.with(BluetoothNewActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);
