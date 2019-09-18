@@ -32,6 +32,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapLabel;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
+import com.beardedhen.androidbootstrap.font.MaterialIcons;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.google.android.material.snackbar.Snackbar;
@@ -480,6 +484,19 @@ public class BluetoothNewActivity extends BaseActivity {
                         startActivity(retMenu);
                     }
                 });
+
+                BootstrapLabel enabledMethodsLbl = findViewById(R.id.methods_enabled);
+                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth))
+                .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
+
+                BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
+                qrcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
+
+                BootstrapButton barcode_btn = findViewById(R.id.barcode_button);
+                barcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                        .addFontAwesomeIcon(FontAwesome.FA_BARCODE).addText(getString(R.string.barcode)).build());
 
                 ImageView anim = findViewById(R.id.searching_anim);
                 Glide.with(BluetoothNewActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);

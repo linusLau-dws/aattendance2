@@ -7,6 +7,27 @@
     android:padding="8dp">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.beardedhen.androidbootstrap.BootstrapLabel
+            android:id="@+id/methods_enabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/qrcode_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bootstrapBrand="primary"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/barcode_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bootstrapBrand="primary"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/text_and_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

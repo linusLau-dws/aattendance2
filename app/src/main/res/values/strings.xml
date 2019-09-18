@@ -170,4 +170,9 @@
     <string name="sync_data">Try Sync Data</string>
     <string name="please_open"></string>
     <string name="syncronised">Syncronised!</string>
+
+    <string name="bluetooth">Bluetooth</string>
+    <string name="nfc">NFC</string>
+    <string name="qrcode">Scan QR Code</string>
+    <string name="barcode">Scan Barcode</string>
 </resources>
