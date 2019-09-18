@@ -405,6 +405,10 @@ public class LoginActivity extends BaseActivity {
                                     String.format("%s%s", baseUrl, "_ChangePassword"), changePwObj, new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    // Write credentials to SQLite for offline access
+                                    writeCredentialsToSqlLite(userName, md5(pw));
+
+                                    // Save password if 'Remember Me' is checked
                                     mPrefsEditor.putString(PREF_HASH, md5(pw));
                                     mPrefsEditor.putBoolean(PREF_FIRST_RUN, false);
                                     mPrefsEditor.apply();
@@ -721,6 +725,12 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    private void writeCredentialsToSqlLite(String u, String h) {
+        dbHelper.openDB();
+        dbHelper.insertOfflineUser(u, h);
+        dbHelper.closeDB();
+    }
+
     private void nonce() {
         // IP address AlertDialog
 
@@ -814,6 +824,10 @@ public class LoginActivity extends BaseActivity {
                                                         mPrefsEditor.putBoolean(PREF_FIRST_RUN, false);
                                                         mPrefsEditor.apply();
                                                         DBCreate();
+
+                                                        // Write credentials to SQLite for offline access
+                                                        writeCredentialsToSqlLite(userName, md5);
+
                                                         pd.dismiss();
                                                         Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
                                                         startActivity(intent);

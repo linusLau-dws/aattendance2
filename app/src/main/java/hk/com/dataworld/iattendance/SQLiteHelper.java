@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     // region 2019.01.11 Bluetooth Attendance
 
     String getUsrHash(String usrname) {
-        Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + " FROM " + TABLE_OFFLINE_USERS, new String[]{usrname});
+        Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + " FROM " + TABLE_OFFLINE_USERS + " WHERE " + USR_USERNAME + " = ?", new String[]{usrname});
         cursor.moveToFirst();
         String h = cursor.getString(0);
         cursor.close();
@@ -173,6 +174,24 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String name = cursor.getString(0);
         cursor.close();
         return name;
+    }
+
+    void insertOfflineUser(String u, String h) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "INSERT OR REPLACE INTO " + TABLE_OFFLINE_USERS + " (" + USR_USERNAME + ", " + USR_HASH + ") " + " values (?,?)";
+        SQLiteStatement statement = db.compileStatement(sql);
+        db.beginTransaction();
+        Log.i(TAG, "Begin insertLeaveList Transaction");
+        try {
+            statement.clearBindings();
+            statement.bindString(1, u);
+            statement.bindString(2, h);
+            statement.execute();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            Log.i(TAG, "Finish insertLeaveList Transaction");
+        }
     }
 
     long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name) {

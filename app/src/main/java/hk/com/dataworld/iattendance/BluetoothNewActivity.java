@@ -485,10 +485,13 @@ public class BluetoothNewActivity extends BaseActivity {
                     }
                 });
 
-                BootstrapLabel enabledMethodsLbl = findViewById(R.id.methods_enabled);
+                BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
                 enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
-                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth))
-                .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
+                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth)).build());
+
+                BootstrapLabel enabledMethodsLbl2 = findViewById(R.id.nfc_enabled);
+                enabledMethodsLbl2.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                        .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
 
                 BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
                 qrcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)

@@ -10,35 +10,72 @@
         android:id="@+id/header_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-        <com.beardedhen.androidbootstrap.BootstrapLabel
-            android:id="@+id/methods_enabled"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/bootstrap_h4_text_size" />
+            android:text="@string/enabled_methods"
+            android:layout_weight="1"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapLabel
+            android:id="@+id/bluetooth_enabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/bootstrap_h6_text_size"
+            app:bootstrapBrand="primary"
+            app:roundedCorners="true" />
+
+        <com.beardedhen.androidbootstrap.BootstrapLabel
+            android:id="@+id/nfc_enabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/bootstrap_h6_text_size"
+            app:bootstrapBrand="success"
+            app:roundedCorners="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/header_control2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/header_control"
+        android:weightSum="2">
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/qrcode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:bootstrapBrand="primary"
-            app:bootstrapSize="md" />
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            app:bootstrapBrand="info"
+            app:bootstrapSize="sm"
+            app:roundedCorners="true" />
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/barcode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:bootstrapBrand="primary"
-            app:bootstrapSize="md" />
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            app:bootstrapBrand="warning"
+            app:bootstrapSize="sm"
+            app:roundedCorners="true" />
     </LinearLayout>
+
+
 
     <LinearLayout
         android:id="@+id/text_and_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/header_control"
-        android:layout_alignBottom="@id/header_control"
+        android:layout_below="@id/header_control2"
         android:orientation="horizontal"
         android:paddingBottom="4dp">
 
