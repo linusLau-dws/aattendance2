@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_iattendance">iAttendance</string>
+
+    <!--  Copyright , Terms and Conditions Message -->
+    <string name="msg_infoCopyright">
+        版權所有 © 2018 達訊顧問有限公司。保留所有權利。
+        \n\n條款及細則
+        \n\n你使用 DW-iHR Leave Manager應用程式時，會被視作接納本應用程式的條款及細則。
+        \n\n1. 達訊顧問有限公司(下稱「公司」)在DW-iHR 假期管理應用程式(下稱「本應用程式」) 登載的資料(下稱「資料」)，包括但不限於透過互聯網提供的資料，僅供一般參考用途。雖然公司已盡力確保該等資料準確無誤，但對於在任何特定情況下使用該等資料是否準確或恰當，並沒有作出明示或隱含的陳述、申述、保證或擔保。對因使用或關乎使用該等資料及本應用程式而引致的任何損失或損害，公司概不負上法律責任。
+        \n\n2. 用戶資料和透過互聯網提供的資料，僅供一般參考用途。雖然公司已盡力確保該等資料準確無誤，但對於在任何特定情況下使用該等資料是否準確或恰當，並沒有作出明示或隱含的陳述、申述、保證或擔保。對因使用或關乎使用該等資料及本應用程式而引致的任何損失或損害，公司概不負上法律責任。
+        \n\n3. 使用本服務會產生流動數據用量。如你於海外以流動數據使用本服務，須繳付數據漫遊費用。
+        \n\n4. 公司保留權利，可隨時運用其絕對酌情決定權，省略、暫停或編輯其在本應用程式編製的一切資料，而無須給予任何理由或事先通知。
+        \n\n5. 你明確了解並同意使用本應用程式的服務之風險須自行負擔。本應用程式是依「現況」及「現有」基礎提供。
+        \n\n6. 本應用程式及登載的資料均為公司的財產，其受到有關版權、商標或其他所有權的權利及法律保護。公司明確保留其法律行使權。其全部或部分內容不得修改、登載、轉傳或再度發放，或參與其轉移或伴售賣、藉以製造衍生作業或作任何形式的商業使用。
+        \n\n7. 公司保留權利於任何時間不允許您連結至本程式。若公司行使該權利，您同意即時刪除您對本程式的連結。
+        \n\n8. 你絕不可在知情或疏忽的情況下產生不必要的流量、載入電腦病毒、木馬程式、電腦蠕蟲、邏輯炸彈或其他惡意或科技上對本程式有害的資料以誤用本程式或使本程式停止運作。
+        \n\n9. 你絕不可使用本程式的服務作不合法的目的。你須嚴格遵守香港或其他地區一切與網上行為及可接受內容有關的法律法規。
+        \n\n10. 你絕不可對本程式或其任何相關伺服器、電腦或資料庫取得或嘗試取得未經許可的存取。
+        \n\n11. 公司不保證你能在不受干擾、持續或安全的情況下進入本應用程式。部分或整個應用程式可能突然在任何時段內或因各種原因不能使用，其中包括系統失靈或中斷、互聯網停機或其他技術故障；公司對此等原因並無控制權，亦概不負責。你同意自行承擔使用網站的一切相關風險，亦不就你因任何原因無法使用網站而引致的任何損害或損失，向公司追究責任。
+        \n\n12. 你陳述及保證你不會在使用本程式時參與任何下述行為︰
+        \n(a)使用本程式的服務以達到向任何其他使用者發出大量未要求傳送的信息的目的；或
+        \n(b)以查詢公司所提供資訊以外的目的使用本程式。
+        \n\n13. 若任何人因你於本程式上或經由本程式所作的行為向公司提出申索，你須對公司遭受的與該申索相關的任何形式的損害、損失及支出(包括所有律師費及其他支出)彌償公司並使公司得到全額及有效彌償。
+        \n\n14. 公司不對本程式內容的可信性、準確性、及時性、適用性及完整性提供任何保證。除本條款及細則列明(如有)外，你使用及存取本程式並不以任何形式產生任何其他關係致使公司承擔任何責任。
+        \n\n15. 公司可不時修訂及更新本條款。你已獲告知須定期經本程式檢視本條款以確保你已參閱本條款的最新版本。公司並沒有任何責任於本程式貼出通告通知你本條款的條文更新。若你於上述修訂及更新生效後繼續使用或進入本程式，你同意受經修訂的本條款所約束，而該修訂將取代所有公司以往向你提供的條款及細則。
+        \n\n16. 本免責聲明的條款受香港特別行政區的法律管限，並按香港特別行政區的法律解釋。你亦同意接受香港特別行政區法院非專有審判權的管轄。
+        \n\n17. 本免責聲明是英文原文的中譯本，如中文與英文版本之間有任何歧義，概以英文版本為準。
+        \n
+    </string>
+
+    <string name="title_activity_settings">設定</string>
+
+    <!-- Strings related to Settings -->
+    <!--  General settings -->
+    <string name="pref_header_general">基本設定</string>
+    <string name="pref_title_server_addr">伺服器位址</string>
+    <string name="pref_title_Language">語言</string>
+    <string name="pref_title_device_name">裝置名稱</string>
+
+    <string name="pref_default_device_name">在Leave Manager系統內顯示的裝置名稱</string>
+
+    <!-- Language options -->
+    <string name="pref_language_english">English</string>
+    <string name="pref_language_chinese">中文</string>
+
+    <!-- menu items -->
+    <string name="action_settings">設定</string>
+    <string name="action_logout">登出</string>
+    <string name="action_about">使用條款</string>
+
+    <!-- Action in progress -->
+    <string name="login_msg_progress">登入中…</string>
+    <string name="leave_apply_msg_progress">申請放假中…</string>
+    <string name="leave_approval_msg_progress">申請批核處理中…</string>
+    <string name="leave_withdraw_msg_progress">申請撤回處理中…</string>
+    <string name="leave_cancel_msg_progress">申請取消處理中…</string>
+    <string name="request_leave_approval_list_progress">讀取申請列表中…</string>
+    <string name="request_leave_approval_detail_progress">讀取申請資料中…</string>
+    <string name="request_leave_history_list_progress">讀取申請歷史列表中…</string>
+    <string name="request_leave_history_detail_progress">讀取申請歷史資料中…</string>
+    <string name="logout_msg_progress">登出中…</string>
+
+    <!-- Login Page -->
+    <string name="et_name">用戶</string>
+    <string name="et_password">密碼</string>
+    <string name="et_password_retype">重複密碼</string>
+    <string name="btn_login">登入</string>
+    <string name="tv_version">版本</string>
+    <string name="remember_me">記住我的登錄狀態</string>
+    <string name="password_change_mandatory">首次登入必須重設密碼。</string>
+    <string name="no_active_employments">此用戶現時沒有合約！</string>
+
+    <!-- General Information Message -->
+    <string name="msg_errorUserPwd">用戶/密碼 不正確</string>
+    <string name="msg_infoInsertRecordSuccess">記錄已成功新增</string>
+    <string name="msg_infoInsertRecordFail">記錄新增出錯!</string>
+    <string name="msg_infoNoRecordFound">沒有任何記錄!</string>
+    <string name="msg_errorEmployment">沒有僱員資料</string>
+    <string name="msg_errorNoPic">沒有照片!</string>
+    <string name="msg_errorField">沒有輸入足夠資料!</string>
+    <string name="msg_infoNoLeavePaper">申請病假請附上醫生紙</string>
+    <string name="msg_errDate">開始日期不可早於結束日期</string>
+    <string name="msg_errReject">請提供拒絕原因</string>
+    <string name="msg_infoFileDownloadOk">成功下載檔案.</string>
+    <string name="msg_infoNoPDFviewer">沒有可讀取PDF文件的工具.</string>
+    <string name="msg_sendRequest">請求已發送</string>
+    <string name="msg_dateRange">日期範圍不能多於180日</string>
+    <string name="msg_infoLogoutConfirm">確定要登出?</string>
+    <string name="msg_infoTimeoutLogin">操作逾時，請重新登入！</string>
+    <string name="msg_errorLoginFail">伺服器暫時無法提供服務，請稍後重試!</string>
+    <string name="msg_errorDataIncomplete">伺服器數據不一致，請稍後重試!</string>
+    <string name="msg_errorPasswordMismatch">兩組密碼不符！</string>
+    <string name="msg_errorPasswordTooShort">密碼須有%1$d個或以上字元。</string>
+    <string name="msg_errorPasswordUpper">密碼須有%1$d個或以上大草字母。</string>
+    <string name="msg_errorPasswordLower">密碼須有%1$d個或以上小草字母。</string>
+    <string name="msg_errorPasswordNumber">密碼須有%1$d個或以上數字。</string>
+    <string name="msg_errorPasswordSymbol">密碼須有%1$d個或以上符號。</string>
+    <string name="msg_errorNoAvailableDates">沒有符合條件的日期！</string>
+
+    <string name="msg_infoTimeout">操作逾時，請稍後再試！</string>
+    <string name="msg_errorSessionExpired">操作逾時，請重新登入。</string>
+    <string name="msg_errorNoAvailableNetworks">沒有可用網絡！請檢查設定。</string>
+    <string name="msg_errorPleaseContact">出現錯誤，請聯絡資訊科技管理員。</string>
+
+    <string name="date_mon">%1$s（一）</string>
+    <string name="date_tue">%1$s（二）</string>
+    <string name="date_wed">%1$s（三）</string>
+    <string name="date_thu">%1$s（四）</string>
+    <string name="date_fri">%1$s（五）</string>
+    <string name="date_sat">%1$s（六）</string>
+    <string name="date_sun">%1$s（日）</string>
+
+    <string name="mon_short">一)</string>
+    <string name="tue_short">二)</string>
+    <string name="wed_short">三)</string>
+    <string name="thu_short">四)</string>
+    <string name="fri_short">五)</string>
+    <string name="sat_short">六)</string>
+    <string name="sun_short">日)</string>
+
+    <!-- General Common Button -->
+    <string name="common_Close">關閉</string>
+
+    <string name="bluetooth_function_unavailable">你的裝置並不支援藍芽。</string>
+    <string name="bluetooth_not_enabled">藍芽並未啟用。</string>
+    <string name="bluetooth_searching">搜尋簽到裝置中，請稍候……</string>
+    <string name="bluetooth_disable_bluetooth">你現在可關閉藍芽，以節省電源。</string>
+    <string name="bluetooth_go_to_settings">前往藍芽設定</string>
+
+    <string name="bluetooth_name">裝置藍芽名稱</string>
+    <string name="bluetooth_address">藍芽地址</string>
+    <string name="bluetooth_description">位置</string>
+    <string name="bluetooth_dbm">強度</string>
+    <string name="bluetooth_receptor_not_found">已發現藍芽裝置列表</string>
+    <string name="bluetooth_in">入</string>
+    <string name="bluetooth_meal_out">午膳外出</string>
+    <string name="bluetooth_meal_in">午膳歸來</string>
+    <string name="bluetooth_out">出</string>
+    <string name="bluetooth_check_bd_logo">已發現藍芽裝置列表</string>
+
+    <string name="bluetooth_record_date_time">日期/時間</string>
+    <string name="bluetooth_record_in_out">入/出</string>
+    <string name="bluetooth_record_status">同步狀態</string>
+    <string name="bluetooth_record_sync_time">同步時間</string>
+
+    <string name="bluetooth_saved_receptor">已儲存的藍芽接收器</string>
+    <string name="bluetooth_add_to_saved_receptors">儲存藍芽接收器</string>
+
+    <string name="status_pending">待同步</string>
+    <string name="status_syncing">同步中…</string>
+    <string name="bluetooth_success">已報到！</string>
+
+    <string name="attendance_function_requires_autotime">要使用報到同步功能，必須開啟「自動設定時間」。</string>
+    <string name="attendance_go_to_settings">前往日期與時間設定</string>
+    <string name="not_found">找不到藍芽接收器。請檢查該接收器，請聯絡系統管理員。</string>
+
+    <string name="bluetooth_filter">篩選：</string>
+    <string name="back">返回</string>
+
+    <string name="bluetooth_show_searching_device">顯示尋找裝置</string>
+    <string name="bluetooth_hide_searching_device">隱藏尋找裝置</string>
+
+    <string name="submit_plain">遞交</string>
+    <string name="server_loc_header">請輸入伺服器位置：</string>
+    <string name="loading">載入中……</string>
+    <string name="btn_attendanceCamel">上班簽到</string>
+
+    <string name="network_not_found">未連接內聯網。</string>
+    <string name="sync_data">嘗試同步</string>
+    <string name="please_open"></string>
+    <string name="syncronised">已同步！</string>
+
+</resources>

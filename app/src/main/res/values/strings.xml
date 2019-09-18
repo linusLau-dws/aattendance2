@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_iattendance">iAttendance</string>
+
+    <!--   Copyright , Terms and Conditions Message -->
+    <string name="msg_infoCopyright">
+        Copyright © 2018 Data World Solutions Ltd. All rights reserved.
+        \n\nTerms and Conditions
+        \n\nYou are deemed to have accepted the Terms and Conditions provided herein when you use the Mobile App - DW-iHR Leave Manager.
+        \n\n1. The information (the “Information”) of the Mobile App – DW-iHR Leave Manager (the “Application”) provided by Data World Solutions Limited (the “Companies”) including but not limited to the user information and other information through the internet, is of general information nature only. Whilst the Companies endeavour to ensure the accuracy of the Information, no statement, representation, warranty or guarantee, expressed or implied, is given as to the accuracy or appropriateness for use in any circumstances. The Companies accept no liability for any loss or damage whatsoever and howsoever arising from the Information and the Application.
+        \n\n2. The Information may be contributed by others over whom the Companies have no influence. The Companies accept no responsibility in ensuring the correctness and validity of the Information, and accept no liability for any loss or damage whatsoever and howsoever arising from the Information contributed by others.
+        \n\n3. Data charges apply when using this Service. Roaming charges apply when using this Service overseas.
+        \n\n4. The Companies reserve the right to omit, suspend or edit the Information at any time in its absolute discretion without giving any reason or prior notice.
+        \n\n5. You expressly agree that the use of the Application is at your sole risk. The Application is provided on an “as is” and “as available” basis.
+        \n\n6. The Information and the Application are the Companies’ property. They are protected by copyright, trademarks or other intellectual property rights. The Companies expressly retain all the relevant rights and laws for enforcement. No modification, copying, publication, transfer, sale, or any commercial exploitation of any kind in whole or in part is permitted.
+        \n\n7. The Companies reserve their right to disallow you to link to this Application at any time. If the Companies assert such right, you shall remove forthwith such links to this Application.
+        \n\n8. You must not misuse or disrupt this Application by knowingly or negligently generating unnecessary traffic, introducing viruses, trojans, worms, logic bombs or other materials which may be malicious or technologically harmful to this Application.
+        \n\n9. You must not use the services of this Application for any purpose which may violate the law. You shall strictly comply with all laws and regulations in Hong Kong or elsewhere regarding online conduct and acceptable content.
+        \n\n10. You must not gain, or attempt to gain, unauthorized access to this Application or any of its related servers, computers or databases.
+        \n\n11. The Companies do not guarantee uninterrupted, continued or secured access in the Application. The Application may be unavailable at any time for any reason including system malfunction, disruption, internet access downtime or other technical problems. You agree that the use of the Application is at your own risk and that the Companies shall not be responsible and liable for any damage or loss incurred thereby.
+        \n\n12. You represent and warrant that you shall not engage in the following activities when using this Application:
+        \n(a)use the services of this Application for the purpose of spamming any other user; or
+        \n(b)use the services of this Application for any purpose other than checking the information provided therein.
+        \n\n13. If anyone brings a claim against the Companies which is attributable to your acts done in or through this Application, you shall indemnify the Companies and keep the Companies fully and effectively indemnified from and against all damages, losses, and expenses of any kind (including all legal fees and costs) related to such claim.
+        \n\n14. The Companies makes no warranty as to the reliability, accuracy, timeliness, usefulness or completeness of the information on this Application. Your access or use of this Application does not create in any way any relationship that would give rise to any duty on the part of the Companies apart from those provided for in these Terms.
+        \n\n15. The Companies may amend and update these Terms from time to time. You are reminded to regularly review these Terms through this Application to keep yourself updated on the latest version of these Terms. The Companies may, but shall in no event be obliged to, notify you of any update to the terms of these Terms by means of posts in this Application. By continuing to access or use this Application after those amendments and updates become effective, you agree to be bound by these Terms as amended, which shall supersede all previous terms and conditions the Companies has with you.
+        \n\n16. This Disclaimer shall be governed by and construed in accordance with the Laws of Hong Kong Special Administrative Region. You submit to the non-exclusive jurisdiction of the courts of Hong Kong Special Administrative Region.
+        \n\n17. This Disclaimer is also translated into Chinese language. If there is any inconsistency between the English version and the Chinese version, the English version shall prevail.
+        \n
+    </string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <!--  General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_title_server_addr">Server Location</string>
+    <string name="pref_title_Language">Language</string>
+    <string name="pref_title_device_name">Device name</string>
+
+    <string name="pref_default_device_name">Name to be displayed in Leave Manage to identify this device</string>
+
+    <!-- Language options -->
+    <string name="pref_language_english">English</string>
+    <string name="pref_language_chinese">中文</string>
+
+    <!-- Menu items -->
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_about">Terms and Conditions</string>
+
+    <!-- Action in progress -->
+    <string name="login_msg_progress">Logging in progress…</string>
+    <string name="leave_apply_msg_progress">Leave apply in progress…</string>
+    <string name="leave_approval_msg_progress">Leave approval in progress…</string>
+    <string name="leave_withdraw_msg_progress">Leave withdraw in progress…</string>
+    <string name="leave_cancel_msg_progress">Leave cancel in progress…</string>
+    <string name="request_leave_approval_list_progress">Request leave approval list in progress…</string>
+    <string name="request_leave_approval_detail_progress">Request leave approval detail in progress…</string>
+    <string name="request_leave_history_list_progress">Request leave history list in progress…</string>
+    <string name="request_leave_history_detail_progress">Request leave history detail in progress…</string>
+    <string name="logout_msg_progress">Logout in progress…</string>
+
+    <!-- Login Page -->
+    <string name="et_name">Name</string>
+    <string name="et_password">Password</string>
+    <string name="et_password_retype">Retype Password</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="tv_version">Version</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="password_change_mandatory">Your password must be changed upon the first login.</string>
+    <string name="no_active_employments">This account has no active employments! Exiting.</string>
+
+    <!-- General Information Message -->
+    <string name="msg_errorUserPwd">Incorrect User/Password</string>
+    <string name="msg_infoInsertRecordSuccess">Add Record Success</string>
+    <string name="msg_infoInsertRecordFail">Add Record Fail!</string>
+    <string name="msg_infoNoRecordFound">No Record Found!</string>
+    <string name="msg_errorEmployment">Employment information not found</string>
+    <string name="msg_errorNoPic">Photo is missing!</string>
+    <string name="msg_errorField">Some data is missing!</string>
+    <string name="msg_infoNoLeavePaper">Attach Sick Leave Paper for SL</string>
+    <string name="msg_errDate">Start Date can not earlier than End Date</string>
+    <string name="msg_errReject">Please provide reject reason</string>
+    <string name="msg_infoFileDownloadOk">File downloaded successfully.</string>
+    <string name="msg_infoNoPDFviewer">No Application available to view PDF.</string>
+    <string name="msg_sendRequest">Request been sent</string>
+    <string name="msg_dateRange">Date range must be within 180 days</string>
+    <string name="msg_infoLogoutConfirm">Confirm to Logout?</string>
+    <string name="msg_infoTimeoutLogin">Operation timeout, please Login again!</string>
+    <string name="msg_errorLoginFail">Server unavailable, please retry later!</string>
+    <string name="msg_errorDataIncomplete">Data inconsistent on server, please retry later!</string>
+    <string name="msg_errorPasswordMismatch">Passwords do not match!</string>
+    <string name="msg_errorPasswordTooShort">Passwords must be at least %1$d characters long.</string>
+    <string name="msg_errorPasswordUpper">Passwords must contain at least %1$d uppercase letters.</string>
+    <string name="msg_errorPasswordLower">Passwords must contain at least %1$d lowercase letters.</string>
+    <string name="msg_errorPasswordNumber">Passwords must contain at least %1$d digits.</string>
+    <string name="msg_errorPasswordSymbol">Passwords must contain at least %1$d symbols.</string>
+    <string name="msg_errorNoAvailableDates">No dates meet the criteria!</string>
+
+    <string name="msg_infoTimeout">Operation timeout, please try again later.</string>
+    <string name="msg_errorSessionExpired">Session expired, please re-login.</string>
+    <string name="msg_errorNoAvailableNetworks">No available network! Please check your settings.</string>
+    <string name="msg_errorPleaseContact">Error occurred, please contact your IT administrator.</string>
+
+    <string name="date_mon">%1$s (Mon)</string>
+    <string name="date_tue">%1$s (Tue)</string>
+    <string name="date_wed">%1$s (Wed)</string>
+    <string name="date_thu">%1$s (Thu)</string>
+    <string name="date_fri">%1$s (Fri)</string>
+    <string name="date_sat">%1$s (Sat)</string>
+    <string name="date_sun">%1$s (Sun)</string>
+
+    <string name="mon_short">M)</string>
+    <string name="tue_short">T)</string>
+    <string name="wed_short">W)</string>
+    <string name="thu_short">H)</string>
+    <string name="fri_short">F)</string>
+    <string name="sat_short">S)</string>
+    <string name="sun_short">U)</string>
+
+    <!-- General Common Button -->
+    <string name="common_Close">Close</string>
+
+    <string name="bluetooth_function_unavailable">Your device does not support Bluetooth.</string>
+    <string name="bluetooth_not_enabled">Bluetooth is not enabled.</string>
+    <string name="bluetooth_searching">Searching for attendance logger, please wait…</string>
+    <string name="bluetooth_disable_bluetooth">You may now disable Bluetooth to save power.</string>
+    <string name="bluetooth_go_to_settings">Go to Bluetooth settings</string>
+
+    <string name="bluetooth_name">Device Bluetooth Name</string>
+    <string name="bluetooth_address">Bluetooth Address</string>
+    <string name="bluetooth_description">Location</string>
+    <string name="bluetooth_dbm">Strength</string>
+    <string name="bluetooth_receptor_not_found">List of Bluetooth Discovery</string>
+    <string name="bluetooth_in">IN</string>
+    <string name="bluetooth_meal_out">MEAL OUT</string>
+    <string name="bluetooth_meal_in">MEAL IN</string>
+    <string name="bluetooth_out">OUT</string>
+    <string name="bluetooth_check_bd_logo">Bluetooth Discovery List</string>
+
+    <string name="bluetooth_record_date_time">Date/Time</string>
+    <string name="bluetooth_record_in_out">In/Out</string>
+    <string name="bluetooth_record_status">Status</string>
+    <string name="bluetooth_record_sync_time">Sync Date/Time</string>
+
+    <string name="bluetooth_saved_receptor">Saved Receptors</string>
+    <string name="bluetooth_add_to_saved_receptors">{fa_plus} Save Receptor</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="status_syncing">Syncing…</string>
+    <string name="bluetooth_success">Checked in!</string>
+
+    <string name="attendance_function_requires_autotime">The attendance function requires autotime to be enabled.</string>
+    <string name="attendance_go_to_settings">Go to Date &amp; Time settings</string>
+    <string name="not_found">Could not find locator device. Please check the device, and report to your IT administrator.</string>
+
+    <string name="bluetooth_filter">Filter: </string>
+    <string name="back">Back</string>
+
+    <string name="bluetooth_show_searching_device">Show Searching Device</string>
+    <string name="bluetooth_hide_searching_device">Hide Searching Device</string>
+
+    <string name="submit_plain">SUBMIT</string>
+    <string name="server_loc_header">Please enter the server address:</string>
+    <string name="loading">Loading…</string>
+    <string name="btn_attendanceCamel">Attendance</string>
+
+    <string name="network_not_found">Network not connected.</string>
+    <string name="sync_data">Try Sync Data</string>
+    <string name="please_open"></string>
+    <string name="syncronised">Syncronised!</string>
+</resources>

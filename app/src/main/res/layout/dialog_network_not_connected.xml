@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/dialog_network_not_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:text="@string/network_not_found"
+        android:textSize="@dimen/bootstrap_h3_text_size" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/dialog_sync_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/sync_data"
+            app:roundedCorners="true"
+            android:layout_weight="1"/>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/dialog_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bootstrapSize="lg"
+            app:bootstrapText="@string/common_Close"
+            app:roundedCorners="true"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>

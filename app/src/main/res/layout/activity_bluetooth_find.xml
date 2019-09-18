@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/bluetooth_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bluetooth_not_found_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/bluetooth_receptor_not_found"
+            android:textSize="@dimen/bootstrap_h5_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/bt_anim"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <com.evrencoskun.tableview.TableView
+        android:id="@+id/findTableView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_panel"
+        android:layout_below="@id/bluetooth_heading" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_panel"
+        android:layout_below="@id/bluetooth_heading"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/devices_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/bluetooth_name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/bluetooth_address"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bluetooth_dbm"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1">-->
+
+                <!--<RadioButton-->
+                <!--android:id="@+id/radioButton"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="abc" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/textView8"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="TextView" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/textView15"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="TextView" />-->
+                <!--</TableRow>-->
+
+                <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1">-->
+
+                <!--<RadioButton-->
+                <!--android:id="@+id/radioButton1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="def" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/textView10"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="TextView" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/textView16"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="TextView" />-->
+                <!--</TableRow>-->
+
+            </TableLayout>
+        </RadioGroup>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/bottom_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="4dp">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bluetooth_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:bootstrapBrand="primary"
+            app:bootstrapText="{fa_chevron-left} Back"
+            app:roundedCorners="true" />
+
+        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+        <!--android:id="@+id/bluetooth_save_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:enabled="false"-->
+        <!--app:bootstrapBrand="success"-->
+        <!--app:bootstrapText="@string/bluetooth_add_to_saved_receptors"-->
+        <!--app:roundedCorners="true" />-->
+    </RelativeLayout>
+</RelativeLayout>

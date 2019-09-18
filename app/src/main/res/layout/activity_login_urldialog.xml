@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/server_url_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/server_loc_header"
+        android:textSize="@dimen/bootstrap_h3_text_size" />
+
+    <EditText
+        android:id="@+id/server_url"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:hint="@string/pref_title_server_addr"
+        android:paddingStart="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/url_err"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="@dimen/bootstrap_h4_text_size"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/url_btnSubmit"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="109dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_bg_rounded_corners"
+        android:text="@string/submit_plain"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/colorButtonText" />
+
+</LinearLayout>

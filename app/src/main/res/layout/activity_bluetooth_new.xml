@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/bluetooth_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="end">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/find_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                app:bootstrapBrand="primary"
+                app:bootstrapSize="md"
+                app:bootstrapText="@string/bluetooth_check_bd_logo"
+                app:roundedCorners="true" />
+        </LinearLayout>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/in_button"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="4dp"
+            android:enabled="false"
+            android:text="@string/bluetooth_in"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="xl"
+            app:roundedCorners="true" />
+
+        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+            <!--android:id="@+id/meal_out_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginBottom="4dp"-->
+            <!--android:enabled="false"-->
+            <!--android:text="@string/bluetooth_meal_out"-->
+            <!--app:bootstrapBrand="success"-->
+            <!--app:bootstrapSize="xl"-->
+            <!--app:roundedCorners="true" />-->
+
+        <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+            <!--android:id="@+id/meal_in_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginBottom="4dp"-->
+            <!--android:enabled="false"-->
+            <!--android:text="@string/bluetooth_meal_in"-->
+            <!--app:bootstrapBrand="success"-->
+            <!--app:bootstrapSize="xl"-->
+            <!--app:roundedCorners="true" />-->
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/out_button"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="4dp"
+            android:enabled="false"
+            android:text="@string/bluetooth_out"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="xl"
+            app:roundedCorners="true" />
+
+        <!--<com.evrencoskun.tableview.TableView-->
+        <!--android:id="@+id/content_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <TextView
+            android:id="@+id/foundDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.evrencoskun.tableview.TableView
+            android:id="@+id/recordsTableView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.evrencoskun.tableview.TableView>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableLayout
+                    android:id="@+id/myRecords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/bootstrap_h4_hori_padding"
+                            android:text="@string/bluetooth_record_date_time"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/bootstrap_h4_hori_padding"
+                            android:text="@string/bluetooth_record_in_out"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/bootstrap_h4_hori_padding"
+                            android:text="@string/bluetooth_record_status"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/bluetooth_record_sync_time"
+                            android:textStyle="bold" />
+
+                    </TableRow>
+                </TableLayout>
+            </ScrollView>
+        </HorizontalScrollView>
+    </LinearLayout>
+</ScrollView>
