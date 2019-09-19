@@ -43,9 +43,7 @@ import com.beardedhen.androidbootstrap.font.MaterialIcons;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ChecksumException;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
@@ -65,6 +63,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
@@ -91,6 +90,10 @@ import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 
 public class BluetoothNewActivity extends BaseActivity {
+
+    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
+    private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
+    private static final int REQUEST_CODE_ENABLE_NFC = 105;
 
     private BluetoothAdapter mBluetoothAdapter;
     private PendingIntent mPendingIntent;
@@ -518,7 +521,7 @@ public class BluetoothNewActivity extends BaseActivity {
 
                 BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
                 qrcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
-                .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
+                        .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
 
                 qrcode_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -657,7 +660,7 @@ public class BluetoothNewActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName());
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -717,7 +720,7 @@ public class BluetoothNewActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName());
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -852,7 +855,6 @@ public class BluetoothNewActivity extends BaseActivity {
 //        GenericMultipleBarcodeReader qrCodeReader = new GenericMultipleBarcodeReader();
 
 
-
 //        try {
 //            qrCodeReader.decode(null);
 //        } catch (NotFoundException e) {
@@ -886,12 +888,13 @@ public class BluetoothNewActivity extends BaseActivity {
                                     JSONObject obj = arr.getJSONObject(y);
                                     dbHelper.insertLocalAttendance(obj.getString("Time")
                                             , obj.getInt("InOut")
-                                            ,""
+                                            , ""
 //                                            , dbHelper.findAddressByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                             , obj.getString("ZoneCode")
                                             , obj.getString("StationCode")
-                                            ,""
-                                            ,""
+                                            , ""
+                                            , ""
+                                            ,"Bluetooth"
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                     );
@@ -996,7 +999,10 @@ public class BluetoothNewActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+
+        if (requestCode == REQUEST_CODE_ENABLE_AUTOTIME) {
+            forceAutoTime();
+        } else if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
             if (!mBluetoothAdapter.isEnabled()) {
 //                mBluetoothAdapter.enable();
                 Intent intentBtEnabled = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1004,8 +1010,22 @@ public class BluetoothNewActivity extends BaseActivity {
             } else {
                 bluetoothContent();
             }
-        } else if (requestCode == 104) {
-            forceAutoTime();
+        } else if (requestCode == REQUEST_CODE_ENABLE_NFC) {
+            if (!mNfcAdapter.isEnabled()) {
+                //Dialog to NFC settings
+                AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                builder.setMessage(R.string.nfc_not_enabled);
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.nfc_go_to_settings, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), REQUEST_CODE_ENABLE_NFC);
+                    }
+                });
+                builder.create().show();
+            } else {
+                bluetoothContent();
+            }
         }
     }
 

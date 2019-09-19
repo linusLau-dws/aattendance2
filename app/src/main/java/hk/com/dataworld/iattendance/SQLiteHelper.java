@@ -31,7 +31,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     static final String BT_Name = "name";
     static final String BT_SyncTime = "sync_time";
     // Added Sep 2019
-    static final String BT_EmployeeNumber = "employee_number";
+    static final String BT_EmploymentNumber = "employment_number";
+    static final String BT_AuthMethod = "auth_method";
 
     // Receivers
     static final String BD_Name = "name";
@@ -74,7 +75,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + BT_Description + " VARCHAR, "
                     + BT_Name + " VARCHAR, "
                     + BT_SyncTime + " VARCHAR, "
-                    + BT_EmployeeNumber + " VARCHAR)";
+                    + BT_EmploymentNumber + " VARCHAR, "
+                    + BT_AuthMethod + " VARCHAR)";
             database.execSQL(CREATE_TABLE7);
 
             String CREATE_TABLE8 = "CREATE TABLE " + TABLE_BLUETOOTH_RECEPTORS + " ("
@@ -197,7 +199,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name) {
+    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String authmethod) {
         ContentValues values = new ContentValues();
         values.put(BT_DateTime, datetime);
         values.put(BT_InOut, inout);
@@ -207,6 +209,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(BT_Status, 0);
         values.put(BT_Description, description);
         values.put(BT_Name, name);
+        values.put(BT_AuthMethod, authmethod);
         return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
     }
 
@@ -271,6 +274,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             tmp.put(BT_Description, cur.getString(6));
             tmp.put(BT_Name, cur.getString(7));
             tmp.put(BT_SyncTime, cur.getString(8));
+            tmp.put(BT_EmploymentNumber, cur.getString(9));
+            tmp.put(BT_AuthMethod, cur.getString(10));
             attendanceRecordContents.add(tmp);
         }
         cur.close();
@@ -292,6 +297,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             tmp.put(BT_Status, cur.getInt(5));
             tmp.put(BT_Description, cur.getString(6));
             tmp.put(BT_Name, cur.getString(7));
+            // No sync time: 8
+            tmp.put(BT_EmploymentNumber, cur.getString(9));
+            tmp.put(BT_EmploymentNumber, cur.getString(10));
             attendanceRecordContents.add(tmp);
         }
         cur.close();

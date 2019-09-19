@@ -625,7 +625,7 @@ public class SupervisorActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName());
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -685,7 +685,7 @@ public class SupervisorActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName());
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -859,6 +859,7 @@ public class SupervisorActivity extends BaseActivity {
                                             , obj.getString("StationCode")
                                             ,""
                                             ,""
+                                            ,"Bluetooth"
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                     );
