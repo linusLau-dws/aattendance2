@@ -225,7 +225,7 @@ public class SupervisorActivity extends BaseActivity {
         forceAutoTime();
 
         BootstrapButton findButton = findViewById(R.id.find_button);
-        findButton.setText(R.string.bluetooth_check_bd_logo);
+        findButton.setText(R.string.bluetooth_bd_logo);
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -35,7 +35,7 @@
                 android:layout_marginBottom="4dp"
                 app:bootstrapBrand="primary"
                 app:bootstrapSize="md"
-                app:bootstrapText="@string/bluetooth_check_bd_logo"
+                app:bootstrapText="@string/bluetooth_bd_logo"
                 app:roundedCorners="true" />
         </LinearLayout>
 

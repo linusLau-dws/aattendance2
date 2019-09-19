@@ -139,7 +139,7 @@
     <string name="bluetooth_meal_out">MEAL OUT</string>
     <string name="bluetooth_meal_in">MEAL IN</string>
     <string name="bluetooth_out">OUT</string>
-    <string name="bluetooth_check_bd_logo">{fa_bluetooth} Bluetooth Discovery List</string>
+    <string name="bluetooth_bd_logo">{fa_bluetooth-b} Bluetooth Discovery List</string>
     <string name="more_options">{fa_list-ul} More options…</string>
 
     <string name="bluetooth_record_date_time">Date/Time</string>
@@ -255,7 +255,8 @@
 
     <string name="timeCardRegistrationTitle">TIME CARD REGISTRATION</string>
     <string name="zoneRegistrationTitle">ZONE CARD REGISTRATION</string>
-    <string name="punchTitle">PUNCH</string>
+    <string name="punchTitle">TIME CARD CHECKIN</string>
+    <string name="supervisorTitle">SUPERVISOR MODE</string>
     <string name="settingsTitle">SETTINGS</string>
     <string name="logoutTitle">LOGOUT</string>
 

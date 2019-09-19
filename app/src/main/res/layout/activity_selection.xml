@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
@@ -21,7 +20,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/content_page_color_botton_a"
-            android:text="LOCATION REGISTRATION"
+            android:text="@string/zoneRegistrationTitle"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorButtonText" />
 
@@ -33,7 +32,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/content_page_color_botton_b"
-            android:text="TIMECARD REGISTRATION"
+            android:text="@string/timeCardRegistrationTitle"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorButtonText" />
 
@@ -45,7 +44,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/content_page_color_botton_d"
-            android:text="TIME CARD"
+            android:text="@string/punchTitle"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorButtonText" />
 
@@ -57,7 +56,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/content_page_color_botton_f"
-            android:text="SUPERVISOR MODE"
+            android:text="@string/supervisorTitle"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorButtonText" />
     </LinearLayout>
