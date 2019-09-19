@@ -93,6 +93,8 @@ import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 public class BluetoothNewActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
+    private static final int REQUEST_CODE_GPS_PERMISSION = 102;
+    private static final int REQUEST_CODE_NFC_PERMISSION = 103;
     private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
     private static final int REQUEST_CODE_ENABLE_NFC = 105;
 
@@ -210,13 +212,27 @@ public class BluetoothNewActivity extends BaseActivity {
         mLayout = findViewById(R.id.bluetooth_container);
         int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (hasPermission != PERMISSION_GRANTED) {
+
+            // Needs GPS for autotime
+
             ActivityCompat.requestPermissions(this,
                     new String[]{
                             android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                    103);
+                    REQUEST_CODE_GPS_PERMISSION);
         } else {
-            dbHelper = new SQLiteHelper(this);
-            tryRefreshReceptors();
+
+            // NFC (if enabled)
+
+            hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+            if (hasPermission != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                android.Manifest.permission.NFC},
+                        REQUEST_CODE_NFC_PERMISSION);
+            } else {
+                dbHelper = new SQLiteHelper(this);
+                tryRefreshReceptors();
+            }
         }
     }
 
@@ -1046,13 +1062,35 @@ public class BluetoothNewActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 103) {
+        if (requestCode == REQUEST_CODE_GPS_PERMISSION) {
             int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
             if (hasPermission != PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{
                                 android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                        103);
+                        REQUEST_CODE_GPS_PERMISSION);
+            } else {
+                hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+                if (hasPermission != PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{
+                                    android.Manifest.permission.NFC},
+                            REQUEST_CODE_NFC_PERMISSION);
+                } else {
+                    dbHelper = new SQLiteHelper(this);
+                    tryRefreshReceptors();
+                    bluetoothContent();
+                }
+            }
+        }
+
+        else if (requestCode == REQUEST_CODE_NFC_PERMISSION) {
+            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+            if (hasPermission != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                android.Manifest.permission.NFC},
+                        REQUEST_CODE_NFC_PERMISSION);
             } else {
                 dbHelper = new SQLiteHelper(this);
                 tryRefreshReceptors();

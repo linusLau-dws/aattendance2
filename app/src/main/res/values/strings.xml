@@ -139,7 +139,7 @@
     <string name="bluetooth_meal_out">MEAL OUT</string>
     <string name="bluetooth_meal_in">MEAL IN</string>
     <string name="bluetooth_out">OUT</string>
-    <string name="bluetooth_bd_logo">{fa_bluetooth-b} Bluetooth Discovery List</string>
+    <string name="bluetooth_bd_logo">Bluetooth Discovery List</string>
     <string name="more_options">{fa_list-ul} More options…</string>
 
     <string name="bluetooth_record_date_time">Date/Time</string>

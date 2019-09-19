@@ -907,7 +907,7 @@ public class SupervisorActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
     }
-    
+
     private void trySyncHistory() {
         try {
             JSONObject obj = new JSONObject();

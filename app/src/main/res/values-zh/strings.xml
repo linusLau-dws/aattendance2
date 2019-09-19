@@ -139,7 +139,7 @@
     <string name="bluetooth_meal_out">午膳外出</string>
     <string name="bluetooth_meal_in">午膳歸來</string>
     <string name="bluetooth_out">出</string>
-    <string name="bluetooth_bd_logo">{fa_bluetooth-b} 已發現藍芽裝置列表</string>
+    <string name="bluetooth_bd_logo">已發現藍芽裝置列表</string>
     <string name="more_options">{fa_list-ul} 更多選項……</string>
 
     <string name="bluetooth_record_date_time">日期/時間</string>
