@@ -35,7 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class LocationRegistrationActivity extends BaseActivity {
+public class TimeCardRegistrationActivity extends BaseActivity {
     private String mToken;
     private String mBaseURL;
     private RequestQueue mRequestQueue;
@@ -67,7 +67,7 @@ public class LocationRegistrationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_registration);
+        setContentView(R.layout.activity_timecard_registration);
 
         getSupportActionBar().setTitle(R.string.supervisor_edition_plain);
 
@@ -134,7 +134,7 @@ public class LocationRegistrationActivity extends BaseActivity {
                                 mTableView.setTranslationX(-160);
                                 mTableView.getLayoutParams().width = displayMetrics.widthPixels + 200;
 
-                                final BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(LocationRegistrationActivity.this);
+                                final BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(TimeCardRegistrationActivity.this);
 
                                 List<List<CellModel>> cells = new ArrayList<>();
 
@@ -186,7 +186,7 @@ public class LocationRegistrationActivity extends BaseActivity {
                                             mRemoveLinkage.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(LocationRegistrationActivity.this);
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeCardRegistrationActivity.this);
 //                                                    builder.setMessage(i+" "+i1).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 //                                                        @Override
 //                                                        public void onClick(DialogInterface dialogInterface, int i) {
@@ -225,7 +225,7 @@ public class LocationRegistrationActivity extends BaseActivity {
                                             mRemoveLinkage.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(LocationRegistrationActivity.this);
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeCardRegistrationActivity.this);
 //                                                    builder.setMessage(i+" "+i1).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 //                                                        @Override
 //                                                        public void onClick(DialogInterface dialogInterface, int i) {
@@ -270,9 +270,9 @@ public class LocationRegistrationActivity extends BaseActivity {
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mIntentFilters = new IntentFilter[]{};
 
-        AlertDialog.Builder builder;
+        androidx.appcompat.app.AlertDialog.Builder builder;
         if (mNfcAdapter == null) { //mNfcAdapter == null
-            builder = new AlertDialog.Builder(this);
+            builder = new androidx.appcompat.app.AlertDialog.Builder(this);
             builder.setMessage(R.string.nfc_function_unavailable);
             builder.setCancelable(false);
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

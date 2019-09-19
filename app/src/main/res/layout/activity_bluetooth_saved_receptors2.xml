@@ -16,8 +16,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enabled_methods"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="@string/enabled_methods" />
 
         <com.beardedhen.androidbootstrap.BootstrapLabel
             android:id="@+id/bluetooth_enabled"
@@ -44,8 +44,8 @@
         android:id="@+id/header_control2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/header_control"
+        android:orientation="horizontal"
         android:weightSum="2">
 
         <com.beardedhen.androidbootstrap.BootstrapButton
@@ -68,7 +68,6 @@
             app:bootstrapSize="sm"
             app:roundedCorners="true" />
     </LinearLayout>
-
 
 
     <LinearLayout

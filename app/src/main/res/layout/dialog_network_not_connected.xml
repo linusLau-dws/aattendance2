@@ -23,10 +23,10 @@
             android:id="@+id/dialog_sync_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:bootstrapSize="lg"
             app:bootstrapText="@string/sync_data"
-            app:roundedCorners="true"
-            android:layout_weight="1"/>
+            app:roundedCorners="true" />
 
         <Space
             android:layout_width="10dp"
@@ -36,9 +36,9 @@
             android:id="@+id/dialog_close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:bootstrapSize="lg"
             app:bootstrapText="@string/common_Close"
-            app:roundedCorners="true"
-            android:layout_weight="1"/>
+            app:roundedCorners="true" />
     </LinearLayout>
 </LinearLayout>

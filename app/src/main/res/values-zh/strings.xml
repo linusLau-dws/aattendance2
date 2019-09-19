@@ -214,8 +214,8 @@
     <string name="employment_number_colon">員工編號：</string>
     <string name="employment_number">員工編號</string>
 
-    <string name="instructions_txt">請拍卡以登記分區</string>
-    <!--<string name="instructions_txt">請拍卡以登記員工</string>-->
+    <string name="instructions_zonecard_txt">請拍卡以登記分區</string>
+    <string name="instructions_timecard_txt">請拍卡以登記員工</string>
     <string name="serial_colon">卡序號：</string>
     <string name="pls_select_employee">請選擇分區：</string>
     <!--<string name="pls_select_employee">請選擇僱員：</string>-->

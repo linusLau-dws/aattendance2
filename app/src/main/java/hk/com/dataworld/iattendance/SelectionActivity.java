@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 public class SelectionActivity extends BaseActivity {
     @Override
@@ -25,7 +24,7 @@ public class SelectionActivity extends BaseActivity {
         registerTimecard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent attendanceIntent = new Intent(SelectionActivity.this, LocationRegistrationActivity.class);
+                Intent attendanceIntent = new Intent(SelectionActivity.this, TimeCardRegistrationActivity.class);
                 startActivity(attendanceIntent);
             }
         });
@@ -43,7 +42,7 @@ public class SelectionActivity extends BaseActivity {
         supervisorMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent attendanceIntent = new Intent(SelectionActivity.this, SupervisorActivity.class);
+                Intent attendanceIntent = new Intent(SelectionActivity.this, BluetoothNewActivity.class);
                 startActivity(attendanceIntent);
             }
         });

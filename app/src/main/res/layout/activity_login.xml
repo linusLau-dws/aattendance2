@@ -12,13 +12,13 @@
         android:id="@+id/avatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:src="@drawable/login_page_icon"
         app:layout_constraintBottom_toTopOf="@+id/etName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.96"
-        android:src="@drawable/login_page_icon" />
+        app:layout_constraintVertical_bias="0.96" />
 
     <com.beardedhen.androidbootstrap.BootstrapEditText
         android:id="@+id/etName"
@@ -100,7 +100,6 @@
 
     <TextView
         android:id="@+id/textView"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -109,13 +108,13 @@
         android:text="@string/tv_version"
         android:textColor="@color/colorDisplayText"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <TextView
         android:id="@+id/tvVersionName"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -124,6 +123,7 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/colorDisplayText"
         android:textSize="15sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

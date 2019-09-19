@@ -15,12 +15,12 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_Language" />
         <!--<EditTextPreference-->
-            <!--android:inputType="text"-->
-            <!--android:key="pref_device_name"-->
-            <!--android:maxLength="100"-->
-            <!--android:maxLines="1"-->
-            <!--android:selectAllOnFocus="true"-->
-            <!--android:singleLine="true"-->
-            <!--android:title="@string/pref_title_device_name" />-->
+        <!--android:inputType="text"-->
+        <!--android:key="pref_device_name"-->
+        <!--android:maxLength="100"-->
+        <!--android:maxLines="1"-->
+        <!--android:selectAllOnFocus="true"-->
+        <!--android:singleLine="true"-->
+        <!--android:title="@string/pref_title_device_name" />-->
     </PreferenceCategory>
 </PreferenceScreen>

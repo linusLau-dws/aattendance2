@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/instructions_txt"
+                android:text="@string/instructions_zonecard_txt"
                 android:textSize="@dimen/bootstrap_h3_text_size"
                 android:textStyle="bold" />
 

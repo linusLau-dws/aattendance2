@@ -214,7 +214,8 @@
     <string name="employment_number_colon">Employment number:</string>
     <string name="employment_number">Employment number</string>
 
-    <string name="instructions_txt">Please tap zone card on the device to register.</string>
+    <string name="instructions_zonecard_txt">Tap a zone card on the device to register it.</string>
+    <string name="instructions_timecard_txt">Tap a time card on the device to register it.</string>
     <!--<string name="instructions_txt">Please tap employee card on the device to register.</string>-->
     <string name="serial_colon">Serial: </string>
     <string name="pls_select_employee">Please select employee: </string>

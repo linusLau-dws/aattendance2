@@ -41,12 +41,23 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     static final String BD_ZoneCode = "zonecode";
     static final String BD_StationCode = "stationcode";
 
+    // Supervisor Mode
+    static final String SV_EmploymentNumber = "employmentnumber";
+    static final String SV_HKID = "hkid";
+    static final String SV_Name = "name";
+    static final String SV_ContractCode = "contractcode";
+    static final String SV_StationCode = "stationcode";
+    static final String SV_ZoneCode = "zonecode";
+    static final String SV_DefaultIn = "defaultin";
+    static final String SV_DefaultOut = "defaultout";
+
     private static final String TAG = SQLiteHelper.class.getSimpleName();
     private static final int VERSION = 1;
 
     private static final String TABLE_OFFLINE_USERS = "OfflineUsers";
     private static final String TABLE_BLUETOOTH_ATTENDANCE = "BluetoothAttendance";
     private static final String TABLE_BLUETOOTH_RECEPTORS = "BluetoothReceptors";
+    private static final String TABLE_SUPERVISOR_INFO = "SupervisorInfo";
 //    private static final String TABLE_NOTIFICATIONS = "Notifications";
 
     private static String DATABASE_NAME = "HRMSDataBase";
@@ -86,6 +97,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + BD_ZoneCode + " VARCHAR, "
                     + BD_StationCode + " VARCHAR)";
             database.execSQL(CREATE_TABLE8);
+
+            String CREATE_TABLE9 = "CREATE TABLE " + TABLE_SUPERVISOR_INFO + " ("
+                    + SV_EmploymentNumber + " VARCHAR PRIMARY KEY, "
+                    + SV_HKID + " VARCHAR, "
+                    + SV_Name + " VARCHAR, "
+                    + SV_ContractCode + " VARCHAR, "
+                    + SV_StationCode + " VARCHAR, "
+                    + SV_ZoneCode + " VARCHAR, "
+                    + SV_DefaultIn + " VARCHAR, "
+                    + SV_DefaultOut + " VARCHAR)";
+            database.execSQL(CREATE_TABLE9);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +122,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_USERS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLUETOOTH_ATTENDANCE);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLUETOOTH_RECEPTORS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUPERVISOR_INFO);
             onCreate(db);
         } catch (SQLException e) {
             e.printStackTrace();
