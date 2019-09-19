@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name_iattendance">iAttendance</string>
     <string name="enabled_methods">已啟用方法：</string>
+    <string name="method">方法</string>
 
     <!--  Copyright , Terms and Conditions Message -->
     <string name="msg_infoCopyright">
@@ -163,6 +164,7 @@
     <string name="bluetooth_show_searching_device">顯示尋找裝置</string>
     <string name="bluetooth_hide_searching_device">隱藏尋找裝置</string>
 
+    <string name="submit">{fa_paper-plane} 遞交</string>
     <string name="submit_plain">遞交</string>
     <string name="server_loc_header">請輸入伺服器位置：</string>
     <string name="loading">載入中……</string>

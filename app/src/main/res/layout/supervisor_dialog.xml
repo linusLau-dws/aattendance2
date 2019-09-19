@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:id="@+id/page1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+        <!--
+        Last Contract
+Contract Desc	Display only
+
+Last Zone		 	 	Select
+Zone Desc	Display only
+        -->
+        <com.beardedhen.androidbootstrap.BootstrapDropDown
+        android:id="@+id/ddl_contract_codes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.beardedhen.androidbootstrap.BootstrapDropDown
+            android:id="@+id/ddl_zone_codes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/back1"
+                app:roundedCorners="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                app:bootstrapBrand="warning"
+                app:bootstrapText="Back" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/next1"
+                app:roundedCorners="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                app:bootstrapBrand="success" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/page2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/back2"
+                app:roundedCorners="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bootstrapBrand="warning"
+                app:bootstrapText="Back" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/next2"
+                app:roundedCorners="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                app:bootstrapBrand="success" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/page3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/back3"
+            app:roundedCorners="true"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bootstrapBrand="warning"
+            app:bootstrapText="Back" />
+        <com.evrencoskun.tableview.TableView
+            android:id="@+id/employmentTableView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/next3"
+                app:roundedCorners="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                app:bootstrapBrand="success" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

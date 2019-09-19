@@ -18,9 +18,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,10 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.beardedhen.androidbootstrap.BootstrapLabel;
-import com.beardedhen.androidbootstrap.BootstrapText;
-import com.beardedhen.androidbootstrap.font.FontAwesome;
-import com.beardedhen.androidbootstrap.font.MaterialIcons;
+import com.beardedhen.androidbootstrap.BootstrapDropDown;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.google.android.material.snackbar.Snackbar;
@@ -69,12 +68,11 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 import static hk.com.dataworld.iattendance.Constants.PREF_TOKEN;
 import static hk.com.dataworld.iattendance.Constants.SCAN_TIMEOUT_SECONDS;
-import static hk.com.dataworld.iattendance.SQLiteHelper.BD_Description;
-import static hk.com.dataworld.iattendance.SQLiteHelper.BD_Name;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Address;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_AuthMethod;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_DateTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Description;
+import static hk.com.dataworld.iattendance.SQLiteHelper.BT_EmploymentNumber;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_InOut;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Name;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_StationCode;
@@ -314,6 +312,8 @@ public class SupervisorActivity extends BaseActivity {
         headings.add(new CellModel(getString(R.string.bluetooth_name)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_status)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_sync_time)));
+        headings.add(new CellModel(getString(R.string.employment_number)));
+        headings.add(new CellModel(getString(R.string.method)));
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -365,6 +365,11 @@ public class SupervisorActivity extends BaseActivity {
 
 
             t4.setText(c.getAsString(BT_SyncTime));
+
+
+            tmp.add(new CellModel(c.getAsString(BT_EmploymentNumber) == null ? "" : c.getAsString(BT_EmploymentNumber)));
+            tmp.add(new CellModel(c.getAsString(BT_AuthMethod)));
+
             row.addView(t1);
             row.addView(t2);
             row.addView(t3);
@@ -384,11 +389,9 @@ public class SupervisorActivity extends BaseActivity {
 
         if (arr.size() == 0) {
             List<CellModel> empty = new ArrayList<>();
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
+            for (int cols= 0; cols < 9; cols++) {
+                empty.add(new CellModel(""));
+            }
             cells.add(empty);
         }
         tableView.setAdapter(adapter);
@@ -455,117 +458,191 @@ public class SupervisorActivity extends BaseActivity {
             @Override
             protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_bluetooth_saved_receptors2);
+                setContentView(R.layout.supervisor_dialog);
 
-                BootstrapButton backButton = findViewById(R.id.backButton);
-                backButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mCountdownTimer.pause();
-                        mScanner.stopScan(new ScanCallback() {
-                            @Override
-                            public void onScanResult(int callbackType, @NonNull ScanResult result) {
-                                super.onScanResult(callbackType, result);
-                            }
+                BootstrapButton backButton1 = findViewById(R.id.back1);
+                BootstrapButton backButton2 = findViewById(R.id.back2);
+                BootstrapButton backButton3 = findViewById(R.id.back3);
+                final RelativeLayout relLayout1 = findViewById(R.id.page1);
+                final RelativeLayout relLayout2 = findViewById(R.id.page2);
+                final RelativeLayout relLayout3 = findViewById(R.id.page3);
 
-                            @Override
-                            public void onBatchScanResults(@NonNull List<ScanResult> results) {
-                                super.onBatchScanResults(results);
-                            }
+                final BootstrapDropDown contractCodes = findViewById(R.id.ddl_contract_codes);
+                final BootstrapDropDown zoneCodes = findViewById(R.id.ddl_zone_codes);
 
-                            @Override
-                            public void onScanFailed(int errorCode) {
-                                super.onScanFailed(errorCode);
-                            }
-                        });
-                        finish();
-                        Intent retMenu = new Intent(SupervisorActivity.this, SupervisorActivity.class);  // TODO: Formerly Selection.class
-                        startActivity(retMenu);
-                    }
-                });
-
-                BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
-                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
-                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth)).build());
-
-                BootstrapLabel enabledMethodsLbl2 = findViewById(R.id.nfc_enabled);
-                enabledMethodsLbl2.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
-                        .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
-
-                BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
-                qrcode_btn.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
-                .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
-
-                qrcode_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent zxing = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
-                        startActivity(zxing);
-                    }
-                });
-
-                BootstrapButton barcode_btn = findViewById(R.id.barcode_button);
-                barcode_btn.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
-                        .addFontAwesomeIcon(FontAwesome.FA_BARCODE).addText(getString(R.string.barcode)).build());
-                barcode_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent zxing = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
-                        startActivity(zxing);
-                    }
-                });
-
-                ImageView anim = findViewById(R.id.searching_anim);
-                Glide.with(SupervisorActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);
-
-                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(SupervisorActivity.this);
-
-                List<CellModel> headings = new ArrayList<>();
-                headings.add(new CellModel(getString(R.string.bluetooth_name)));
-                headings.add(new CellModel(getString(R.string.bluetooth_description)));
-
-
-                List<CellModel> rowHeadings = new ArrayList<>();
-                rowHeadings.add(new CellModel("1"));
-                rowHeadings.add(new CellModel("2"));
-
-
-                List<List<CellModel>> cells = new ArrayList<>();
+                //TODO
                 dbHelper.openDB();
-                ArrayList<ContentValues> contentValues = dbHelper.getReceptors();
-                Log.i("Receptors", contentValues.toString());
-                for (ContentValues c :
-                        contentValues) {
-                    List<CellModel> tmp = new ArrayList<>();
-                    tmp.add(new CellModel(c.getAsString(BD_Name)));
-                    tmp.add(new CellModel(c.getAsString(BD_Description)));
-//            tmp.add(new CellModel(c.getAsString(BD_Address)));
-                    cells.add(tmp);
-                }
+                ArrayList<String> contracts = dbHelper.getSupervisorMasterTableContract();
                 dbHelper.closeDB();
 
-                adapter.setAllItems(headings, rowHeadings, cells);
+                contractCodes.setDropdownData(contracts.toArray(new String[0]));
 
-                final TableView tableView = findViewById(R.id.testTableView);
-                tableView.setAdapter(adapter);
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                tableView.setTranslationX(-100);
-                tableView.getLayoutParams().width = displayMetrics.widthPixels + 140;
-
-                final BootstrapButton showHideButton = findViewById(R.id.showHideTable);
-                showHideButton.setOnClickListener(new View.OnClickListener() {
+                contractCodes.setOnDropDownItemClickListener(new BootstrapDropDown.OnDropDownItemClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        if (tableView.getVisibility() == View.GONE) {
-                            tableView.setVisibility(View.VISIBLE);
-                            showHideButton.setText(getString(R.string.bluetooth_hide_searching_device));
-                        } else {
-                            tableView.setVisibility(View.GONE);
-                            showHideButton.setText(getString(R.string.bluetooth_show_searching_device));
-                        }
+                    public void onItemClick(ViewGroup parent, View v, int id) {
+                        contractCodes.setText(contractCodes.getDropdownData()[id]);
+                        dbHelper.openDB();
+                        ArrayList<String> zones = dbHelper.getSupervisorMasterTableZone(contractCodes.getText().toString());
+                        zoneCodes.setDropdownData(zones.toArray(new String[0]));
+                        dbHelper.closeDB();
                     }
                 });
+
+                contractCodes.callOnClick();
+
+                zoneCodes.setOnDropDownItemClickListener(new BootstrapDropDown.OnDropDownItemClickListener() {
+                    @Override
+                    public void onItemClick(ViewGroup parent, View v, int id) {
+                        zoneCodes.setText(zoneCodes.getDropdownData()[id]);
+                    }
+                });
+
+                zoneCodes.callOnClick();
+
+                backButton1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dismiss();
+
+//                        mCountdownTimer.pause();
+//                        mScanner.stopScan(new ScanCallback() {
+//                            @Override
+//                            public void onScanResult(int callbackType, @NonNull ScanResult result) {
+//                                super.onScanResult(callbackType, result);
+//                            }
+//
+//                            @Override
+//                            public void onBatchScanResults(@NonNull List<ScanResult> results) {
+//                                super.onBatchScanResults(results);
+//                            }
+//
+//                            @Override
+//                            public void onScanFailed(int errorCode) {
+//                                super.onScanFailed(errorCode);
+//                            }
+//                        });
+//                        finish();
+//                        Intent retMenu = new Intent(SupervisorActivity.this, SupervisorActivity.class);  // TODO: Formerly Selection.class
+//                        startActivity(retMenu);
+                    }
+                });
+                backButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        relLayout2.setVisibility(View.GONE);
+                        relLayout1.setVisibility(View.VISIBLE);
+                    }
+                });
+                backButton3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        relLayout3.setVisibility(View.GONE);
+                        relLayout2.setVisibility(View.VISIBLE);
+//                        mCountdownTimer.pause();
+//                        mScanner.stopScan(new ScanCallback() {
+//                            @Override
+//                            public void onScanResult(int callbackType, @NonNull ScanResult result) {
+//                                super.onScanResult(callbackType, result);
+//                            }
+//
+//                            @Override
+//                            public void onBatchScanResults(@NonNull List<ScanResult> results) {
+//                                super.onBatchScanResults(results);
+//                            }
+//
+//                            @Override
+//                            public void onScanFailed(int errorCode) {
+//                                super.onScanFailed(errorCode);
+//                            }
+//                        });
+//                        finish();
+//                        Intent retMenu = new Intent(SupervisorActivity.this, SupervisorActivity.class);  // TODO: Formerly Selection.class
+//                        startActivity(retMenu);
+                    }
+                });
+
+//                BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
+//                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
+//                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth)).build());
+//
+//                BootstrapLabel enabledMethodsLbl2 = findViewById(R.id.nfc_enabled);
+//                enabledMethodsLbl2.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
+//                        .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
+//
+//                BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
+//                qrcode_btn.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
+//                .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
+//
+//                qrcode_btn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent zxing = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
+//                        startActivity(zxing);
+//                    }
+//                });
+//
+//                BootstrapButton barcode_btn = findViewById(R.id.barcode_button);
+//                barcode_btn.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
+//                        .addFontAwesomeIcon(FontAwesome.FA_BARCODE).addText(getString(R.string.barcode)).build());
+//                barcode_btn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent zxing = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
+//                        startActivity(zxing);
+//                    }
+//                });
+//
+//                ImageView anim = findViewById(R.id.searching_anim);
+//                Glide.with(SupervisorActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);
+//
+//                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(SupervisorActivity.this);
+//
+//                List<CellModel> headings = new ArrayList<>();
+//                headings.add(new CellModel(getString(R.string.bluetooth_name)));
+//                headings.add(new CellModel(getString(R.string.bluetooth_description)));
+//
+//
+//                List<CellModel> rowHeadings = new ArrayList<>();
+//                rowHeadings.add(new CellModel("1"));
+//                rowHeadings.add(new CellModel("2"));
+//
+//
+//                List<List<CellModel>> cells = new ArrayList<>();
+//                dbHelper.openDB();
+//                ArrayList<ContentValues> contentValues = dbHelper.getReceptors();
+//                Log.i("Receptors", contentValues.toString());
+//                for (ContentValues c :
+//                        contentValues) {
+//                    List<CellModel> tmp = new ArrayList<>();
+//                    tmp.add(new CellModel(c.getAsString(BD_Name)));
+//                    tmp.add(new CellModel(c.getAsString(BD_Description)));
+////            tmp.add(new CellModel(c.getAsString(BD_Address)));
+//                    cells.add(tmp);
+//                }
+//                dbHelper.closeDB();
+//
+//                adapter.setAllItems(headings, rowHeadings, cells);
+//
+//                final TableView tableView = findViewById(R.id.testTableView);
+//                tableView.setAdapter(adapter);
+//                DisplayMetrics displayMetrics = new DisplayMetrics();
+//                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//                tableView.setTranslationX(-100);
+//                tableView.getLayoutParams().width = displayMetrics.widthPixels + 140;
+//
+//                final BootstrapButton showHideButton = findViewById(R.id.showHideTable);
+//                showHideButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if (tableView.getVisibility() == View.GONE) {
+//                            tableView.setVisibility(View.VISIBLE);
+//                            showHideButton.setText(getString(R.string.bluetooth_hide_searching_device));
+//                        } else {
+//                            tableView.setVisibility(View.GONE);
+//                            showHideButton.setText(getString(R.string.bluetooth_show_searching_device));
+//                        }
+//                    }
+//                });
             }
         };
         mDialog.setCancelable(false);
@@ -626,7 +703,7 @@ public class SupervisorActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "","Bluetooth");
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -686,7 +763,7 @@ public class SupervisorActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "","Bluetooth");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -820,7 +897,6 @@ public class SupervisorActivity extends BaseActivity {
 //        GenericMultipleBarcodeReader qrCodeReader = new GenericMultipleBarcodeReader();
 
 
-
 //        try {
 //            qrCodeReader.decode(null);
 //        } catch (NotFoundException e) {
@@ -854,14 +930,14 @@ public class SupervisorActivity extends BaseActivity {
                                     JSONObject obj = arr.getJSONObject(y);
                                     dbHelper.insertLocalAttendance(obj.getString("Time")
                                             , obj.getInt("InOut")
-                                            ,""
+                                            , ""
 //                                            , dbHelper.findAddressByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                             , obj.getString("ZoneCode")
                                             , obj.getString("StationCode")
-                                            ,""
-                                            ,""
-                                            ,""
-                                            ,"Bluetooth"
+                                            , ""
+                                            , ""
+                                            , ""
+                                            , "Bluetooth"
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                     );

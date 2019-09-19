@@ -352,6 +352,7 @@ public class BluetoothNewActivity extends BaseActivity {
         headings.add(new CellModel(getString(R.string.bluetooth_name)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_status)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_sync_time)));
+        headings.add(new CellModel(getString(R.string.method)));
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -386,23 +387,20 @@ public class BluetoothNewActivity extends BaseActivity {
 
             t2.setText(c.getAsInteger(BT_InOut) == 0 ? getString(R.string.bluetooth_in) : getString(R.string.bluetooth_out));
             t2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
             TextView t3 = new TextView(BluetoothNewActivity.this);
-
-
             tmp.add(new CellModel(c.getAsString(BT_Description)));
             tmp.add(new CellModel(c.getAsString(BT_Name)));
             tmp.add(new CellModel(c.getAsInteger(BT_Status) == 0 ? getString(R.string.status_pending) : getString(R.string.bluetooth_success)));
-
-
             t3.setText(c.getAsInteger(BT_Status) == 0 ? getString(R.string.status_pending) : getString(R.string.bluetooth_success));
             t3.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
             TextView t4 = new TextView(BluetoothNewActivity.this);
-
-
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
-
-
             t4.setText(c.getAsString(BT_SyncTime));
+
+            tmp.add(new CellModel(c.getAsString(BT_AuthMethod)));
+
             row.addView(t1);
             row.addView(t2);
             row.addView(t3);
@@ -422,11 +420,9 @@ public class BluetoothNewActivity extends BaseActivity {
 
         if (arr.size() == 0) {
             List<CellModel> empty = new ArrayList<>();
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
-            empty.add(new CellModel(""));
+            for (int cols= 0; cols < 8; cols++) {
+                empty.add(new CellModel(""));
+            }
             cells.add(empty);
         }
         tableView.setAdapter(adapter);

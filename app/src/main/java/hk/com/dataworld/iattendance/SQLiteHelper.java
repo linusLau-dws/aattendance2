@@ -339,7 +339,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
 
-    void replaceOrInsertUser() {
+    void replaceOrInsertSupermasterTable() {
         // TODO: Replace or Insert User
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "INSERT OR REPLACE INTO " + TABLE_SUPERVISOR_INFO + " (" + SV_EmploymentNumber + ", " + SV_HKID + ", " + SV_Name + ", " + SV_ContractCode + ", " + SV_StationCode + ", " + SV_ZoneCode + ", " + SV_DefaultIn + ", " + SV_DefaultOut + ") " + " values (?,?,?,?,?,?,?,?)";
@@ -362,6 +362,31 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             db.endTransaction();
             Log.i(TAG, "Finish insertLeaveList Transaction");
         }
+    }
+
+    ArrayList<String> getSupervisorMasterTableContract() {
+        ArrayList<String> list = new ArrayList<>();
+        Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ContractCode + " FROM " + TABLE_SUPERVISOR_INFO, new String[]{});
+
+        for (int x = 0; x < cur.getCount(); x++) {
+            cur.moveToPosition(x);
+            list.add(cur.getString(0));
+        }
+        cur.close();
+        return list;
+    }
+
+    ArrayList<String> getSupervisorMasterTableZone(String contract) {
+        ArrayList<String> list = new ArrayList<>();
+        Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ZoneCode + " FROM " + TABLE_SUPERVISOR_INFO + " WHERE " + SV_ContractCode
+                + " = ?", new String[]{contract});
+
+        for (int x = 0; x < cur.getCount(); x++) {
+            cur.moveToPosition(x);
+            list.add(cur.getString(0));
+        }
+        cur.close();
+        return list;
     }
     // endregion 2019.01.11 Bluetooth Attendance
 

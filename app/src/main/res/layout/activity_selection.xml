@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="hk.com.dataworld.leaveapp.SelectionActivity">
+    tools:context="hk.com.dataworld.iattendance.SelectionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,11 +23,7 @@
             android:background="@drawable/content_page_color_botton_a"
             android:text="LOCATION REGISTRATION"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorButtonText"
-            app:layout_constraintBottom_toTopOf="@+id/btnLeaveApproval"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.583"
-            app:layout_constraintStart_toEndOf="@+id/btnNewworker" />
+            android:textColor="@color/colorButtonText" />
 
         <Button
             android:id="@+id/btnTimecardRegistration"
@@ -39,10 +35,7 @@
             android:background="@drawable/content_page_color_botton_b"
             android:text="TIMECARD REGISTRATION"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorButtonText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.583" />
+            android:textColor="@color/colorButtonText" />
 
         <Button
             android:id="@+id/btnPunch"
@@ -54,11 +47,7 @@
             android:background="@drawable/content_page_color_botton_d"
             android:text="TIME CARD"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorButtonText"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.583"
-            app:layout_constraintStart_toEndOf="parent" />
+            android:textColor="@color/colorButtonText" />
 
         <Button
             android:id="@+id/btnSupervisorMode"

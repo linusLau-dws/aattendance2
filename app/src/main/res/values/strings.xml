@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name_iattendance">iAttendance</string>
     <string name="enabled_methods">Enabled methods: </string>
+    <string name="method">Method</string>
 
     <!--   Copyright , Terms and Conditions Message -->
     <string name="msg_infoCopyright">
@@ -163,6 +164,7 @@
     <string name="bluetooth_show_searching_device">Show Searching Device</string>
     <string name="bluetooth_hide_searching_device">Hide Searching Device</string>
 
+    <string name="submit">{fa_paper-plane} SUBMIT</string>
     <string name="submit_plain">SUBMIT</string>
     <string name="server_loc_header">Please enter the server address:</string>
     <string name="loading">Loading…</string>
