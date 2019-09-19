@@ -338,6 +338,31 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         cur.close();
     }
 
+
+    void replaceOrInsertUser() {
+        // TODO: Replace or Insert User
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "INSERT OR REPLACE INTO " + TABLE_SUPERVISOR_INFO + " (" + SV_EmploymentNumber + ", " + SV_HKID + ", " + SV_Name + ", " + SV_ContractCode + ", " + SV_StationCode + ", " + SV_ZoneCode + ", " + SV_DefaultIn + ", " + SV_DefaultOut + ") " + " values (?,?,?,?,?,?,?,?)";
+        SQLiteStatement statement = db.compileStatement(sql);
+        db.beginTransaction();
+        Log.i(TAG, "Begin insertLeaveList Transaction");
+        try {
+            statement.clearBindings();
+            statement.bindString(1, "");
+            statement.bindString(2, "");
+            statement.bindString(3, "");
+            statement.bindString(4, "");
+            statement.bindString(5, "");
+            statement.bindString(6, "");
+            statement.bindString(7, "");
+            statement.bindString(8, "");
+            statement.execute();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            Log.i(TAG, "Finish insertLeaveList Transaction");
+        }
+    }
     // endregion 2019.01.11 Bluetooth Attendance
 
 }
