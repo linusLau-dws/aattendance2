@@ -239,6 +239,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
     }
 
+    long syncHistory(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String employmentnumber, String authmethod, String synctime) {
+        ContentValues values = new ContentValues();
+        values.put(BT_DateTime, datetime);
+        values.put(BT_InOut, inout);
+        values.put(BT_Address, address);
+        values.put(BT_ZoneCode, zonecode);              // TODO
+        values.put(BT_StationCode, stationcode);        // TODO
+        values.put(BT_Status, 1);
+        values.put(BT_Description, description);
+        values.put(BT_Name, name);
+        values.put(BT_EmploymentNumber, employmentnumber);
+        values.put(BT_AuthMethod, authmethod);
+        values.put(BT_SyncTime, synctime);
+        return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
+    }
+
     void clearReceptors() {
         Cursor cursor = myDB.rawQuery("DELETE FROM " + TABLE_BLUETOOTH_RECEPTORS, null);
         cursor.moveToFirst();
