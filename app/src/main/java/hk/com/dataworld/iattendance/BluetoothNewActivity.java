@@ -180,6 +180,16 @@ public class BluetoothNewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_new);
 
+        BootstrapButton moreOptions = findViewById(R.id.more_options);
+        moreOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BluetoothNewActivity.this, SelectionActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mBaseURL = extendBaseUrl(prefs.getString(PREF_SERVER_ADDRESS, ""));
         mToken = prefs.getString(PREF_TOKEN, "");
@@ -894,7 +904,7 @@ public class BluetoothNewActivity extends BaseActivity {
                                             , obj.getString("StationCode")
                                             , ""
                                             , ""
-                                            ,"Bluetooth"
+                                            , "Bluetooth"
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                     );
