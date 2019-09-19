@@ -907,12 +907,14 @@ public class SupervisorActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
     }
-
-
+    
     private void trySyncHistory() {
         try {
             JSONObject obj = new JSONObject();
             obj.put("token", mToken);
+            obj.put("program", 1);
+
+            Log.i("Why500", obj.toString());
 
             mRequestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest req = new JsonObjectRequest(JsonObjectRequest.Method.POST,
@@ -922,29 +924,32 @@ public class SupervisorActivity extends BaseActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                Log.i("trySyncHistory", response.toString());
                                 JSONArray arr = response.getJSONArray("d");
 
                                 dbHelper.openDB();
                                 for (int y = 0; y < arr.length(); y++) {
+                                    Log.i("trySyncHistory", String.valueOf(y));
                                     // Add records if not exists
                                     JSONObject obj = arr.getJSONObject(y);
-                                    dbHelper.insertLocalAttendance(obj.getString("Time")
-                                            , obj.getInt("InOut")
+                                    dbHelper.syncHistory(obj.getString("Time")
+                                            , obj.getBoolean("InOut") ? 1 : 0
                                             , ""
 //                                            , dbHelper.findAddressByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                             , obj.getString("ZoneCode")
                                             , obj.getString("StationCode")
-                                            , ""
-                                            , ""
-                                            , ""
+                                            ,""
+                                            ,""
+                                            ,""
                                             , "Bluetooth"
+                                            , obj.getString("CreateDate")
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                     );
                                 }
                                 dbHelper.closeDB();
 
-                                snackbar(R.string.bluetooth_success);
+//                                snackbar(R.string.nfc_success);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
