@@ -199,7 +199,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String authmethod) {
+    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String employmentnumber, String authmethod) {
         ContentValues values = new ContentValues();
         values.put(BT_DateTime, datetime);
         values.put(BT_InOut, inout);
@@ -209,6 +209,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(BT_Status, 0);
         values.put(BT_Description, description);
         values.put(BT_Name, name);
+        values.put(BT_EmploymentNumber, employmentnumber);
         values.put(BT_AuthMethod, authmethod);
         return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
     }

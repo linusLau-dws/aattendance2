@@ -42,6 +42,7 @@ import static hk.com.dataworld.iattendance.Constants.DEBUG_FALLBACK_URL;
 import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 import static hk.com.dataworld.iattendance.Constants.PREF_TOKEN;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Address;
+import static hk.com.dataworld.iattendance.SQLiteHelper.BT_AuthMethod;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_DateTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_InOut;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_StationCode;
@@ -124,6 +125,7 @@ public class AttendanceSyncService extends Service {
                 innerObj.put("stationcode", c.get(BT_StationCode));
                 innerObj.put("inout", c.get(BT_InOut));
                 innerObj.put("datetime", c.get(BT_DateTime));
+                innerObj.put("authmethod", c.get(BT_AuthMethod));
                 array.put(innerObj);
             }
             obj.put("Data", array.toString());

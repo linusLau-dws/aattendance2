@@ -77,6 +77,7 @@ import static hk.com.dataworld.iattendance.Constants.SCAN_TIMEOUT_SECONDS;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BD_Description;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BD_Name;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Address;
+import static hk.com.dataworld.iattendance.SQLiteHelper.BT_AuthMethod;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_DateTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Description;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_InOut;
@@ -670,7 +671,7 @@ public class BluetoothNewActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "Bluetooth");
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -730,7 +731,7 @@ public class BluetoothNewActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "Bluetooth");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "","Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -904,6 +905,7 @@ public class BluetoothNewActivity extends BaseActivity {
                                             , obj.getString("StationCode")
                                             , ""
                                             , ""
+                                            ,""
                                             , "Bluetooth"
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
 //                                            , dbHelper.findNameByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
@@ -956,6 +958,7 @@ public class BluetoothNewActivity extends BaseActivity {
                 innerObj.put("zonecode", c.get(BT_ZoneCode));
                 innerObj.put("stationcode", c.get(BT_StationCode));
                 innerObj.put("inout", c.get(BT_InOut));
+                innerObj.put("authmethod", c.get(BT_AuthMethod));
                 array.put(innerObj);
             }
             obj.put("Data", array.toString());
