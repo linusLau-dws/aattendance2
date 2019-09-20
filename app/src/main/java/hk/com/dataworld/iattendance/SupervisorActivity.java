@@ -58,6 +58,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
@@ -84,6 +85,12 @@ import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 
 public class SupervisorActivity extends BaseActivity {
+
+    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
+    private static final int REQUEST_CODE_GPS_PERMISSION = 102;
+    private static final int REQUEST_CODE_NFC_PERMISSION = 103;
+    private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
+    private static final int REQUEST_CODE_ENABLE_NFC = 105;
 
     private TableLayout mTableLayout;
     private BluetoothAdapter mBluetoothAdapter;
@@ -170,13 +177,27 @@ public class SupervisorActivity extends BaseActivity {
         mLayout = findViewById(R.id.bluetooth_container);
         int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (hasPermission != PERMISSION_GRANTED) {
+
+            // Needs GPS for autotime
+
             ActivityCompat.requestPermissions(this,
                     new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    103);
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE_GPS_PERMISSION);
         } else {
-            dbHelper = new SQLiteHelper(this);
-            tryRefreshReceptors();
+
+            // NFC (if enabled)
+
+            hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+            if (hasPermission != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                android.Manifest.permission.NFC},
+                        REQUEST_CODE_NFC_PERMISSION);
+            } else {
+                dbHelper = new SQLiteHelper(this);
+                tryRefreshReceptors();
+            }
         }
     }
 
@@ -389,7 +410,7 @@ public class SupervisorActivity extends BaseActivity {
 
         if (arr.size() == 0) {
             List<CellModel> empty = new ArrayList<>();
-            for (int cols= 0; cols < 9; cols++) {
+            for (int cols = 0; cols < 9; cols++) {
                 empty.add(new CellModel(""));
             }
             cells.add(empty);
@@ -463,6 +484,10 @@ public class SupervisorActivity extends BaseActivity {
                 BootstrapButton backButton1 = findViewById(R.id.back1);
                 BootstrapButton backButton2 = findViewById(R.id.back2);
                 BootstrapButton backButton3 = findViewById(R.id.back3);
+                BootstrapButton nextButton1 = findViewById(R.id.next1);
+                BootstrapButton doneButton2 = findViewById(R.id.done2);
+                BootstrapButton newStaffButton2 = findViewById(R.id.newstaff2);
+                BootstrapButton doneButton3 = findViewById(R.id.done3);
                 final RelativeLayout relLayout1 = findViewById(R.id.page1);
                 final RelativeLayout relLayout2 = findViewById(R.id.page2);
                 final RelativeLayout relLayout3 = findViewById(R.id.page3);
@@ -558,6 +583,36 @@ public class SupervisorActivity extends BaseActivity {
 //                        finish();
 //                        Intent retMenu = new Intent(SupervisorActivity.this, SupervisorActivity.class);  // TODO: Formerly Selection.class
 //                        startActivity(retMenu);
+                    }
+                });
+
+                nextButton1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        relLayout1.setVisibility(View.GONE);
+                        relLayout2.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                newStaffButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        relLayout2.setVisibility(View.GONE);
+                        relLayout3.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                doneButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dismiss();
+                    }
+                });
+
+                doneButton3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dismiss();
                     }
                 });
 
@@ -938,9 +993,9 @@ public class SupervisorActivity extends BaseActivity {
 //                                            , dbHelper.findAddressByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                             , obj.getString("ZoneCode")
                                             , obj.getString("StationCode")
-                                            ,""
-                                            ,""
-                                            ,""
+                                            , ""
+                                            , ""
+                                            , ""
                                             , "Bluetooth"
                                             , obj.getString("CreateDate")
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
@@ -1049,7 +1104,10 @@ public class SupervisorActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+
+        if (requestCode == REQUEST_CODE_ENABLE_AUTOTIME) {
+            forceAutoTime();
+        } else if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
             if (!mBluetoothAdapter.isEnabled()) {
 //                mBluetoothAdapter.enable();
                 Intent intentBtEnabled = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1057,21 +1115,55 @@ public class SupervisorActivity extends BaseActivity {
             } else {
                 bluetoothContent();
             }
-        } else if (requestCode == 104) {
-            forceAutoTime();
+        } else if (requestCode == REQUEST_CODE_ENABLE_NFC) {
+            if (!mNfcAdapter.isEnabled()) {
+                //Dialog to NFC settings
+                AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                builder.setMessage(R.string.nfc_not_enabled);
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.nfc_go_to_settings, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), REQUEST_CODE_ENABLE_NFC);
+                    }
+                });
+                builder.create().show();
+            } else {
+                bluetoothContent();
+            }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 103) {
+        if (requestCode == REQUEST_CODE_GPS_PERMISSION) {
             int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
             if (hasPermission != PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                                Manifest.permission.ACCESS_COARSE_LOCATION},
-                        103);
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        REQUEST_CODE_GPS_PERMISSION);
+            } else {
+                hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+                if (hasPermission != PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{
+                                    android.Manifest.permission.NFC},
+                            REQUEST_CODE_NFC_PERMISSION);
+                } else {
+                    dbHelper = new SQLiteHelper(this);
+                    tryRefreshReceptors();
+                    bluetoothContent();
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_NFC_PERMISSION) {
+            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+            if (hasPermission != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                android.Manifest.permission.NFC},
+                        REQUEST_CODE_NFC_PERMISSION);
             } else {
                 dbHelper = new SQLiteHelper(this);
                 tryRefreshReceptors();

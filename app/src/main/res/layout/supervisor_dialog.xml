@@ -4,9 +4,11 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:visibility="gone">
 
-    <RelativeLayout
+
+<RelativeLayout
         android:id="@+id/page1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,8 +63,36 @@ Zone Desc	Display only
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/header_control2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_control"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/qrcode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                app:bootstrapBrand="info"
+                app:bootstrapSize="sm"
+                app:roundedCorners="true" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/barcode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                app:bootstrapBrand="warning"
+                app:bootstrapSize="sm"
+                app:roundedCorners="true" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -79,7 +109,17 @@ Zone Desc	Display only
                 app:bootstrapText="Back" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/next2"
+                android:id="@+id/newstaff2"
+                app:roundedCorners="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bootstrapBrand="info"
+                app:bootstrapText="New staff" />
+
+            <!--Enable only when sth is selected / found-->
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/done2"
                 app:roundedCorners="true"
 
                 android:layout_width="wrap_content"
@@ -89,6 +129,7 @@ Zone Desc	Display only
         </LinearLayout>
     </RelativeLayout>
 
+    <!-- Show Page 3 only when unregistered cards are found / new staff is clicked -->
     <RelativeLayout
         android:id="@+id/page3"
         android:layout_width="match_parent"
@@ -96,14 +137,7 @@ Zone Desc	Display only
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="gone">
-        <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/back3"
-            app:roundedCorners="true"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bootstrapBrand="warning"
-            app:bootstrapText="Back" />
         <com.evrencoskun.tableview.TableView
             android:id="@+id/employmentTableView"
             android:layout_width="match_parent"
@@ -113,9 +147,17 @@ Zone Desc	Display only
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/back3"
+                app:roundedCorners="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bootstrapBrand="warning"
+                app:bootstrapText="Back" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/next3"
+                android:id="@+id/done3"
                 app:roundedCorners="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
