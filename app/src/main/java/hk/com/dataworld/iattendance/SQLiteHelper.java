@@ -365,7 +365,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String sql = "INSERT OR REPLACE INTO " + TABLE_SUPERVISOR_INFO + " (" + SV_EmploymentNumber + ", " + SV_HKID + ", " + SV_Name + ", " + SV_ContractCode + ", " + SV_StationCode + ", " + SV_ZoneCode + ", " + SV_DefaultIn + ", " + SV_DefaultOut + ", " + SV_Status + ") " + " values (?,?,?,?,?,?,?,?,?)";
         SQLiteStatement statement = db.compileStatement(sql);
         db.beginTransaction();
-        Log.i(TAG, "Begin insertLeaveList Transaction");
+        //Log.i(TAG, "Begin insertLeaveList Transaction");
         try {
             statement.clearBindings();
             statement.bindString(1, EmploymentNumber);
@@ -377,12 +377,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             statement.bindString(7, DefaultIn);
             statement.bindString(8, DefaultOut);
             statement.bindLong(9, Status);
-            Log.i("DefaultIn", DefaultIn);
+            //Log.i("DefaultIn", DefaultIn);
             statement.execute();
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
-            Log.i(TAG, "Finish insertLeaveList Transaction");
+            //Log.i(TAG, "Finish insertLeaveList Transaction");
         }
     }
 

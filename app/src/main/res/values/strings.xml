@@ -270,4 +270,5 @@
 
     <string name="segmented_supervisor">Supervisor</string>
     <string name="segmented_self_service">Self-service</string>
+    <string name="new_staff">New staff</string>
 </resources>

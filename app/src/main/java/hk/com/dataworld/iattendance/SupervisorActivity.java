@@ -41,6 +41,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapDropDown;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
+import com.evrencoskun.tableview.listener.ITableViewListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -64,6 +65,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
@@ -129,6 +131,12 @@ public class SupervisorActivity extends BaseActivity {
     private int mInOut = -1;
 
     private BluetoothLeScannerCompat mScanner = BluetoothLeScannerCompat.getScanner();
+
+    private List<ContentValues> employmentsInSelectedZone = new ArrayList<>();
+    private BluetoothDeviceAdapter adapter2;
+    private TableView dialogTableView;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    private Integer selectedEmploymentOrder;
 
 
     private static String[][] mTechList = new String[][]{
@@ -517,7 +525,8 @@ public class SupervisorActivity extends BaseActivity {
                 BootstrapButton backButton2 = findViewById(R.id.back2);
                 BootstrapButton backButton3 = findViewById(R.id.back3);
                 BootstrapButton nextButton1 = findViewById(R.id.next1);
-                BootstrapButton doneButton2 = findViewById(R.id.done2);
+                final BootstrapButton doneButton2 = findViewById(R.id.done2);
+                doneButton2.setEnabled(false);
                 BootstrapButton newStaffButton2 = findViewById(R.id.newstaff2);
                 BootstrapButton doneButton3 = findViewById(R.id.done3);
                 final RelativeLayout relLayout1 = findViewById(R.id.page1);
@@ -530,41 +539,11 @@ public class SupervisorActivity extends BaseActivity {
                 BootstrapButton qrScanBtn = findViewById(R.id.qrcode_button);
                 BootstrapButton barcodeScanBtn = findViewById(R.id.barcode_button);
 
-                final List<ContentValues>[] employmentsInSelectedZone = new List[]{new ArrayList<>()};
-                List<List<CellModel>> cells = new ArrayList<>();
-                TableView tableView = findViewById(R.id.employmentTableView);
-
-                List<CellModel> headings = new ArrayList<>();
-                headings.add(new CellModel("Employment number"));
-                headings.add(new CellModel("HKID"));
-                headings.add(new CellModel("Name"));
-                headings.add(new CellModel("Contract code"));
-                headings.add(new CellModel("Station code"));
-                headings.add(new CellModel("Zone code"));
-                headings.add(new CellModel("Default in"));
-                headings.add(new CellModel("Default out"));
-
-                for (ContentValues c : employmentsInSelectedZone[0]) {
-                    List<CellModel> tmp = new ArrayList<>();
-                    tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
-                    tmp.add(new CellModel(c.getAsString(SV_HKID)));
-                    tmp.add(new CellModel(c.getAsString(SV_Name)));
-                    tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
-                    tmp.add(new CellModel(c.getAsString(SV_StationCode)));
-                    tmp.add(new CellModel(c.getAsString(SV_ZoneCode)));
-                    tmp.add(new CellModel(c.getAsString(SV_DefaultIn)));
-                    tmp.add(new CellModel(c.getAsString(SV_DefaultOut)));
-                    cells.add(tmp);
-                }
-
-                List<CellModel> rows = new ArrayList<>();
-                for (int z = 0; z < employmentsInSelectedZone[0].size(); z++) {
-                    rows.add(new CellModel(String.valueOf(z + 1)));
-                }
-
-                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(SupervisorActivity.this);
-                tableView.setAdapter(adapter);
-                adapter.setAllItems(headings, rows, cells);
+                dialogTableView = findViewById(R.id.employmentTableView);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                dialogTableView.setTranslationX(-160);
+                dialogTableView.getLayoutParams().width = displayMetrics.widthPixels + 200;
 
                 //TODO
                 dbHelper.openDB();
@@ -583,20 +562,133 @@ public class SupervisorActivity extends BaseActivity {
                         dbHelper.closeDB();
                     }
                 });
+                contractCodes.setText(contractCodes.getDropdownData()[0]);
+                dbHelper.openDB();
+                ArrayList<String> zones = dbHelper.getSupervisorMasterTableZone(contractCodes.getText().toString());
+                zoneCodes.setDropdownData(zones.toArray(new String[0]) == null ? new String[] {"　"} : zones.toArray(new String[0]));
+                dbHelper.closeDB();
 
-                contractCodes.callOnClick();
 
                 zoneCodes.setOnDropDownItemClickListener(new BootstrapDropDown.OnDropDownItemClickListener() {
                     @Override
                     public void onItemClick(ViewGroup parent, View v, int id) {
                         zoneCodes.setText(zoneCodes.getDropdownData()[id]);
                         dbHelper.openDB();
-                        employmentsInSelectedZone[0] = dbHelper.getSupervisorMasterEmployment(contractCodes.getText().toString(), zoneCodes.getText().toString());
+                        employmentsInSelectedZone = dbHelper.getSupervisorMasterEmployment(contractCodes.getText().toString(), zoneCodes.getText().toString());
+                        List<List<CellModel>> cells = new ArrayList<>();
+
+                        List<CellModel> headings = new ArrayList<>();
+                        headings.add(new CellModel("Employment number"));
+                        headings.add(new CellModel("HKID"));
+                        headings.add(new CellModel("Name"));
+                        headings.add(new CellModel("Contract code"));
+                        headings.add(new CellModel("Station code"));
+                        headings.add(new CellModel("Zone code"));
+                        headings.add(new CellModel("Default in"));
+                        headings.add(new CellModel("Default out"));
+
+                        Log.i("data", employmentsInSelectedZone.toString());
+                        for (ContentValues c : employmentsInSelectedZone) {
+                            List<CellModel> tmp = new ArrayList<>();
+                            tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
+                            tmp.add(new CellModel(c.getAsString(SV_HKID)));
+                            tmp.add(new CellModel(c.getAsString(SV_Name)));
+                            tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
+                            tmp.add(new CellModel(c.getAsString(SV_StationCode)));
+                            tmp.add(new CellModel(c.getAsString(SV_ZoneCode)));
+                            tmp.add(new CellModel(c.getAsString(SV_DefaultIn)));
+                            tmp.add(new CellModel(c.getAsString(SV_DefaultOut)));
+                            cells.add(tmp);
+                        }
+
+                        List<CellModel> rows = new ArrayList<>();
+                        for (int z = 0; z < employmentsInSelectedZone.size(); z++) {
+                            rows.add(new CellModel(String.valueOf(z + 1)));
+                        }
+
+                        adapter2 = new BluetoothDeviceAdapter(SupervisorActivity.this);
+                        dialogTableView.setAdapter(adapter2);
+                        adapter2.setAllItems(headings, rows, cells);
                         dbHelper.closeDB();
                     }
                 });
+                zoneCodes.setText(zoneCodes.getDropdownData()[0]);
+                dbHelper.openDB();
+                employmentsInSelectedZone = dbHelper.getSupervisorMasterEmployment(contractCodes.getText().toString(), zoneCodes.getText().toString());
+                List<List<CellModel>> cells = new ArrayList<>();
+                TableView tableView = findViewById(R.id.employmentTableView);
 
-                zoneCodes.callOnClick();
+                List<CellModel> headings = new ArrayList<>();
+                headings.add(new CellModel("Employment number"));
+                headings.add(new CellModel("HKID"));
+                headings.add(new CellModel("Name"));
+                headings.add(new CellModel("Contract code"));
+                headings.add(new CellModel("Station code"));
+                headings.add(new CellModel("Zone code"));
+                headings.add(new CellModel("Default in"));
+                headings.add(new CellModel("Default out"));
+
+                Log.i("data", employmentsInSelectedZone.toString());
+                for (ContentValues c : employmentsInSelectedZone) {
+                    List<CellModel> tmp = new ArrayList<>();
+                    tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
+                    tmp.add(new CellModel(c.getAsString(SV_HKID)));
+                    tmp.add(new CellModel(c.getAsString(SV_Name)));
+                    tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_StationCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_ZoneCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_DefaultIn)));
+                    tmp.add(new CellModel(c.getAsString(SV_DefaultOut)));
+                    cells.add(tmp);
+                }
+
+                List<CellModel> rows = new ArrayList<>();
+                for (int z = 0; z < employmentsInSelectedZone.size(); z++) {
+                    rows.add(new CellModel(String.valueOf(z + 1)));
+                }
+
+                adapter2 = new BluetoothDeviceAdapter(SupervisorActivity.this);
+                tableView.setAdapter(adapter2);
+                adapter2.setAllItems(headings, rows, cells);
+                dbHelper.closeDB();
+
+                tableView.setTableViewListener(new ITableViewListener() {
+                    @Override
+                    public void onCellClicked(@NonNull RecyclerView.ViewHolder viewHolder, int i, int i1) {
+                        dialogTableView.setSelectedRow(i1);
+                        selectedEmploymentOrder = i1;
+                        doneButton2.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onCellLongPressed(@NonNull RecyclerView.ViewHolder viewHolder, int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                        dialogTableView.getSelectionHandler().clearSelection();
+                        selectedEmploymentOrder = null;
+                        doneButton2.setEnabled(false);
+                    }
+
+                    @Override
+                    public void onColumnHeaderLongPressed(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                    }
+
+                    @Override
+                    public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                        dialogTableView.setSelectedRow(i);
+                        selectedEmploymentOrder = i;
+                        doneButton2.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                    }
+                });
 
                 backButton1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -679,32 +771,42 @@ public class SupervisorActivity extends BaseActivity {
                 doneButton2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        JSONObject obj = new JSONObject();
-                        try {
-                            obj.put("token", mToken);
-                            obj.put("program", 1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
-                        Log.i("Why500", obj.toString());
+                        dbHelper.openDB();
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, "--",  employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_ZoneCode), employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_StationCode), "--", "--", employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_EmploymentNumber), "Supervisor manual");
+                        dbHelper.closeDB();
 
-                        mRequestQueue = Volley.newRequestQueue(SupervisorActivity.this);
-                        JsonObjectRequest req = new JsonObjectRequest(JsonObjectRequest.Method.POST,
-                                String.format("%s%s", mBaseURL, "BluetoothSyncHistory"),
-                                obj,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        dismiss();
-                                    }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Ignore
-                            }
-                        });
-                        mRequestQueue.add(req);
+                        sync();
+
+                        updateTable();
+
+                        snackbar(R.string.bluetooth_success);
+//                        JSONObject obj = new JSONObject();
+//                        try {
+//                            obj.put("token", mToken);
+//                            obj.put("program", 1);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        Log.i("Why500", obj.toString());
+//
+//                        mRequestQueue = Volley.newRequestQueue(SupervisorActivity.this);
+//                        JsonObjectRequest req = new JsonObjectRequest(JsonObjectRequest.Method.POST,
+//                                String.format("%s%s", mBaseURL, "BluetoothSyncHistory"),
+//                                obj,
+//                                new Response.Listener<JSONObject>() {
+//                                    @Override
+//                                    public void onResponse(JSONObject response) {
+//                                        dismiss();
+//                                    }
+//                                }, new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                                // Ignore
+//                            }
+//                        });
+//                        mRequestQueue.add(req);
                     }
                 });
 
@@ -885,7 +987,6 @@ public class SupervisorActivity extends BaseActivity {
 
                     // Log into SQLite
                     dbHelper.openDB();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());

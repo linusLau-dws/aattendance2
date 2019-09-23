@@ -734,6 +734,15 @@ public class LoginActivity extends BaseActivity {
         JSONObject object = new JSONObject();
         try {
             object.put("token", mSharedPreferences.getString(PREF_TOKEN, ""));
+            dbHelper.openDB();
+            boolean isSupervisorMasterEmpty = dbHelper.isSupervisorMasterTableEmpty();
+            dbHelper.closeDB();
+            if (isSupervisorMasterEmpty) {
+                object.put("from", "1900-01-01 00:00:00");
+            } else {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                object.put("from",simpleDateFormat.format(Calendar.getInstance().getTime()));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -857,43 +866,22 @@ public class LoginActivity extends BaseActivity {
                                             editor.putString(PREF_REFRESH_TOKEN, rtok);
                                             editor.apply();
 
-                                            // TODO: Leave Object
-                                            dbHelper.openDB();
-                                            boolean isSupervisorMasterEmpty = dbHelper.isSupervisorMasterTableEmpty();
-                                            dbHelper.closeDB();
                                             mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
 
-                                            JSONObject leaveObj = new JSONObject();
-                                            leaveObj.put("token", tok);
-                                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("en", "gb"));
-                                            leaveObj.put("fromDate", simpleDateFormat.format(Calendar.getInstance().getTime()));
-                                            leaveObj.put("program", 1);
+                                            if (mIsFirstRun) {
+                                                DBCreate();
+                                                forcePwChangeDialog();
+                                            } else {
+                                                mPrefsEditor.putBoolean(PREF_FIRST_RUN, false);
+                                                mPrefsEditor.apply();
+                                                DBCreate();
 
-                                            JsonObjectRequest leaveReq = new JsonObjectRequest(JsonObjectRequest.Method.POST,
-                                                    String.format("%s%s", baseUrl, "_GetLeaveInfo"), leaveObj, new Response.Listener<JSONObject>() {
-                                                @Override
-                                                public void onResponse(JSONObject response) {
-                                                    if (mIsFirstRun) {
-                                                        DBCreate();
-                                                        forcePwChangeDialog();
-                                                    } else {
-                                                        mPrefsEditor.putBoolean(PREF_FIRST_RUN, false);
-                                                        mPrefsEditor.apply();
-                                                        DBCreate();
+                                                // Write credentials to SQLite for offline access
+                                                writeCredentialsToSqlLite(userName, md5);
 
-                                                        // Write credentials to SQLite for offline access
-                                                        writeCredentialsToSqlLite(userName, md5);
-
-                                                        pd.dismiss();
-                                                        updateMaster();
-                                                    }
-                                                }
-                                            }, networkIssueListener);
-                                            leaveReq.setRetryPolicy(new DefaultRetryPolicy(
-                                                    60000,
-                                                    0,
-                                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                                            mRequestQueue.add(leaveReq);
+                                                pd.dismiss();
+                                                updateMaster();
+                                            }
                                         } else {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                             builder.setMessage(getString(R.string.msg_errorUserPwd))

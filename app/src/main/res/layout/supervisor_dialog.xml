@@ -2,17 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="400dp"
+    android:layout_height="600dp"
     android:background="@android:color/white">
 
 
     <RelativeLayout
         android:id="@+id/page1"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
         <!--
         Last Contract
 Contract Desc	Display only
@@ -25,15 +24,17 @@ Zone Desc	Display only
             android:id="@+id/lbl_contract_codes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contract code: "
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:text="Contract code: " />
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_contract_codes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdf"
+            android:layout_alignParentEnd="true"
             android:layout_toRightOf="@id/lbl_contract_codes"
+            android:text="asdf"
+            app:bootstrapBrand="primary"
             app:dropdownResource="@array/placeholder"
             app:roundedCorners="true" />
 
@@ -41,18 +42,20 @@ Zone Desc	Display only
             android:id="@+id/lbl_zone_codes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
             android:layout_below="@id/lbl_contract_codes"
+            android:padding="12dp"
             android:text="Zone code: " />
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_zone_codes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdf"
             android:layout_below="@id/lbl_contract_codes"
             android:layout_alignStart="@id/ddl_contract_codes"
+            android:layout_alignParentEnd="true"
             android:layout_toRightOf="@id/lbl_zone_codes"
+            android:text="asdf"
+            app:bootstrapBrand="primary"
             app:dropdownResource="@array/placeholder"
             app:roundedCorners="true" />
 
@@ -69,7 +72,7 @@ Zone Desc	Display only
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back"
+                app:bootstrapText="@string/back"
                 app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
@@ -77,15 +80,15 @@ Zone Desc	Display only
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
                 app:bootstrapBrand="success"
+                app:bootstrapText="@string/submit"
                 app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/page2"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
@@ -93,7 +96,7 @@ Zone Desc	Display only
 
         <LinearLayout
             android:id="@+id/header_control2"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
@@ -121,14 +124,14 @@ Zone Desc	Display only
 
         <com.evrencoskun.tableview.TableView
             android:id="@+id/employmentTableView"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_above="@id/bottom2"
             android:layout_below="@id/header_control2" />
 
         <LinearLayout
             android:id="@+id/bottom2"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
@@ -138,8 +141,9 @@ Zone Desc	Display only
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back"
+                app:bootstrapText="@string/back"
                 app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
@@ -147,8 +151,9 @@ Zone Desc	Display only
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 app:bootstrapBrand="info"
-                app:bootstrapText="New staff"
+                app:bootstrapText="@string/new_staff"
                 app:roundedCorners="true" />
 
             <!--Enable only when sth is selected / found-->
@@ -157,8 +162,8 @@ Zone Desc	Display only
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
                 app:bootstrapBrand="success"
+                app:bootstrapText="@string/submit"
                 app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>
@@ -166,14 +171,14 @@ Zone Desc	Display only
     <!-- Show Page 3 only when unregistered cards are found / new staff is clicked -->
     <RelativeLayout
         android:id="@+id/page3"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="gone">
 
         <TableLayout
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_above="@id/bottom3"
             android:layout_margin="10dp"
@@ -273,10 +278,10 @@ Zone Desc	Display only
 
         <LinearLayout
             android:id="@+id/bottom3"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/back3"
@@ -284,15 +289,15 @@ Zone Desc	Display only
 
                 android:layout_height="wrap_content"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back"
+                app:bootstrapText="@string/back"
                 app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/done3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
                 app:bootstrapBrand="success"
+                app:bootstrapText="@string/submit"
                 app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>

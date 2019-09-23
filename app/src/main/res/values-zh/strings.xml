@@ -271,4 +271,5 @@
 
     <string name="segmented_supervisor">主管模式</string>
     <string name="segmented_self_service">自助服務</string>
+    <string name="new_staff">新員工</string>
 </resources>
