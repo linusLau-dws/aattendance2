@@ -345,7 +345,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             tmp.put(BT_Name, cur.getString(7));
             // No sync time: 8
             tmp.put(BT_EmploymentNumber, cur.getString(9));
-            tmp.put(BT_EmploymentNumber, cur.getString(10));
+            tmp.put(BT_AuthMethod, cur.getString(10));
             attendanceRecordContents.add(tmp);
         }
         cur.close();
