@@ -46,6 +46,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import static hk.com.dataworld.iattendance.Constants.DEBUG_FALLBACK_URL;
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_SUPERVISOR_RIGHT;
 import static hk.com.dataworld.iattendance.Constants.MAGIC_WORD;
 import static hk.com.dataworld.iattendance.Constants.PREF_FIRST_RUN;
 import static hk.com.dataworld.iattendance.Constants.PREF_HASH;
@@ -55,7 +56,6 @@ import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 import static hk.com.dataworld.iattendance.Constants.PREF_TOKEN;
 import static hk.com.dataworld.iattendance.Constants.PREF_UNAME;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
-import static hk.com.dataworld.iattendance.Utility.getGenericErrorListener;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_512;
 
@@ -83,6 +83,7 @@ public class LoginActivity extends BaseActivity {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mPrefsEditor;
     private ProgressDialog pd;
+    private boolean mIsSupervisor = false;
     private Response.ErrorListener networkIssueListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
@@ -787,6 +788,9 @@ public class LoginActivity extends BaseActivity {
                                             mPolicy_sym = tokContainer.getInt("policy_sym");
                                             mPolicy_upper = tokContainer.getInt("policy_upper");
                                             mPolicy_len = tokContainer.getInt("policy_len");
+                                            if (tokContainer.getInt("supervisor") == 1) {
+                                                mIsSupervisor = true;
+                                            }
                                             Log.i("Success", tok);
                                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit();
                                             // Store hashed password (DON'T SAVE THE REAL ONE!!!)
@@ -805,6 +809,9 @@ public class LoginActivity extends BaseActivity {
                                             editor.apply();
 
                                             // TODO: Leave Object
+                                            dbHelper.openDB();
+                                            boolean isSupervisorMasterEmpty = dbHelper.isSupervisorMasterTableEmpty();
+                                            dbHelper.closeDB();
                                             mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
 
                                             JSONObject leaveObj = new JSONObject();
@@ -829,7 +836,14 @@ public class LoginActivity extends BaseActivity {
                                                         writeCredentialsToSqlLite(userName, md5);
 
                                                         pd.dismiss();
-                                                        Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                                                        Intent intent = null;
+                                                        if (mIsSupervisor) {
+                                                            intent = new Intent(LoginActivity.this, SupervisorActivity.class);
+                                                            mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
+                                                        } else {
+                                                            intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                                                            mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
+                                                        }
                                                         startActivity(intent);
                                                     }
                                                 }

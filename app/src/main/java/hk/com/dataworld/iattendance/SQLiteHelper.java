@@ -50,6 +50,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     static final String SV_ZoneCode = "zonecode";
     static final String SV_DefaultIn = "defaultin";
     static final String SV_DefaultOut = "defaultout";
+    static final String SV_Status = "status";
 
     private static final String TAG = SQLiteHelper.class.getSimpleName();
     private static final int VERSION = 1;
@@ -106,7 +107,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + SV_StationCode + " VARCHAR, "
                     + SV_ZoneCode + " VARCHAR, "
                     + SV_DefaultIn + " VARCHAR, "
-                    + SV_DefaultOut + " VARCHAR)";
+                    + SV_DefaultOut + " VARCHAR, "
+                    + SV_Status + " INT)";
             database.execSQL(CREATE_TABLE9);
 
 
@@ -380,6 +382,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    boolean isSupervisorMasterTableEmpty() {
+        Cursor cur = myDB.rawQuery("SELECT COUNT(*) FROM " + TABLE_SUPERVISOR_INFO, new String[]{});
+        boolean returnVal;
+        cur.moveToPosition(0);
+        returnVal = cur.getInt(0) == 0;
+        cur.close();
+        return returnVal;
+    }
+
     ArrayList<String> getSupervisorMasterTableContract() {
         ArrayList<String> list = new ArrayList<>();
         Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ContractCode + " FROM " + TABLE_SUPERVISOR_INFO, new String[]{});
@@ -396,6 +407,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         ArrayList<String> list = new ArrayList<>();
         Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ZoneCode + " FROM " + TABLE_SUPERVISOR_INFO + " WHERE " + SV_ContractCode
                 + " = ?", new String[]{contract});
+
+        for (int x = 0; x < cur.getCount(); x++) {
+            cur.moveToPosition(x);
+            list.add(cur.getString(0));
+        }
+        cur.close();
+        return list;
+    }
+
+    ArrayList<String> getSupervisorMasterEmployment(String contract, String zone) {
+        ArrayList<String> list = new ArrayList<>();
+        Cursor cur = myDB.rawQuery("SELECT * FROM " + TABLE_SUPERVISOR_INFO + " WHERE " + SV_ContractCode
+                + " = ? AND " + SV_ZoneCode + " = ? AND " + SV_Status + " = 1", new String[]{contract, zone});
 
         for (int x = 0; x < cur.getCount(); x++) {
             cur.moveToPosition(x);

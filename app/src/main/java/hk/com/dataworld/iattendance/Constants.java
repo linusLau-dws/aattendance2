@@ -10,6 +10,7 @@ class Constants {
             PREF_HASH = "hash",
             PREF_TOKEN = "tok",
             PREF_REFRESH_TOKEN = "rtok",
+            PREF_HAS_SUPERVISOR_RIGHT = "has_su",
             ERR_VALID_EMPLOYMENT_NOT_FOUND = "ERROR_VALID_EMPLOYMENT_NOTFOUND",
     //EXTRA_HAS_EMPLOYMENTS = "has_employments",
     EXTRA_ALLOWED_APPROVALS = "allowed_approvals",

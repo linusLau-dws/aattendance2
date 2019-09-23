@@ -3,13 +3,17 @@ package hk.com.dataworld.iattendance;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.MifareClassic;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -92,8 +96,11 @@ public class SupervisorActivity extends BaseActivity {
     private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
     private static final int REQUEST_CODE_ENABLE_NFC = 105;
 
-    private TableLayout mTableLayout;
     private BluetoothAdapter mBluetoothAdapter;
+    private PendingIntent mPendingIntent;
+    private IntentFilter[] mIntentFilters;
+
+    private TableLayout mTableLayout;
     private CountDownTimer mCountdownTimer;
 
     private String mToken;
@@ -114,6 +121,18 @@ public class SupervisorActivity extends BaseActivity {
     private int mInOut = -1;
 
     private BluetoothLeScannerCompat mScanner = BluetoothLeScannerCompat.getScanner();
+
+
+    private static String[][] mTechList = new String[][]{
+            new String[]{MifareClassic.class.getName()},
+            new String[]{android.nfc.tech.MifareUltralight.class.getName()},
+            new String[]{android.nfc.tech.Ndef.class.getName()},
+            new String[]{android.nfc.tech.NfcA.class.getName()},
+            new String[]{android.nfc.tech.NfcB.class.getName()},
+            new String[]{android.nfc.tech.NfcF.class.getName()},
+            new String[]{android.nfc.tech.NfcV.class.getName()}
+    };
+    private NfcAdapter mNfcAdapter;
 
     private void startAttendanceSyncService() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -166,6 +185,11 @@ public class SupervisorActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mBaseURL = extendBaseUrl(prefs.getString(PREF_SERVER_ADDRESS, ""));
         mToken = prefs.getString(PREF_TOKEN, "");
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mPendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mIntentFilters = new IntentFilter[]{};
 
         // Used to be started on SelectionActivity
         startAttendanceSyncService();
@@ -495,12 +519,22 @@ public class SupervisorActivity extends BaseActivity {
                 final BootstrapDropDown contractCodes = findViewById(R.id.ddl_contract_codes);
                 final BootstrapDropDown zoneCodes = findViewById(R.id.ddl_zone_codes);
 
+                BootstrapButton qrScanBtn = findViewById(R.id.qrcode_button);
+                BootstrapButton barcodeScanBtn = findViewById(R.id.barcode_button);
+
+                TableView tableView = findViewById(R.id.employmentTableView);
+
+                List<CellModel> headings = new ArrayList<>();
+                headings.add(new CellModel("Name"));
+                headings.add(new CellModel("Staff number"));
+                headings.add(new CellModel("Employment number"));
+
                 //TODO
                 dbHelper.openDB();
                 ArrayList<String> contracts = dbHelper.getSupervisorMasterTableContract();
                 dbHelper.closeDB();
 
-                contractCodes.setDropdownData(contracts.toArray(new String[0]));
+                contractCodes.setDropdownData(contracts.toArray(new String[0]) == null ? new String[] {""} : contracts.toArray(new String[0]));
 
                 contractCodes.setOnDropDownItemClickListener(new BootstrapDropDown.OnDropDownItemClickListener() {
                     @Override
@@ -508,7 +542,7 @@ public class SupervisorActivity extends BaseActivity {
                         contractCodes.setText(contractCodes.getDropdownData()[id]);
                         dbHelper.openDB();
                         ArrayList<String> zones = dbHelper.getSupervisorMasterTableZone(contractCodes.getText().toString());
-                        zoneCodes.setDropdownData(zones.toArray(new String[0]));
+                        zoneCodes.setDropdownData(zones.toArray(new String[0]) == null ? new String[] {""} : zones.toArray(new String[0]));
                         dbHelper.closeDB();
                     }
                 });
@@ -605,17 +639,74 @@ public class SupervisorActivity extends BaseActivity {
                 doneButton2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dismiss();
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("token", mToken);
+                            obj.put("program", 1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i("Why500", obj.toString());
+
+                        mRequestQueue = Volley.newRequestQueue(SupervisorActivity.this);
+                        JsonObjectRequest req = new JsonObjectRequest(JsonObjectRequest.Method.POST,
+                                String.format("%s%s", mBaseURL, "BluetoothSyncHistory"),
+                                obj,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        dismiss();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Ignore
+                            }
+                        });
+                        mRequestQueue.add(req);
                     }
                 });
 
                 doneButton3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dismiss();
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("token", mToken);
+                            obj.put("program", 1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i("Why500", obj.toString());
+
+                        mRequestQueue = Volley.newRequestQueue(SupervisorActivity.this);
+                        JsonObjectRequest req = new JsonObjectRequest(JsonObjectRequest.Method.POST,
+                                String.format("%s%s", mBaseURL, "BluetoothAddNewStaffRecord"),
+                                obj,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        dismiss();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Ignore
+                            }
+                        });
+                        mRequestQueue.add(req);
                     }
                 });
 
+                qrScanBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent qrIntent = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
+                        startActivity(qrIntent);
+                    }
+                });
 //                BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
 //                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(SupervisorActivity.this)
 //                        .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth)).build());

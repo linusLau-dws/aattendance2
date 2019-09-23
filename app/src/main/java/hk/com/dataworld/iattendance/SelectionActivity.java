@@ -1,15 +1,25 @@
 package hk.com.dataworld.iattendance;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_SUPERVISOR_RIGHT;
+
 public class SelectionActivity extends BaseActivity {
+    private SharedPreferences mSharedPreferences;
+    private boolean mHasSuRights = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mHasSuRights = mSharedPreferences.getBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
 
         Button registerLocation =  findViewById(R.id.btnLocationRegistration);
         registerLocation.setOnClickListener(new View.OnClickListener() {
@@ -19,6 +29,7 @@ public class SelectionActivity extends BaseActivity {
                 startActivity(attendanceIntent);
             }
         });
+
 
         Button registerTimecard =  findViewById(R.id.btnTimecardRegistration);
         registerTimecard.setOnClickListener(new View.OnClickListener() {
@@ -42,9 +53,15 @@ public class SelectionActivity extends BaseActivity {
         supervisorMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent attendanceIntent = new Intent(SelectionActivity.this, BluetoothNewActivity.class);
+                Intent attendanceIntent = new Intent(SelectionActivity.this, SupervisorActivity.class);
                 startActivity(attendanceIntent);
             }
         });
+
+        if (mHasSuRights) {
+            registerLocation.setVisibility(View.GONE);
+            registerTimecard.setVisibility(View.GONE);
+            supervisorMode.setVisibility(View.GONE);
+        }
     }
 }

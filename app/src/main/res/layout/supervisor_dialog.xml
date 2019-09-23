@@ -4,16 +4,15 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:visibility="gone">
+    android:background="@android:color/white">
 
 
-<RelativeLayout
+    <RelativeLayout
         android:id="@+id/page1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <!--
         Last Contract
 Contract Desc	Display only
@@ -21,40 +20,66 @@ Contract Desc	Display only
 Last Zone		 	 	Select
 Zone Desc	Display only
         -->
-        <com.beardedhen.androidbootstrap.BootstrapDropDown
-        android:id="@+id/ddl_contract_codes"
+
+        <TextView
+            android:id="@+id/lbl_contract_codes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Contract code: "
+            android:padding="12dp"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapDropDown
+            android:id="@+id/ddl_contract_codes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="asdf"
+            android:layout_toRightOf="@id/lbl_contract_codes"
+            app:dropdownResource="@array/placeholder"
+            app:roundedCorners="true" />
+
+        <TextView
+            android:id="@+id/lbl_zone_codes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_below="@id/lbl_contract_codes"
+            android:text="Zone code: " />
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_zone_codes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:text="asdf"
+            android:layout_below="@id/lbl_contract_codes"
+            android:layout_alignStart="@id/ddl_contract_codes"
+            android:layout_toRightOf="@id/lbl_zone_codes"
+            app:dropdownResource="@array/placeholder"
+            app:roundedCorners="true" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/lbl_zone_codes"
             android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/back1"
-                app:roundedCorners="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back" />
+                app:bootstrapText="Back"
+                app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/next1"
-                app:roundedCorners="true"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:text="@string/submit"
-                app:bootstrapBrand="success" />
+                app:bootstrapBrand="success"
+                app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -63,13 +88,13 @@ Zone Desc	Display only
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/header_control2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/header_control"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -94,38 +119,47 @@ Zone Desc	Display only
                 app:roundedCorners="true" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <com.evrencoskun.tableview.TableView
+            android:id="@+id/employmentTableView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/bottom2"
+            android:layout_below="@id/header_control2" />
+
+        <LinearLayout
+            android:id="@+id/bottom2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/back2"
-                app:roundedCorners="true"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back" />
+                app:bootstrapText="Back"
+                app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/newstaff2"
-                app:roundedCorners="true"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 app:bootstrapBrand="info"
-                app:bootstrapText="New staff" />
+                app:bootstrapText="New staff"
+                app:roundedCorners="true" />
 
             <!--Enable only when sth is selected / found-->
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/done2"
-                app:roundedCorners="true"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:text="@string/submit"
-                app:bootstrapBrand="success" />
+                app:bootstrapBrand="success"
+                app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -138,31 +172,128 @@ Zone Desc	Display only
         android:orientation="vertical"
         android:visibility="gone">
 
-        <com.evrencoskun.tableview.TableView
-            android:id="@+id/employmentTableView"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom3"
+            android:layout_margin="10dp"
+            android:stretchColumns="1">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_english_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="English name: "
+                    android:textSize="@dimen/bootstrap_h3_text_size" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/english_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:roundedCorners="true" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_chinese_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chinese name: "
+                    android:textSize="@dimen/bootstrap_h3_text_size" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/chinese_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:roundedCorners="true" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_hkid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HKID: "
+                    android:textSize="@dimen/bootstrap_h3_text_size" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/hkid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:roundedCorners="true" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_staff_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Staff number: "
+                    android:textSize="@dimen/bootstrap_h3_text_size" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/staff_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:roundedCorners="true" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_employment_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employment number: "
+                    android:textSize="@dimen/bootstrap_h3_text_size" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/employment_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:roundedCorners="true" />
+            </TableRow>
+        </TableLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/bottom3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/back3"
-                app:roundedCorners="true"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 app:bootstrapBrand="warning"
-                app:bootstrapText="Back" />
+                app:bootstrapText="Back"
+                app:roundedCorners="true" />
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/done3"
-                app:roundedCorners="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/submit"
-                app:bootstrapBrand="success" />
+                app:bootstrapBrand="success"
+                app:roundedCorners="true" />
         </LinearLayout>
     </RelativeLayout>
 
