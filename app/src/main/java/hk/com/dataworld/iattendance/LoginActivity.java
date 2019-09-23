@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 
 import org.apache.commons.codec.binary.Hex;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -415,10 +416,7 @@ public class LoginActivity extends BaseActivity {
                                     mPrefsEditor.apply();
 
                                     dismiss();
-                                    // Intent to menu Activity
-                                    Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
-                                    finish();
-                                    startActivity(intent);
+                                    updateMaster();
                                 }
                             }, networkIssueListener);
                             mRequestQueue.add(changePwReq);
@@ -732,6 +730,57 @@ public class LoginActivity extends BaseActivity {
         dbHelper.closeDB();
     }
 
+    private void updateMaster() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("token", mSharedPreferences.getString(PREF_TOKEN, ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest updateMasterReq = new JsonObjectRequest(JsonObjectRequest.Method.POST,
+                                                    String.format("%s%s", baseUrl, "GetMaster"), object, new Response.Listener<JSONObject>() {
+                                                @Override
+                                                public void onResponse(JSONObject response) {
+                                                    try {
+                                                        JSONArray jsonArray = response.getJSONArray("d");
+                                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                                            JSONObject inst = jsonArray.getJSONObject(i);
+                                                            dbHelper.openDB();
+                                                            dbHelper.replaceOrInsertSupermasterTable(
+                                                                    inst.getString("EmploymentNumber"),
+                                                                    inst.getString("IDNumber"),
+                                                                    inst.getString("Name"),
+                                                                    inst.getString("ContractCode"),
+                                                                    inst.getString("StationCode"),
+                                                                    inst.getString("ZoneCode"),
+                                                                    inst.getString("DefaultIn"),
+                                                                    inst.getString("DefaultOut"),
+                                                                    inst.getInt("Status")
+                                                            );
+                                                            dbHelper.closeDB();
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    // TODO: Leave Object
+                                                    Intent intent = null;
+                                                    if (mIsSupervisor) {
+                                                        intent = new Intent(LoginActivity.this, SupervisorActivity.class);
+                                                        mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
+                                                    } else {
+                                                        intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                                                        mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
+                                                    }
+                                                    startActivity(intent);
+                                                }
+                                            }, networkIssueListener);
+        updateMasterReq.setRetryPolicy(new DefaultRetryPolicy(
+                                                    60000,
+                                                    0,
+                                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                                            mRequestQueue.add(updateMasterReq);
+    }
+
     private void nonce() {
         // IP address AlertDialog
 
@@ -836,15 +885,7 @@ public class LoginActivity extends BaseActivity {
                                                         writeCredentialsToSqlLite(userName, md5);
 
                                                         pd.dismiss();
-                                                        Intent intent = null;
-                                                        if (mIsSupervisor) {
-                                                            intent = new Intent(LoginActivity.this, SupervisorActivity.class);
-                                                            mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
-                                                        } else {
-                                                            intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
-                                                            mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
-                                                        }
-                                                        startActivity(intent);
+                                                        updateMaster();
                                                     }
                                                 }
                                             }, networkIssueListener);
@@ -853,59 +894,6 @@ public class LoginActivity extends BaseActivity {
                                                     0,
                                                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                                             mRequestQueue.add(leaveReq);
-//                                            JsonObjectRequest leaveReq = new JsonObjectRequest(JsonObjectRequest.Method.POST,
-//                                                    String.format("%s%s", baseUrl, "_GetLeaveInfo"), leaveObj, new Response.Listener<JSONObject>() {
-//                                                @Override
-//                                                public void onResponse(JSONObject response) {
-//
-//                                                    JSONObject employment = null;
-//                                                    try {
-//                                                        JSONArray array = response.getJSONArray("d");
-//                                                        for (int foo = 0; foo < array.length(); foo++) {
-//                                                            employment = array.getJSONObject(foo);
-//                                                            String err = employment.getString("ErrorCode");
-//                                                            Log.i("LoginBlocked", err);
-//                                                            if (err.equals(ERR_VALID_EMPLOYMENT_NOT_FOUND)) {
-//                                                                pd.dismiss();
-//                                                                AlertDialog.Builder bd = new AlertDialog.Builder(LoginActivity.this);
-//                                                                bd.setMessage(R.string.no_active_employments);
-//                                                                bd.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                                                                    @Override
-//                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-//                                                                        dialogInterface.dismiss();
-//                                                                    }
-//                                                                });
-//                                                                bd.create().show();
-//                                                                return;
-//                                                            }
-//
-//                                                            if (employment.getString("EmploymentNumber") != null) {
-//                                                                Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
-//                                                                startActivity(intent);
-//                                                            }
-//
-//                                                            DBCreate();
-//                                                        }
-//                                                    } catch (JSONException e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                    // TODO: Leave Object
-//
-//                                                    if (mIsFirstRun) {
-//                                                        forcePwChangeDialog();
-//                                                    } else {
-//                                                        // Intent to menu Activity
-//                                                        Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class); // TODO: Formerly Selection.class
-//                                                        //finish();
-//                                                        startActivity(intent);
-//                                                    }
-//                                                }
-//                                            }, networkIssueListener);
-//                                            leaveReq.setRetryPolicy(new DefaultRetryPolicy(
-//                                                    60000,
-//                                                    0,
-//                                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//                                            mRequestQueue.add(leaveReq);
                                         } else {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                             builder.setMessage(getString(R.string.msg_errorUserPwd))

@@ -84,6 +84,14 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.BT_StationCode;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Status;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_SyncTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_ZoneCode;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_ContractCode;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_DefaultIn;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_DefaultOut;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_EmploymentNumber;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_HKID;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_Name;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_StationCode;
+import static hk.com.dataworld.iattendance.SQLiteHelper.SV_ZoneCode;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
 import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
@@ -522,19 +530,48 @@ public class SupervisorActivity extends BaseActivity {
                 BootstrapButton qrScanBtn = findViewById(R.id.qrcode_button);
                 BootstrapButton barcodeScanBtn = findViewById(R.id.barcode_button);
 
+                final List<ContentValues>[] employmentsInSelectedZone = new List[]{new ArrayList<>()};
+                List<List<CellModel>> cells = new ArrayList<>();
                 TableView tableView = findViewById(R.id.employmentTableView);
 
                 List<CellModel> headings = new ArrayList<>();
-                headings.add(new CellModel("Name"));
-                headings.add(new CellModel("Staff number"));
                 headings.add(new CellModel("Employment number"));
+                headings.add(new CellModel("HKID"));
+                headings.add(new CellModel("Name"));
+                headings.add(new CellModel("Contract code"));
+                headings.add(new CellModel("Station code"));
+                headings.add(new CellModel("Zone code"));
+                headings.add(new CellModel("Default in"));
+                headings.add(new CellModel("Default out"));
+
+                for (ContentValues c : employmentsInSelectedZone[0]) {
+                    List<CellModel> tmp = new ArrayList<>();
+                    tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
+                    tmp.add(new CellModel(c.getAsString(SV_HKID)));
+                    tmp.add(new CellModel(c.getAsString(SV_Name)));
+                    tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_StationCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_ZoneCode)));
+                    tmp.add(new CellModel(c.getAsString(SV_DefaultIn)));
+                    tmp.add(new CellModel(c.getAsString(SV_DefaultOut)));
+                    cells.add(tmp);
+                }
+
+                List<CellModel> rows = new ArrayList<>();
+                for (int z = 0; z < employmentsInSelectedZone[0].size(); z++) {
+                    rows.add(new CellModel(String.valueOf(z + 1)));
+                }
+
+                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(SupervisorActivity.this);
+                tableView.setAdapter(adapter);
+                adapter.setAllItems(headings, rows, cells);
 
                 //TODO
                 dbHelper.openDB();
                 ArrayList<String> contracts = dbHelper.getSupervisorMasterTableContract();
                 dbHelper.closeDB();
 
-                contractCodes.setDropdownData(contracts.toArray(new String[0]) == null ? new String[] {""} : contracts.toArray(new String[0]));
+                contractCodes.setDropdownData(contracts.toArray(new String[0]) == null ? new String[] {"　"} : contracts.toArray(new String[0]));
 
                 contractCodes.setOnDropDownItemClickListener(new BootstrapDropDown.OnDropDownItemClickListener() {
                     @Override
@@ -542,7 +579,7 @@ public class SupervisorActivity extends BaseActivity {
                         contractCodes.setText(contractCodes.getDropdownData()[id]);
                         dbHelper.openDB();
                         ArrayList<String> zones = dbHelper.getSupervisorMasterTableZone(contractCodes.getText().toString());
-                        zoneCodes.setDropdownData(zones.toArray(new String[0]) == null ? new String[] {""} : zones.toArray(new String[0]));
+                        zoneCodes.setDropdownData(zones.toArray(new String[0]) == null ? new String[] {"　"} : zones.toArray(new String[0]));
                         dbHelper.closeDB();
                     }
                 });
@@ -553,6 +590,9 @@ public class SupervisorActivity extends BaseActivity {
                     @Override
                     public void onItemClick(ViewGroup parent, View v, int id) {
                         zoneCodes.setText(zoneCodes.getDropdownData()[id]);
+                        dbHelper.openDB();
+                        employmentsInSelectedZone[0] = dbHelper.getSupervisorMasterEmployment(contractCodes.getText().toString(), zoneCodes.getText().toString());
+                        dbHelper.closeDB();
                     }
                 });
 
@@ -1130,6 +1170,7 @@ public class SupervisorActivity extends BaseActivity {
             dbHelper.closeDB();
 
             obj.put("token", mToken);
+            obj.put("program", 1);
             JSONArray array = new JSONArray();
             for (ContentValues c :
                     unsynced) {

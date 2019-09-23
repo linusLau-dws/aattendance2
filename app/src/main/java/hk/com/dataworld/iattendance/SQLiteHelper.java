@@ -154,10 +154,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     String getUsrHash(String usrname) {
         Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + " FROM " + TABLE_OFFLINE_USERS + " WHERE " + USR_USERNAME + " = ?", new String[]{usrname});
-        cursor.moveToFirst();
-        String h = cursor.getString(0);
-        cursor.close();
-        return h;
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String h = cursor.getString(0);
+            cursor.close();
+            return h;
+        } else return null;
     }
 
     String findZoneCodeByAddress(String address) {
@@ -357,23 +359,25 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
 
-    void replaceOrInsertSupermasterTable() {
+    void replaceOrInsertSupermasterTable(String EmploymentNumber, String IDNumber, String Name, String ContractCode, String StationCode, String ZoneCode, String DefaultIn, String DefaultOut, int Status) {
         // TODO: Replace or Insert User
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "INSERT OR REPLACE INTO " + TABLE_SUPERVISOR_INFO + " (" + SV_EmploymentNumber + ", " + SV_HKID + ", " + SV_Name + ", " + SV_ContractCode + ", " + SV_StationCode + ", " + SV_ZoneCode + ", " + SV_DefaultIn + ", " + SV_DefaultOut + ") " + " values (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT OR REPLACE INTO " + TABLE_SUPERVISOR_INFO + " (" + SV_EmploymentNumber + ", " + SV_HKID + ", " + SV_Name + ", " + SV_ContractCode + ", " + SV_StationCode + ", " + SV_ZoneCode + ", " + SV_DefaultIn + ", " + SV_DefaultOut + ", " + SV_Status + ") " + " values (?,?,?,?,?,?,?,?,?)";
         SQLiteStatement statement = db.compileStatement(sql);
         db.beginTransaction();
         Log.i(TAG, "Begin insertLeaveList Transaction");
         try {
             statement.clearBindings();
-            statement.bindString(1, "");
-            statement.bindString(2, "");
-            statement.bindString(3, "");
-            statement.bindString(4, "");
-            statement.bindString(5, "");
-            statement.bindString(6, "");
-            statement.bindString(7, "");
-            statement.bindString(8, "");
+            statement.bindString(1, EmploymentNumber);
+            statement.bindString(2, IDNumber);
+            statement.bindString(3, Name);
+            statement.bindString(4, ContractCode);
+            statement.bindString(5, StationCode);
+            statement.bindString(6, ZoneCode);
+            statement.bindString(7, DefaultIn);
+            statement.bindString(8, DefaultOut);
+            statement.bindLong(9, Status);
+            Log.i("DefaultIn", DefaultIn);
             statement.execute();
             db.setTransactionSuccessful();
         } finally {
@@ -416,14 +420,23 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    ArrayList<String> getSupervisorMasterEmployment(String contract, String zone) {
-        ArrayList<String> list = new ArrayList<>();
+    ArrayList<ContentValues> getSupervisorMasterEmployment(String contract, String zone) {
+        ArrayList<ContentValues> list = new ArrayList<>();
         Cursor cur = myDB.rawQuery("SELECT * FROM " + TABLE_SUPERVISOR_INFO + " WHERE " + SV_ContractCode
                 + " = ? AND " + SV_ZoneCode + " = ? AND " + SV_Status + " = 1", new String[]{contract, zone});
 
         for (int x = 0; x < cur.getCount(); x++) {
             cur.moveToPosition(x);
-            list.add(cur.getString(0));
+            ContentValues tmp = new ContentValues();
+            tmp.put(SV_EmploymentNumber, cur.getString(0));
+            tmp.put(SV_HKID, cur.getString(1));
+            tmp.put(SV_Name, cur.getString(2));
+            tmp.put(SV_ContractCode, cur.getString(3));
+            tmp.put(SV_StationCode, cur.getString(4));
+            tmp.put(SV_ZoneCode, cur.getString(5));
+            tmp.put(SV_DefaultIn, cur.getString(6));
+            tmp.put(SV_DefaultOut, cur.getString(7));
+            list.add(tmp);
         }
         cur.close();
         return list;
