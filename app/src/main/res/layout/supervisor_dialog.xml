@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="4dp"
-        android:visibility="gone">
+>
         <!--
         Last Contract
 Contract Desc	Display only
@@ -94,7 +94,7 @@ Zone Desc	Display only
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/header_control2"
@@ -126,12 +126,19 @@ Zone Desc	Display only
                 app:roundedCorners="true" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/scannedEmploymentNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_control2"
+            android:textStyle="bold"/>
+
         <com.evrencoskun.tableview.TableView
             android:id="@+id/employmentTableView"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_above="@id/bottom2"
-            android:layout_below="@id/header_control2" />
+            android:layout_below="@id/scannedEmploymentNumber" />
 
         <LinearLayout
             android:id="@+id/bottom2"

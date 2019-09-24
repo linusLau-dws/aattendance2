@@ -1,8 +1,11 @@
 package hk.com.dataworld.iattendance;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,22 +51,32 @@ public class ZxingViewActivity extends BaseActivity implements OnDecodedCallback
         super.onResume();
         if (mPermissionGranted) {
             mScanner.startScanning();
+            Log.i("Zxing", "start");
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i("Zxing", "paused");
         mScanner.stopScanning();
     }
 
     @Override
     public void onDecoded(String decodedData) {
+        Log.i("Zxing", decodedData);
         Toast.makeText(this, decodedData, Toast.LENGTH_SHORT).show();
+//        AlertDialog alertDialog = new AlertDialog.Builder(this).setTitle("Is the employment ID correct?")
+        mScanner.stopScanning();
+        Intent returnIntent=new Intent();
+        returnIntent.putExtra("employmentID", decodedData);
+        setResult(RESULT_OK,returnIntent);
+        finish();
     }
 
     @Override
     public void onCameraError(Exception error) {
+        Log.i("Err", "erred");
         Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

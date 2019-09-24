@@ -98,6 +98,8 @@ public class BluetoothNewActivity extends BaseActivity {
     private static final int REQUEST_CODE_NFC_PERMISSION = 103;
     private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
     private static final int REQUEST_CODE_ENABLE_NFC = 105;
+    private static final int REQUEST_CODE_QR_CODE = 106;
+    private static final int REQUEST_CODE_BARCODE = 107;
 
     private BluetoothAdapter mBluetoothAdapter;
     private PendingIntent mPendingIntent;
@@ -416,7 +418,7 @@ public class BluetoothNewActivity extends BaseActivity {
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
             t4.setText(c.getAsString(BT_SyncTime));
 
-            tmp.add(new CellModel(localizeMethod(BluetoothNewActivity.this,c.getAsString(BT_AuthMethod))));
+            tmp.add(new CellModel(localizeMethod(BluetoothNewActivity.this, c.getAsString(BT_AuthMethod))));
 
             row.addView(t1);
             row.addView(t2);
@@ -437,7 +439,7 @@ public class BluetoothNewActivity extends BaseActivity {
 
         if (arr.size() == 0) {
             List<CellModel> empty = new ArrayList<>();
-            for (int cols= 0; cols < 8; cols++) {
+            for (int cols = 0; cols < 8; cols++) {
                 empty.add(new CellModel(""));
             }
             cells.add(empty);
@@ -551,7 +553,7 @@ public class BluetoothNewActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
-                        startActivity(zxing);
+                        startActivityForResult(zxing, REQUEST_CODE_QR_CODE);
                     }
                 });
 
@@ -562,7 +564,7 @@ public class BluetoothNewActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
-                        startActivity(zxing);
+                        startActivityForResult(zxing, REQUEST_CODE_BARCODE);
                     }
                 });
 
@@ -744,7 +746,7 @@ public class BluetoothNewActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "","Bluetooth");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -920,9 +922,9 @@ public class BluetoothNewActivity extends BaseActivity {
 //                                            , dbHelper.findAddressByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
                                             , obj.getString("ZoneCode")
                                             , obj.getString("StationCode")
-                                            ,""
-                                            ,""
-                                            ,""
+                                            , ""
+                                            , ""
+                                            , ""
                                             , "Bluetooth"
                                             , obj.getString("CreateDate")
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
@@ -1063,14 +1065,31 @@ public class BluetoothNewActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_GPS_PERMISSION) {
-            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-            if (hasPermission != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{
-                                android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                        REQUEST_CODE_GPS_PERMISSION);
-            } else {
+        int hasPermission;
+        switch (requestCode) {
+            case REQUEST_CODE_GPS_PERMISSION:
+                hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (hasPermission != PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{
+                                    android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                            REQUEST_CODE_GPS_PERMISSION);
+                } else {
+                    hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+                    if (hasPermission != PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{
+                                        android.Manifest.permission.NFC},
+                                REQUEST_CODE_NFC_PERMISSION);
+                    } else {
+                        dbHelper = new SQLiteHelper(this);
+                        tryRefreshReceptors();
+                        bluetoothContent();
+                    }
+                }
+                break;
+
+            case REQUEST_CODE_NFC_PERMISSION:
                 hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
                 if (hasPermission != PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,
@@ -1082,21 +1101,10 @@ public class BluetoothNewActivity extends BaseActivity {
                     tryRefreshReceptors();
                     bluetoothContent();
                 }
-            }
-        }
 
-        else if (requestCode == REQUEST_CODE_NFC_PERMISSION) {
-            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
-            if (hasPermission != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{
-                                android.Manifest.permission.NFC},
-                        REQUEST_CODE_NFC_PERMISSION);
-            } else {
-                dbHelper = new SQLiteHelper(this);
-                tryRefreshReceptors();
-                bluetoothContent();
-            }
+                break;
+            case REQUEST_CODE_QR_CODE:
+                break;
         }
     }
 

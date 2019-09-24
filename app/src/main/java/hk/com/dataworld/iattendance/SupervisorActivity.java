@@ -106,6 +106,8 @@ public class SupervisorActivity extends BaseActivity {
     private static final int REQUEST_CODE_NFC_PERMISSION = 103;
     private static final int REQUEST_CODE_ENABLE_AUTOTIME = 104;
     private static final int REQUEST_CODE_ENABLE_NFC = 105;
+    private static final int REQUEST_CODE_QR_CODE = 106;
+    private static final int REQUEST_CODE_BARCODE = 107;
 
     private BluetoothAdapter mBluetoothAdapter;
     private PendingIntent mPendingIntent;
@@ -139,6 +141,8 @@ public class SupervisorActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private Integer selectedEmploymentOrder;
     private ArrayList<String> addresses;
+
+    private TextView mBNWCodeEmploymentLabel;
 
     private static String[][] mTechList = new String[][]{
             new String[]{MifareClassic.class.getName()},
@@ -547,6 +551,8 @@ public class SupervisorActivity extends BaseActivity {
                 final BootstrapDropDown contractCodes = findViewById(R.id.ddl_contract_codes);
                 final BootstrapDropDown zoneCodes = findViewById(R.id.ddl_zone_codes);
 
+                mBNWCodeEmploymentLabel = findViewById(R.id.scannedEmploymentNumber);
+
                 BootstrapButton qrScanBtn = findViewById(R.id.qrcode_button);
                 BootstrapButton barcodeScanBtn = findViewById(R.id.barcode_button);
 
@@ -860,7 +866,7 @@ public class SupervisorActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         Intent qrIntent = new Intent(SupervisorActivity.this, ZxingViewActivity.class);
-                        startActivity(qrIntent);
+                        startActivityForResult(qrIntent, REQUEST_CODE_QR_CODE);
                     }
                 });
 //                BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
@@ -1354,32 +1360,39 @@ public class SupervisorActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_ENABLE_AUTOTIME) {
-            forceAutoTime();
-        } else if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
-            if (!mBluetoothAdapter.isEnabled()) {
+        switch (requestCode) {
+            case REQUEST_CODE_ENABLE_AUTOTIME:
+                forceAutoTime();
+                break;
+            case REQUEST_CODE_ENABLE_BLUETOOTH:
+                if (!mBluetoothAdapter.isEnabled()) {
 //                mBluetoothAdapter.enable();
-                Intent intentBtEnabled = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(intentBtEnabled, 1);
-            } else {
-                bluetoothContent();
-            }
-        } else if (requestCode == REQUEST_CODE_ENABLE_NFC) {
-            if (!mNfcAdapter.isEnabled()) {
-                //Dialog to NFC settings
-                AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-                builder.setMessage(R.string.nfc_not_enabled);
-                builder.setCancelable(false);
-                builder.setPositiveButton(R.string.nfc_go_to_settings, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), REQUEST_CODE_ENABLE_NFC);
-                    }
-                });
-                builder.create().show();
-            } else {
-                bluetoothContent();
-            }
+                    Intent intentBtEnabled = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intentBtEnabled, 1);
+                } else {
+                    bluetoothContent();
+                }
+                break;
+            case REQUEST_CODE_ENABLE_NFC:
+                if (!mNfcAdapter.isEnabled()) {
+                    //Dialog to NFC settings
+                    AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setMessage(R.string.nfc_not_enabled);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton(R.string.nfc_go_to_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), REQUEST_CODE_ENABLE_NFC);
+                        }
+                    });
+                    builder.create().show();
+                } else {
+                    bluetoothContent();
+                }
+                break;
+            case REQUEST_CODE_QR_CODE:
+                mBNWCodeEmploymentLabel.setText(data.getStringExtra("employmentID"));
+                break;
         }
     }
 
@@ -1502,14 +1515,31 @@ public class SupervisorActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_GPS_PERMISSION) {
-            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-            if (hasPermission != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{
-                                android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                        REQUEST_CODE_GPS_PERMISSION);
-            } else {
+        int hasPermission;
+        switch (requestCode) {
+            case REQUEST_CODE_GPS_PERMISSION:
+                hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (hasPermission != PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{
+                                    android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                            REQUEST_CODE_GPS_PERMISSION);
+                } else {
+                    hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
+                    if (hasPermission != PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{
+                                        android.Manifest.permission.NFC},
+                                REQUEST_CODE_NFC_PERMISSION);
+                    } else {
+                        dbHelper = new SQLiteHelper(this);
+                        tryRefreshReceptors();
+                        bluetoothContent();
+                    }
+                }
+                break;
+
+            case REQUEST_CODE_NFC_PERMISSION:
                 hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
                 if (hasPermission != PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,
@@ -1521,19 +1551,10 @@ public class SupervisorActivity extends BaseActivity {
                     tryRefreshReceptors();
                     bluetoothContent();
                 }
-            }
-        } else if (requestCode == REQUEST_CODE_NFC_PERMISSION) {
-            int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.NFC);
-            if (hasPermission != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{
-                                android.Manifest.permission.NFC},
-                        REQUEST_CODE_NFC_PERMISSION);
-            } else {
-                dbHelper = new SQLiteHelper(this);
-                tryRefreshReceptors();
-                bluetoothContent();
-            }
+
+                break;
+            case REQUEST_CODE_QR_CODE:
+                break;
         }
     }
 
