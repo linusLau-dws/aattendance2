@@ -199,6 +199,8 @@ public class SupervisorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_new);
 
+        dbHelper = new SQLiteHelper(this);
+
         BootstrapButton moreOptions = findViewById(R.id.more_options);
         moreOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,7 +247,6 @@ public class SupervisorActivity extends BaseActivity {
                                 android.Manifest.permission.NFC},
                         REQUEST_CODE_NFC_PERMISSION);
             } else {
-                dbHelper = new SQLiteHelper(this);
                 tryRefreshReceptors();
             }
         }
@@ -791,6 +792,9 @@ public class SupervisorActivity extends BaseActivity {
                         updateTable();
 
                         snackbar(R.string.bluetooth_success);
+
+                        dismiss();
+
 //                        JSONObject obj = new JSONObject();
 //                        try {
 //                            obj.put("token", mToken);
