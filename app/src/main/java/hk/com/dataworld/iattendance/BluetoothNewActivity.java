@@ -184,6 +184,7 @@ public class BluetoothNewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mIsEnableRestartBehaviour = false;
         setContentView(R.layout.activity_bluetooth_new);
 
         BootstrapButton moreOptions = findViewById(R.id.more_options);
@@ -296,7 +297,6 @@ public class BluetoothNewActivity extends BaseActivity {
             }
         });
 
-        mTableLayout = findViewById(R.id.myRecords);
         updateTable();
 //        BluetoothDeviceAdapter adaptor = new BluetoothDeviceAdapter(this);
 //        mTableView.setAdapter(adaptor);
@@ -383,7 +383,6 @@ public class BluetoothNewActivity extends BaseActivity {
         List<List<CellModel>> cells = new ArrayList<>();
 
         dbHelper.openDB();
-        mTableLayout.removeViews(1, mTableLayout.getChildCount() - 1);
         ArrayList<ContentValues> arr = dbHelper.getAllRecords();
 
         for (ContentValues c :
@@ -426,8 +425,6 @@ public class BluetoothNewActivity extends BaseActivity {
             row.addView(t4);
 
             cells.add(tmp);
-
-            mTableLayout.addView(row);
         }
         dbHelper.closeDB();
 

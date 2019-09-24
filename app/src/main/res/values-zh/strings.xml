@@ -289,4 +289,6 @@
     <string name="HeadingZonecode">分區編號</string>
     <string name="HeadingDefaultin">原定上班時間</string>
     <string name="HeadingDefaultout">原定下班時間</string>
+
+    <string name="scanResult">掃瞄結果：%1$s</string>
 </resources>

@@ -19,6 +19,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     // Offline Users
     static final String USR_USERNAME = "username";
     static final String USR_HASH = "hash";
+    static final String USR_IS_SUPERVISOR = "is_supervisor";
 
     // Actual Record
     static final String BT_DateTime = "datetime";
@@ -74,7 +75,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         try {
             String CREATE_TABLE6 = "CREATE TABLE " + TABLE_OFFLINE_USERS + " ("
                     + USR_USERNAME + " VARCHAR PRIMARY KEY, "
-                    + USR_HASH + " VARCHAR)";
+                    + USR_HASH + " VARCHAR, "
+                    + USR_IS_SUPERVISOR + " INT)";
             database.execSQL(CREATE_TABLE6);
 
             String CREATE_TABLE7 = "CREATE TABLE " + TABLE_BLUETOOTH_ATTENDANCE + " ("
@@ -152,13 +154,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
     // region 2019.01.11 Bluetooth Attendance
 
-    String getUsrHash(String usrname) {
-        Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + " FROM " + TABLE_OFFLINE_USERS + " WHERE " + USR_USERNAME + " = ?", new String[]{usrname});
+    ContentValues getUsrHash(String usrname) {
+        Cursor cursor = myDB.rawQuery("SELECT " + USR_HASH + ", " + USR_IS_SUPERVISOR + " FROM " + TABLE_OFFLINE_USERS + " WHERE " + USR_USERNAME + " = ?", new String[]{usrname});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            String h = cursor.getString(0);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("h",cursor.getString(0));
+            contentValues.put("isSupervisor",cursor.getInt(1) == 1);
             cursor.close();
-            return h;
+            return contentValues;
         } else return null;
     }
 
@@ -210,9 +214,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return name;
     }
 
-    void insertOfflineUser(String u, String h) {
+    void insertOfflineUser(String u, String h,  boolean isSupervisor) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "INSERT OR REPLACE INTO " + TABLE_OFFLINE_USERS + " (" + USR_USERNAME + ", " + USR_HASH + ") " + " values (?,?)";
+        String sql = "INSERT OR REPLACE INTO " + TABLE_OFFLINE_USERS + " (" + USR_USERNAME + ", " + USR_HASH + ", " + USR_IS_SUPERVISOR + ") " + " values (?,?,?)";
         SQLiteStatement statement = db.compileStatement(sql);
         db.beginTransaction();
         Log.i(TAG, "Begin insertLeaveList Transaction");
@@ -220,6 +224,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             statement.clearBindings();
             statement.bindString(1, u);
             statement.bindString(2, h);
+            statement.bindLong(3, isSupervisor ? 1 : 0);
             statement.execute();
             db.setTransactionSuccessful();
         } finally {

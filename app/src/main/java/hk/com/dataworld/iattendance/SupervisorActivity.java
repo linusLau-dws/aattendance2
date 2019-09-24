@@ -202,6 +202,7 @@ public class SupervisorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_new);
+        mIsEnableRestartBehaviour = false;
 
         dbHelper = new SQLiteHelper(this);
 
@@ -313,7 +314,6 @@ public class SupervisorActivity extends BaseActivity {
             }
         });
 
-        mTableLayout = findViewById(R.id.myRecords);
         updateTable();
 //        BluetoothDeviceAdapter adaptor = new BluetoothDeviceAdapter(this);
 //        mTableView.setAdapter(adaptor);
@@ -401,7 +401,6 @@ public class SupervisorActivity extends BaseActivity {
         List<List<CellModel>> cells = new ArrayList<>();
 
         dbHelper.openDB();
-        mTableLayout.removeViews(1, mTableLayout.getChildCount() - 1);
         ArrayList<ContentValues> arr = dbHelper.getAllRecords();
 
         for (ContentValues c :
@@ -453,7 +452,6 @@ public class SupervisorActivity extends BaseActivity {
 
             cells.add(tmp);
 
-            mTableLayout.addView(row);
         }
         dbHelper.closeDB();
 
@@ -1391,7 +1389,8 @@ public class SupervisorActivity extends BaseActivity {
                 }
                 break;
             case REQUEST_CODE_QR_CODE:
-                mBNWCodeEmploymentLabel.setText(data.getStringExtra("employmentID"));
+                Log.i("Howdy", "ddd");
+                mBNWCodeEmploymentLabel.setText(getString(R.string.scanResult,data.getStringExtra("employmentID")));
                 break;
         }
     }

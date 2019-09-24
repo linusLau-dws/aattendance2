@@ -289,4 +289,5 @@
     <string name="HeadingDefaultin">Default in</string>
     <string name="HeadingDefaultout">Default out</string>
 
+    <string name="scanResult">Scan result: %1$s</string>
 </resources>

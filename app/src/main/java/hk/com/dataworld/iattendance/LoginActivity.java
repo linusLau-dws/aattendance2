@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -409,7 +410,7 @@ public class LoginActivity extends BaseActivity {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     // Write credentials to SQLite for offline access
-                                    writeCredentialsToSqlLite(userName, md5(pw));
+                                    writeCredentialsToSqlLite(userName, md5(pw), mIsSupervisor);
 
                                     // Save password if 'Remember Me' is checked
                                     mPrefsEditor.putString(PREF_HASH, md5(pw));
@@ -725,9 +726,9 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void writeCredentialsToSqlLite(String u, String h) {
+    private void writeCredentialsToSqlLite(String u, String h, boolean isSupervisor) {
         dbHelper.openDB();
-        dbHelper.insertOfflineUser(u, h);
+        dbHelper.insertOfflineUser(u, h, isSupervisor);
         dbHelper.closeDB();
     }
 
@@ -878,7 +879,7 @@ public class LoginActivity extends BaseActivity {
                                                 DBCreate();
 
                                                 // Write credentials to SQLite for offline access
-                                                writeCredentialsToSqlLite(userName, md5);
+                                                writeCredentialsToSqlLite(userName, md5, mIsSupervisor);
 
                                                 pd.dismiss();
                                                 updateMaster();
@@ -917,12 +918,26 @@ public class LoginActivity extends BaseActivity {
                 // Cannot reach server, consult SQLite table OfflineUsers instead.
                 DBCreate();
                 dbHelper.openDB();
-                String mHash = dbHelper.getUsrHash(mUsernameEdit.getText().toString());
+                ContentValues contentValues = dbHelper.getUsrHash(mUsernameEdit.getText().toString());
+                if (contentValues == null) {
+                    return;
+                }
+                String mHash = contentValues.getAsString("h");
                 dbHelper.closeDB();
                 if (mHash.equals(md5(mPasswordEdit.getText().toString()))) {
                     Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
                     startActivity(intent);
                 }
+                mIsSupervisor = contentValues.getAsBoolean("isSupervisor");
+                Intent intent = null;
+                if (mIsSupervisor) {
+                    intent = new Intent(LoginActivity.this, SupervisorActivity.class);
+                    mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
+                } else {
+                    intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                    mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
+                }
+                startActivity(intent);
             }
         });   //getGenericErrorListener(this, pd)
         mRequestQueue.add(nonceRequest);
