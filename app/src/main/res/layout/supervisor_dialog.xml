@@ -29,9 +29,8 @@ Zone Desc	Display only
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_contract_codes"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_toRightOf="@id/lbl_contract_codes"
             android:text="asdf"
             app:bootstrapBrand="primary"
@@ -48,11 +47,10 @@ Zone Desc	Display only
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_zone_codes"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/lbl_contract_codes"
             android:layout_alignStart="@id/ddl_contract_codes"
-            android:layout_alignParentEnd="true"
             android:layout_toRightOf="@id/lbl_zone_codes"
             android:text="asdf"
             app:bootstrapBrand="primary"
