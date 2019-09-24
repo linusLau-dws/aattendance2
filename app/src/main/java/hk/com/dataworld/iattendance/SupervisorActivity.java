@@ -936,6 +936,8 @@ public class SupervisorActivity extends BaseActivity {
         mDialog.setCancelable(false);
         mDialog.show();
 
+        mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mTechList);
+
         ScanSettings settings = new ScanSettings.Builder()
                 .setLegacy(false)
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).setReportDelay(0)
@@ -1126,31 +1128,31 @@ public class SupervisorActivity extends BaseActivity {
             }
         });
 
-        mCountdownTimer = new CountDownTimer(1000 * 30, 1000 * SCAN_TIMEOUT_SECONDS) {
-            @Override
-            public void onTick(long l) {
-                //mBluetoothAdapter.startDiscovery();
-                Log.i("tick", String.valueOf(l));
-            }
-
-            @Override
-            public void onFinish() {
-                if (!mIsFound) {
-                    finish();
-                    Intent intent = new Intent(SupervisorActivity.this, BluetoothFindActivity.class);
-                    intent.putExtra("NOT_FOUND", true);
-                    startActivity(intent);
-                }
-            }
-        };
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mCountdownTimer.start();
-            }
-        });
-        thread.start();
+//        mCountdownTimer = new CountDownTimer(1000 * 30, 1000 * SCAN_TIMEOUT_SECONDS) {
+//            @Override
+//            public void onTick(long l) {
+//                //mBluetoothAdapter.startDiscovery();
+//                Log.i("tick", String.valueOf(l));
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                if (!mIsFound) {
+//                    finish();
+//                    Intent intent = new Intent(SupervisorActivity.this, BluetoothFindActivity.class);
+//                    intent.putExtra("NOT_FOUND", true);
+//                    startActivity(intent);
+//                }
+//            }
+//        };
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mCountdownTimer.start();
+//            }
+//        });
+//        thread.start();
     }
 
     private void snackbar(int res) {
