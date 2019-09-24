@@ -179,6 +179,7 @@
     <string name="nfc">NFC</string>
     <string name="qrcode">Scan QR Code</string>
     <string name="barcode">Scan Barcode</string>
+    <string name="manual">Manual</string>
 
     <string name="nfc_function_unavailable">Your device does not support NFC.</string>
     <string name="nfc_not_enabled">NFC is not enabled.</string>
@@ -271,4 +272,21 @@
     <string name="segmented_supervisor">Supervisor</string>
     <string name="segmented_self_service">Self-service</string>
     <string name="new_staff">New staff</string>
+
+    <string name="contract_code_colon">Contract code:</string>
+    <string name="zone_code_colon">Zone code:</string>
+    <string name="hkid_colon">HKID: </string>
+    <string name="english_name_colon">English name:</string>
+    <string name="chinese_name_colon">Chinese name:</string>
+    <string name="staff_number_colon">Staff number:</string>
+
+    <string name="HeadingEmploymentnumber">Employment number</string>
+    <string name="HeadingHKID">HKID</string>
+    <string name="HeadingName">Name</string>
+    <string name="HeadingContractcode">Contract code</string>
+    <string name="HeadingStationcode">Station code</string>
+    <string name="HeadingZonecode">Zone code</string>
+    <string name="HeadingDefaultin">Default in</string>
+    <string name="HeadingDefaultout">Default out</string>
+
 </resources>

@@ -89,6 +89,7 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.BT_ZoneCode;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
 import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
+import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
 public class BluetoothNewActivity extends BaseActivity {
 
@@ -415,7 +416,7 @@ public class BluetoothNewActivity extends BaseActivity {
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
             t4.setText(c.getAsString(BT_SyncTime));
 
-            tmp.add(new CellModel(c.getAsString(BT_AuthMethod)));
+            tmp.add(new CellModel(localizeMethod(BluetoothNewActivity.this,c.getAsString(BT_AuthMethod))));
 
             row.addView(t1);
             row.addView(t2);

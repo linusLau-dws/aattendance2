@@ -57,6 +57,7 @@
                 android:text="@string/nfc_in"
                 android:textSize="@dimen/bootstrap_h1_text_size"
                 app:bootstrapBrand="primary"
+                android:layout_marginEnd="2dp"
                 app:bootstrapSize="xl"
                 app:roundedCorners="true" />
 
@@ -69,6 +70,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:enabled="false"
                 android:text="@string/nfc_out"
+                android:layout_marginStart="2dp"
                 android:textSize="@dimen/bootstrap_h1_text_size"
                 app:bootstrapBrand="primary"
                 app:bootstrapSize="xl"

@@ -179,6 +179,7 @@
     <string name="nfc">NFC</string>
     <string name="qrcode">掃瞄二維碼</string>
     <string name="barcode">掃瞄條碼</string>
+    <string name="manual">手動</string>
 
     <string name="nfc_function_unavailable">你的裝置並不支援NFC。</string>
     <string name="nfc_not_enabled">NFC並未啟用。</string>
@@ -272,4 +273,20 @@
     <string name="segmented_supervisor">主管模式</string>
     <string name="segmented_self_service">自助服務</string>
     <string name="new_staff">新員工</string>
+
+    <string name="contract_code_colon">合約編號：</string>
+    <string name="zone_code_colon">分區編號：</string>
+    <string name="hkid_colon">身分證號碼：</string>
+    <string name="english_name_colon">英文姓名：</string>
+    <string name="chinese_name_colon">中文姓名：</string>
+    <string name="staff_number_colon">員工編號：</string>
+
+    <string name="HeadingEmploymentnumber">僱員編號</string>
+    <string name="HeadingHKID">身分證號碼</string>
+    <string name="HeadingName">姓名</string>
+    <string name="HeadingContractcode">合約編號</string>
+    <string name="HeadingStationcode">區域編號</string>
+    <string name="HeadingZonecode">分區編號</string>
+    <string name="HeadingDefaultin">原定上班時間</string>
+    <string name="HeadingDefaultout">原定下班時間</string>
 </resources>

@@ -276,4 +276,22 @@ public class Utility {
         }
         return out;
     }
+
+    static String localizeMethod(Context context, String method) {
+        switch (method) {
+            case "Bluetooth":
+                return context.getString(R.string.bluetooth);
+            case "NFC":
+                return context.getString(R.string.nfc);
+            case "QR Code":
+                return context.getString(R.string.qrcode);
+            case "Bar Code":
+                return context.getString(R.string.barcode);
+            case "Manual":
+            case "Supervisor manual":
+                return context.getString(R.string.manual);
+            default:
+                return "";
+        }
+    }
 }

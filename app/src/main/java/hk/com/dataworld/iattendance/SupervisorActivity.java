@@ -97,6 +97,7 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.SV_ZoneCode;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
 import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
+import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
 public class SupervisorActivity extends BaseActivity {
 
@@ -438,7 +439,7 @@ public class SupervisorActivity extends BaseActivity {
 
 
             tmp.add(new CellModel(c.getAsString(BT_EmploymentNumber) == null ? "" : c.getAsString(BT_EmploymentNumber)));
-            tmp.add(new CellModel(c.getAsString(BT_AuthMethod)));
+            tmp.add(new CellModel(localizeMethod(SupervisorActivity.this,c.getAsString(BT_AuthMethod))));
 
             row.addView(t1);
             row.addView(t2);
@@ -587,14 +588,14 @@ public class SupervisorActivity extends BaseActivity {
                         List<List<CellModel>> cells = new ArrayList<>();
 
                         List<CellModel> headings = new ArrayList<>();
-                        headings.add(new CellModel("Employment number"));
-                        headings.add(new CellModel("HKID"));
-                        headings.add(new CellModel("Name"));
-                        headings.add(new CellModel("Contract code"));
-                        headings.add(new CellModel("Station code"));
-                        headings.add(new CellModel("Zone code"));
-                        headings.add(new CellModel("Default in"));
-                        headings.add(new CellModel("Default out"));
+                        headings.add(new CellModel(getString(R.string.HeadingEmploymentnumber)));
+                        headings.add(new CellModel(getString(R.string.HeadingHKID)));
+                        headings.add(new CellModel(getString(R.string.HeadingName)));
+                        headings.add(new CellModel(getString(R.string.HeadingContractcode)));
+                        headings.add(new CellModel(getString(R.string.HeadingStationcode)));
+                        headings.add(new CellModel(getString(R.string.HeadingZonecode)));
+                        headings.add(new CellModel(getString(R.string.HeadingDefaultin)));
+                        headings.add(new CellModel(getString(R.string.HeadingDefaultout)));
 
                         Log.i("data", employmentsInSelectedZone.toString());
                         for (ContentValues c : employmentsInSelectedZone) {
@@ -628,14 +629,14 @@ public class SupervisorActivity extends BaseActivity {
                 TableView tableView = findViewById(R.id.employmentTableView);
 
                 List<CellModel> headings = new ArrayList<>();
-                headings.add(new CellModel("Employment number"));
-                headings.add(new CellModel("HKID"));
-                headings.add(new CellModel("Name"));
-                headings.add(new CellModel("Contract code"));
-                headings.add(new CellModel("Station code"));
-                headings.add(new CellModel("Zone code"));
-                headings.add(new CellModel("Default in"));
-                headings.add(new CellModel("Default out"));
+                headings.add(new CellModel(getString(R.string.HeadingEmploymentnumber)));
+                headings.add(new CellModel(getString(R.string.HeadingHKID)));
+                headings.add(new CellModel(getString(R.string.HeadingName)));
+                headings.add(new CellModel(getString(R.string.HeadingContractcode)));
+                headings.add(new CellModel(getString(R.string.HeadingStationcode)));
+                headings.add(new CellModel(getString(R.string.HeadingZonecode)));
+                headings.add(new CellModel(getString(R.string.HeadingDefaultin)));
+                headings.add(new CellModel(getString(R.string.HeadingDefaultout)));
 
                 Log.i("data", employmentsInSelectedZone.toString());
                 for (ContentValues c : employmentsInSelectedZone) {
@@ -782,7 +783,7 @@ public class SupervisorActivity extends BaseActivity {
                     public void onClick(View view) {
 
                         dbHelper.openDB();
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, "--",  employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_ZoneCode), employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_StationCode), "--", "--", employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_EmploymentNumber), "Supervisor manual");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, "--",  employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_ZoneCode), employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_StationCode), "--", "--", employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_EmploymentNumber), "Manual");
                         dbHelper.closeDB();
 
                         sync();
