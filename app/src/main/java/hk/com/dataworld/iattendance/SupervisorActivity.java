@@ -39,6 +39,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapDropDown;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
@@ -141,6 +142,8 @@ public class SupervisorActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private Integer selectedEmploymentOrder;
     private ArrayList<String> addresses;
+    private RelativeLayout relLayout2, relLayout3;
+    private BootstrapEditText dialogEmploymentNumEdit;
 
     private TextView mBNWCodeEmploymentLabel;
 
@@ -206,6 +209,12 @@ public class SupervisorActivity extends BaseActivity {
 
         dbHelper = new SQLiteHelper(this);
 
+        mInButton = findViewById(R.id.in_button);
+        mOutButton = findViewById(R.id.out_button);
+
+        mInButton.setBackgroundColor(getResources().getColor(R.color.colorComplementary));
+        mOutButton.setBackgroundColor(getResources().getColor(R.color.colorComplementary));
+
         BootstrapButton moreOptions = findViewById(R.id.more_options);
         moreOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,8 +238,6 @@ public class SupervisorActivity extends BaseActivity {
 
         trySyncHistory();
 
-        mInButton = findViewById(R.id.in_button);
-        mOutButton = findViewById(R.id.out_button);
         mLayout = findViewById(R.id.bluetooth_container);
         int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (hasPermission != PERMISSION_GRANTED) {
@@ -543,8 +550,13 @@ public class SupervisorActivity extends BaseActivity {
                 BootstrapButton newStaffButton2 = findViewById(R.id.newstaff2);
                 BootstrapButton doneButton3 = findViewById(R.id.done3);
                 final RelativeLayout relLayout1 = findViewById(R.id.page1);
-                final RelativeLayout relLayout2 = findViewById(R.id.page2);
-                final RelativeLayout relLayout3 = findViewById(R.id.page3);
+                relLayout2 = findViewById(R.id.page2);
+                relLayout3 = findViewById(R.id.page3);
+                final BootstrapEditText dialogEnglishNameEdit = findViewById(R.id.english_name);
+                final BootstrapEditText dialogChineseNameEdit = findViewById(R.id.chinese_name);
+                final BootstrapEditText dialogHKIDEdit = findViewById(R.id.hkid);
+                final BootstrapEditText dialogStaffNumEdit = findViewById(R.id.staff_number);
+                dialogEmploymentNumEdit = findViewById(R.id.employment_number);
 
                 final BootstrapDropDown contractCodes = findViewById(R.id.ddl_contract_codes);
                 final BootstrapDropDown zoneCodes = findViewById(R.id.ddl_zone_codes);
@@ -831,6 +843,12 @@ public class SupervisorActivity extends BaseActivity {
                 doneButton3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dialogEnglishNameEdit.getText();
+                        dialogChineseNameEdit.getText();
+                        dialogHKIDEdit.getText();
+                        dialogStaffNumEdit.getText();
+                        dialogEmploymentNumEdit.getText();
+
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("token", mToken);
@@ -1390,7 +1408,21 @@ public class SupervisorActivity extends BaseActivity {
                 break;
             case REQUEST_CODE_QR_CODE:
                 Log.i("Howdy", "ddd");
-                mBNWCodeEmploymentLabel.setText(getString(R.string.scanResult,data.getStringExtra("employmentID")));
+                String scanResult = data.getStringExtra("employmentID");
+                mBNWCodeEmploymentLabel.setText(getString(R.string.scanResult,scanResult));
+                boolean found = false;
+                for (int i =0; i<employmentsInSelectedZone.size(); i++) {
+                    if (employmentsInSelectedZone.get(i).getAsString(SV_EmploymentNumber).equalsIgnoreCase(scanResult)) {
+                    dialogTableView.setSelectedRow(i);
+                    found = true;
+                    break;
+                }
+                if (!found) {
+                    // Go to new staff
+                    relLayout2.setVisibility(View.GONE);
+                    relLayout3.setVisibility(View.VISIBLE);
+                    dialogEmploymentNumEdit.setText(scanResult);
+                }
                 break;
         }
     }
