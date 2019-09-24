@@ -57,6 +57,7 @@ import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 import static hk.com.dataworld.iattendance.Constants.PREF_TOKEN;
 import static hk.com.dataworld.iattendance.Constants.PREF_UNAME;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
+import static hk.com.dataworld.iattendance.Utility.getGenericErrorListener;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_512;
 
@@ -418,7 +419,7 @@ public class LoginActivity extends BaseActivity {
                                     dismiss();
                                     updateMaster();
                                 }
-                            }, networkIssueListener);
+                            }, getGenericErrorListener(LoginActivity.this,pd));
                             mRequestQueue.add(changePwReq);
                         } else {
                             errText.setText(errMsg.toString());

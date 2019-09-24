@@ -25,7 +25,7 @@ Zone Desc	Display only
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Contract code: " />
+            android:text="@string/contract_code_colon" />
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_contract_codes"
@@ -43,7 +43,7 @@ Zone Desc	Display only
             android:layout_height="wrap_content"
             android:layout_below="@id/lbl_contract_codes"
             android:padding="12dp"
-            android:text="@string/contract_code_colon" />
+            android:text="@string/zone_code_colon" />
 
         <com.beardedhen.androidbootstrap.BootstrapDropDown
             android:id="@+id/ddl_zone_codes"

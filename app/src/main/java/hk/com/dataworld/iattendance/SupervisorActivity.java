@@ -1337,7 +1337,7 @@ public class SupervisorActivity extends BaseActivity {
                 }
             });
             req.setRetryPolicy(new DefaultRetryPolicy(
-                    DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                    5000,
                     0,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             mRequestQueue.add(req);
