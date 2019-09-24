@@ -280,7 +280,7 @@ public class SupervisorActivity extends BaseActivity {
     }
 
     private void payload() {
-        getSupportActionBar().setTitle(R.string.btn_attendanceCamel);
+        getSupportActionBar().setTitle(R.string.supervisorTitle);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         forceAutoTime();
