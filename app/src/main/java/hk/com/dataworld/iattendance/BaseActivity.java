@@ -172,6 +172,9 @@ public class BaseActivity extends AppCompatActivity {
                 });
                 builder.create().show();
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

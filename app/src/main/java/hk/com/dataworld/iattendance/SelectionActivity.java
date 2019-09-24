@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.ActionBar;
+
 import static hk.com.dataworld.iattendance.Constants.PREF_HAS_SUPERVISOR_RIGHT;
 
 public class SelectionActivity extends BaseActivity {
@@ -17,6 +19,11 @@ public class SelectionActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mHasSuRights = mSharedPreferences.getBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);

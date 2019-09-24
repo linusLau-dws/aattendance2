@@ -13,5 +13,5 @@
         app:decode_interval="500"
         app:reticle_color="@android:color/holo_green_light"
         app:reticle_fraction="0.5"
-        app:use_flash="true" />
+        app:use_flash="false" />
 </LinearLayout>

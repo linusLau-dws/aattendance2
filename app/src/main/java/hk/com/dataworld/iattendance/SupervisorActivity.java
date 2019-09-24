@@ -137,7 +137,7 @@ public class SupervisorActivity extends BaseActivity {
     private TableView dialogTableView;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private Integer selectedEmploymentOrder;
-
+    private ArrayList<String> addresses;
 
     private static String[][] mTechList = new String[][]{
             new String[]{MifareClassic.class.getName()},
@@ -197,6 +197,15 @@ public class SupervisorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_new);
+
+        BootstrapButton moreOptions = findViewById(R.id.more_options);
+        moreOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SupervisorActivity.this, SelectionActivity.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mBaseURL = extendBaseUrl(prefs.getString(PREF_SERVER_ADDRESS, ""));
@@ -512,7 +521,7 @@ public class SupervisorActivity extends BaseActivity {
         mIsFound = false;
 
         dbHelper.openDB();
-        final ArrayList<String> addresses = dbHelper.getReceptorAddresses();
+        addresses = dbHelper.getReceptorAddresses();
         dbHelper.closeDB();
 
         mDialog = new Dialog(this) {
@@ -1366,6 +1375,122 @@ public class SupervisorActivity extends BaseActivity {
             } else {
                 bluetoothContent();
             }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // NFC Discovered
+        super.onNewIntent(intent);
+        resolveIntent(intent);
+    }
+
+    private void resolveIntent(Intent intent) {
+        String intentAction = intent.getAction();
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intentAction)) {
+            String cardId = Utility.byteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID));
+            Log.i("cardId", cardId);
+
+            if (addresses.contains(cardId)) {
+//                        // Disable Bluetooth
+//                        if (mNfcAdapter.isEnabled()) {
+//                            mNfcAdapter.disable();
+//                        }
+
+                // Close dialog
+                if (!isFinishing() && mDialog != null) {
+                    mDialog.dismiss();
+                }
+
+                TextView textView = findViewById(R.id.foundDevice);
+                textView.setText(cardId);
+                Log.e("matched", cardId);
+
+                mIsFound = true;
+
+                // Log into SQLite
+                dbHelper.openDB();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                String zonecode = dbHelper.findZoneCodeByAddress(cardId);
+                String stationcode = dbHelper.findStationCodeByAddress(cardId);
+                String description = dbHelper.findDescriptionByAddress(cardId);
+                String name = dbHelper.findDescriptionByAddress(cardId); // TODO: Now same as description
+                dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, cardId, zonecode, stationcode, description, name, "", "NFC");
+                dbHelper.closeDB();
+
+                //Try sync
+                sync();
+
+                updateTable();
+
+                snackbar(R.string.nfc_success);
+
+                mInButton.setEnabled(false);
+                mOutButton.setEnabled(false);
+//                        mInButton.setEnabled(true);
+//                        mOutButton.setEnabled(true);
+//                        mLayout.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+//                        mInButton.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                //bluetoothContent();
+//
+//                                // Log into SQLite
+//                                dbHelper.openDB();
+//                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//                                String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
+//                                dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), 0, result.getDevice().getAddress(), description);
+//                                dbHelper.closeDB();
+//
+//                                //Try sync
+//                                sync();
+//
+//                                updateTable();
+//                            }
+//                        });
+//                        mOutButton.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                //bluetoothContent();
+//
+//                                // Log into SQLite
+//                                dbHelper.openDB();
+//                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//                                String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
+//                                dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), 1, result.getDevice().getAddress(), description);
+//                                dbHelper.closeDB();
+//
+//                                //Try sync
+//                                sync();
+//
+//                                updateTable();
+//                            }
+//                        });
+//                        CountDownTimer countDownTimer = new CountDownTimer(1000, 10000) {
+//                            @Override
+//                            public void onTick(long millisUntilFinished) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onFinish() {
+//                                mIsFound = false;
+//                            }
+//                        };
+//                        countDownTimer.start();
+            }
+
+//            textViewStaffNum.setText(cardId);
+//            StaffDataSource ds = new StaffDataSource(this);
+//            try {
+//                ds.open();
+//                staffName = ds.getStaffNameByExternalRef(cardId);
+//                textViewStaffName.setText(staffName);
+//            } finally {
+//                ds.close();
+//            }
+//
+//            mCamera.takePicture(null, null, pictureCallback);
         }
     }
 

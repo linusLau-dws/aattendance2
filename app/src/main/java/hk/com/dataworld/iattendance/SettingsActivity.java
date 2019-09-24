@@ -12,13 +12,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import static hk.com.dataworld.iattendance.Constants.PREF_LOCALE;
 import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private static final GeneralPreferenceFragment pref_general = new GeneralPreferenceFragment();
@@ -36,6 +37,11 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(R.id.settings_layout, new GeneralPreferenceFragment())
                 .commit();
         //setupSimplePreferencesScreen();
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 //    @Override
