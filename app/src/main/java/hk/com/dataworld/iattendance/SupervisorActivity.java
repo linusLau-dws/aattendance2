@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
@@ -43,6 +44,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapDropDown;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
@@ -74,6 +76,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
@@ -137,6 +140,9 @@ public class SupervisorActivity extends BaseActivity {
                  */
                 mCurrentLatitude = location.getLatitude();
                 mCurrentLongitude = location.getLongitude();
+                Log.i("Latitude", mCurrentLatitude.toString());
+                Log.i("Longitude", mCurrentLongitude.toString());
+
                 mGeoApiContext = new GeoApiContext.Builder().apiKey(getString(R.string.google_directions_key)).build();
                 GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(mGeoApiContext);
                 geocodingApiRequest.latlng(new LatLng(mCurrentLatitude, mCurrentLongitude));
@@ -162,6 +168,8 @@ public class SupervisorActivity extends BaseActivity {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (IllegalStateException s) {
+                    // Ignore
                 }
             }
         }
@@ -310,6 +318,14 @@ public class SupervisorActivity extends BaseActivity {
         setContentView(R.layout.activity_bluetooth_new);
         mIsEnableRestartBehaviour = false;
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                   this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    111);
+        }
         setupLocationRequest();
 
         dbHelper = new SQLiteHelper(this);
@@ -317,59 +333,8 @@ public class SupervisorActivity extends BaseActivity {
         mInButton = findViewById(R.id.in_button);
         mOutButton = findViewById(R.id.out_button);
 
-        BootstrapBrand supervisorBootstrapBrand = new BootstrapBrand() {
-            @Override
-            public int defaultFill(Context context) {
-                return context.getResources().getColor(R.color.colorComplementary);
-            }
-
-            @Override
-            public int defaultEdge(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int defaultTextColor(Context context) {
-                return context.getResources().getColor(android.R.color.white);
-            }
-
-            @Override
-            public int activeFill(Context context) {
-                return context.getResources().getColor(R.color.colorComplementary);
-            }
-
-            @Override
-            public int activeEdge(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int activeTextColor(Context context) {
-                return context.getResources().getColor(android.R.color.white);
-            }
-
-            @Override
-            public int disabledFill(Context context) {
-                return context.getResources().getColor(R.color.colorComplementaryLight);
-            }
-
-            @Override
-            public int disabledEdge(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int disabledTextColor(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int getColor() {
-                return 0;
-            }
-        };
-        mInButton.setBootstrapBrand(supervisorBootstrapBrand);
-        mOutButton.setBootstrapBrand(supervisorBootstrapBrand);
+        mInButton.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+        mOutButton.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
 
         BootstrapButton moreOptions = findViewById(R.id.more_options);
         moreOptions.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
@@ -77,6 +78,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
@@ -140,6 +142,7 @@ public class PunchActivity extends BaseActivity {
                 geocodingApiRequest.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
                     @Override
                     public void onResult(GeocodingResult[] result) {
+                        Log.i("Gps", "success");
                         if (result.length > 0) {
                             mGeocodedLocation = result[0].formattedAddress;
                         }
@@ -147,7 +150,7 @@ public class PunchActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(Throwable e) {
-
+                        Log.e("Errorgps", e.getMessage());
                     }
                 });
                 try {
@@ -159,6 +162,7 @@ public class PunchActivity extends BaseActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                mGeocodedLocation = String.format("%f, %f", mCurrentLatitude, mCurrentLongitude);
             }
         }
     };
@@ -302,6 +306,14 @@ public class PunchActivity extends BaseActivity {
         mIsEnableRestartBehaviour = false;
         setContentView(R.layout.activity_bluetooth_new);
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    111);
+        }
         setupLocationRequest();
 
         BootstrapButton moreOptions = findViewById(R.id.more_options);

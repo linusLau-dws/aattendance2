@@ -861,7 +861,7 @@ public class LoginActivity extends BaseActivity {
                                             mMethod_qrcode = tokContainer.getInt("qr_on");
                                             editor.putBoolean(PREF_HAS_QRCODE, mMethod_qrcode == 1);
 
-                                            if (tokContainer.tokContainer.getInt("supervisor") == 1) {
+                                            if (tokContainer.getInt("supervisor") == 1) {
                                                 mIsSupervisor = true;
                                             }
                                             Log.i("Success", tok);
