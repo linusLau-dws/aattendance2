@@ -42,23 +42,23 @@
         </activity>
         <activity
             android:name=".BluetoothFindActivity"
-            android:parentActivityName=".BluetoothNewActivity"
+            android:parentActivityName=".PunchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BluetoothNewActivity"
-            android:parentActivityName=".BluetoothNewActivity"
+            android:name=".PunchActivity"
+            android:parentActivityName=".PunchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".BluetoothSavedReceptorsActivity"
-            android:parentActivityName=".BluetoothNewActivity"
+            android:parentActivityName=".PunchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LocationRegistrationActivity"
-            android:parentActivityName=".BluetoothNewActivity"
+            android:parentActivityName=".PunchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TimeCardRegistrationActivity"
-            android:parentActivityName=".BluetoothNewActivity"
+            android:parentActivityName=".PunchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"

@@ -48,6 +48,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import static hk.com.dataworld.iattendance.Constants.DEBUG_FALLBACK_URL;
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_BLUETOOTH;
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_NFC;
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_QRCODE;
 import static hk.com.dataworld.iattendance.Constants.PREF_HAS_SUPERVISOR_RIGHT;
 import static hk.com.dataworld.iattendance.Constants.MAGIC_WORD;
 import static hk.com.dataworld.iattendance.Constants.PREF_FIRST_RUN;
@@ -197,6 +200,7 @@ public class LoginActivity extends BaseActivity {
 
 
     private int mPolicy_low, mPolicy_num, mPolicy_sym, mPolicy_upper, mPolicy_len;
+    private int mMethod_bluetooth, mMethod_nfc, mMethod_qrcode;
 
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
@@ -779,7 +783,7 @@ public class LoginActivity extends BaseActivity {
                                                         intent = new Intent(LoginActivity.this, SupervisorActivity.class);
                                                         mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
                                                     } else {
-                                                        intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                                                        intent = new Intent(LoginActivity.this, PunchActivity.class);
                                                         mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
                                                     }
                                                     startActivity(intent);
@@ -848,11 +852,19 @@ public class LoginActivity extends BaseActivity {
                                             mPolicy_sym = tokContainer.getInt("policy_sym");
                                             mPolicy_upper = tokContainer.getInt("policy_upper");
                                             mPolicy_len = tokContainer.getInt("policy_len");
+
+                                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit();
+                                            mMethod_bluetooth = tokContainer.getInt("bluetooth_on");
+                                            editor.putBoolean(PREF_HAS_BLUETOOTH, mMethod_bluetooth == 1);
+                                            mMethod_nfc = tokContainer.getInt("nfc_on");
+                                            editor.putBoolean(PREF_HAS_NFC, mMethod_nfc == 1);
+                                            mMethod_qrcode = tokContainer.getInt("qr_on");
+                                            editor.putBoolean(PREF_HAS_QRCODE, mMethod_qrcode == 1);
+
                                             if (tokContainer.getInt("supervisor") == 1) {
                                                 mIsSupervisor = true;
                                             }
                                             Log.i("Success", tok);
-                                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit();
                                             // Store hashed password (DON'T SAVE THE REAL ONE!!!)
                                             if (mRememberMe.isChecked()) {
                                                 editor.putString(PREF_UNAME, userName);
@@ -925,7 +937,7 @@ public class LoginActivity extends BaseActivity {
                 String mHash = contentValues.getAsString("h");
                 dbHelper.closeDB();
                 if (mHash.equals(md5(mPasswordEdit.getText().toString()))) {
-                    Intent intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, PunchActivity.class);
                     startActivity(intent);
                 }
                 mIsSupervisor = contentValues.getAsBoolean("isSupervisor");
@@ -934,7 +946,7 @@ public class LoginActivity extends BaseActivity {
                     intent = new Intent(LoginActivity.this, SupervisorActivity.class);
                     mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
                 } else {
-                    intent = new Intent(LoginActivity.this, BluetoothNewActivity.class);
+                    intent = new Intent(LoginActivity.this, PunchActivity.class);
                     mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
                 }
                 startActivity(intent);

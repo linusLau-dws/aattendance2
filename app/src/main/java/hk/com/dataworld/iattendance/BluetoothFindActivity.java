@@ -98,7 +98,7 @@ public class BluetoothFindActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                Intent intent = new Intent(BluetoothFindActivity.this, BluetoothNewActivity.class); // TODO: Formerly Selection.class
+                Intent intent = new Intent(BluetoothFindActivity.this, PunchActivity.class); // TODO: Formerly Selection.class
                 startActivity(intent);
             }
         });

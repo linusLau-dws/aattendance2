@@ -51,7 +51,7 @@ public class SelectionActivity extends BaseActivity {
         punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent attendanceIntent = new Intent(SelectionActivity.this, BluetoothNewActivity.class);
+                Intent attendanceIntent = new Intent(SelectionActivity.this, PunchActivity.class);
                 startActivity(attendanceIntent);
             }
         });

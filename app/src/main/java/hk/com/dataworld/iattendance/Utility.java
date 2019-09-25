@@ -29,13 +29,6 @@ import java.util.Locale;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import static hk.com.dataworld.iattendance.Constants.STATUS_APPROVED;
-import static hk.com.dataworld.iattendance.Constants.STATUS_CANCELLED;
-import static hk.com.dataworld.iattendance.Constants.STATUS_CONFIRMED_CANCELLED;
-import static hk.com.dataworld.iattendance.Constants.STATUS_PENDING_CANCEL;
-import static hk.com.dataworld.iattendance.Constants.STATUS_REJECTED;
-import static hk.com.dataworld.iattendance.Constants.STATUS_WAITING;
-
 //import java.io.IOException;
 //import java.io.InputStream;
 //import android.util.Log;
@@ -250,7 +243,7 @@ public class Utility {
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(context, BluetoothNewActivity.class);  // TODO: Formerly Selection.class
+                                        Intent intent = new Intent(context, PunchActivity.class);  // TODO: Formerly Selection.class
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         context.startActivity(intent);
                                     }

@@ -1,3 +1,8 @@
+/*
+    THIS IS THE CENTER ACTVITY THAT CONTAINS IN/OUT BUTTONS
+    FOR SUPERVISORS 主管, SEE SupervisorActivity INSTEAD
+ */
+
 package hk.com.dataworld.iattendance;
 
 import android.Manifest;
@@ -64,6 +69,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static hk.com.dataworld.iattendance.Constants.PREF_HAS_QRCODE;
 import static hk.com.dataworld.iattendance.Constants.PREF_SERVER_ADDRESS;
 import static hk.com.dataworld.iattendance.Constants.PREF_TOKEN;
 import static hk.com.dataworld.iattendance.Constants.SCAN_TIMEOUT_SECONDS;
@@ -84,7 +90,7 @@ import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
-public class BluetoothNewActivity extends BaseActivity {
+public class PunchActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
     private static final int REQUEST_CODE_GPS_PERMISSION = 102;
@@ -117,6 +123,8 @@ public class BluetoothNewActivity extends BaseActivity {
 
     private boolean mIsFound = false;
     private int mInOut = -1;
+
+    private SharedPreferences mPrefs;
 
     private BluetoothLeScannerCompat mScanner = BluetoothLeScannerCompat.getScanner();
 
@@ -184,15 +192,15 @@ public class BluetoothNewActivity extends BaseActivity {
         moreOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BluetoothNewActivity.this, SelectionActivity.class);
+                Intent intent = new Intent(PunchActivity.this, SelectionActivity.class);
                 startActivity(intent);
             }
         });
 
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mBaseURL = extendBaseUrl(prefs.getString(PREF_SERVER_ADDRESS, ""));
-        mToken = prefs.getString(PREF_TOKEN, "");
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mBaseURL = extendBaseUrl(mPrefs.getString(PREF_SERVER_ADDRESS, ""));
+        mToken = mPrefs.getString(PREF_TOKEN, "");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mPendingIntent = PendingIntent.getActivity(this, 0,
@@ -285,7 +293,7 @@ public class BluetoothNewActivity extends BaseActivity {
 //                mCountdownTimer.pause();
                 //mIsEnableRestartBehaviour = false;
                 finish();
-                Intent intent = new Intent(BluetoothNewActivity.this, BluetoothFindActivity.class);
+                Intent intent = new Intent(PunchActivity.this, BluetoothFindActivity.class);
                 startActivity(intent);
             }
         });
@@ -333,7 +341,7 @@ public class BluetoothNewActivity extends BaseActivity {
                             setContentView(R.layout.autotime_dialog);
 
                             ImageView iv = findViewById(R.id.instructionAnim);
-                            Glide.with(BluetoothNewActivity.this).asGif().load(R.raw.force_autotime).into(iv);
+                            Glide.with(PunchActivity.this).asGif().load(R.raw.force_autotime).into(iv);
                             TextView txt = findViewById(R.id.instructionTxt);
                             txt.setText(R.string.attendance_function_requires_autotime);
                             Button goToSettings = findViewById(R.id.go_to_settings_button);
@@ -382,8 +390,8 @@ public class BluetoothNewActivity extends BaseActivity {
                 arr) {
             List<CellModel> tmp = new ArrayList<>();
 
-            TableRow row = new TableRow(BluetoothNewActivity.this);
-            TextView t1 = new TextView(BluetoothNewActivity.this);
+            TableRow row = new TableRow(PunchActivity.this);
+            TextView t1 = new TextView(PunchActivity.this);
             String dateTime = c.getAsString(BT_DateTime);
 
             tmp.add(new CellModel(getShortDayOfWeek(this, dateTime.substring(0, 10))));
@@ -391,7 +399,7 @@ public class BluetoothNewActivity extends BaseActivity {
 
 
             t1.setText(String.format("%s %s", getDayOfWeekSuffixedString(this, dateTime.substring(0, 10)), dateTime.substring(11)));
-            TextView t2 = new TextView(BluetoothNewActivity.this);
+            TextView t2 = new TextView(PunchActivity.this);
 
 
             tmp.add(new CellModel(c.getAsInteger(BT_InOut) == 0 ? getString(R.string.bluetooth_in) : getString(R.string.bluetooth_out)));
@@ -399,18 +407,18 @@ public class BluetoothNewActivity extends BaseActivity {
             t2.setText(c.getAsInteger(BT_InOut) == 0 ? getString(R.string.bluetooth_in) : getString(R.string.bluetooth_out));
             t2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            TextView t3 = new TextView(BluetoothNewActivity.this);
+            TextView t3 = new TextView(PunchActivity.this);
             tmp.add(new CellModel(c.getAsString(BT_Description)));
             tmp.add(new CellModel(c.getAsString(BT_Name)));
             tmp.add(new CellModel(c.getAsInteger(BT_Status) == 0 ? getString(R.string.status_pending) : getString(R.string.bluetooth_success)));
             t3.setText(c.getAsInteger(BT_Status) == 0 ? getString(R.string.status_pending) : getString(R.string.bluetooth_success));
             t3.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            TextView t4 = new TextView(BluetoothNewActivity.this);
+            TextView t4 = new TextView(PunchActivity.this);
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
             t4.setText(c.getAsString(BT_SyncTime));
 
-            tmp.add(new CellModel(localizeMethod(BluetoothNewActivity.this, c.getAsString(BT_AuthMethod))));
+            tmp.add(new CellModel(localizeMethod(PunchActivity.this, c.getAsString(BT_AuthMethod))));
 
             row.addView(t1);
             row.addView(t2);
@@ -522,46 +530,50 @@ public class BluetoothNewActivity extends BaseActivity {
                             }
                         });
                         finish();
-                        Intent retMenu = new Intent(BluetoothNewActivity.this, BluetoothNewActivity.class);  // TODO: Formerly Selection.class
+                        Intent retMenu = new Intent(PunchActivity.this, PunchActivity.class);  // TODO: Formerly Selection.class
                         startActivity(retMenu);
                     }
                 });
 
                 BootstrapLabel enabledMethodsLbl = findViewById(R.id.bluetooth_enabled);
-                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                enabledMethodsLbl.setBootstrapText(new BootstrapText.Builder(PunchActivity.this)
                         .addMaterialIcon(MaterialIcons.MD_BLUETOOTH).addText(getString(R.string.bluetooth)).build());
 
                 BootstrapLabel enabledMethodsLbl2 = findViewById(R.id.nfc_enabled);
-                enabledMethodsLbl2.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                enabledMethodsLbl2.setBootstrapText(new BootstrapText.Builder(PunchActivity.this)
                         .addMaterialIcon(MaterialIcons.MD_NFC).addText(getString(R.string.nfc)).build());
 
                 BootstrapButton qrcode_btn = findViewById(R.id.qrcode_button);
-                qrcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                qrcode_btn.setBootstrapText(new BootstrapText.Builder(PunchActivity.this)
                         .addFontAwesomeIcon(FontAwesome.FA_QRCODE).addText(getString(R.string.qrcode)).build());
 
                 qrcode_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
+                        Intent zxing = new Intent(PunchActivity.this, ZxingViewActivity.class);
                         startActivityForResult(zxing, REQUEST_CODE_QR_CODE);
                     }
                 });
 
                 BootstrapButton barcode_btn = findViewById(R.id.barcode_button);
-                barcode_btn.setBootstrapText(new BootstrapText.Builder(BluetoothNewActivity.this)
+                barcode_btn.setBootstrapText(new BootstrapText.Builder(PunchActivity.this)
                         .addFontAwesomeIcon(FontAwesome.FA_BARCODE).addText(getString(R.string.barcode)).build());
                 barcode_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent zxing = new Intent(BluetoothNewActivity.this, ZxingViewActivity.class);
+                        Intent zxing = new Intent(PunchActivity.this, ZxingViewActivity.class);
                         startActivityForResult(zxing, REQUEST_CODE_BARCODE);
                     }
                 });
+                if (!mPrefs.getBoolean(PREF_HAS_QRCODE, false)) {
+                    qrcode_btn.setVisibility(View.GONE);
+                    barcode_btn.setVisibility(View.GONE);
+                }
 
                 ImageView anim = findViewById(R.id.searching_anim);
-                Glide.with(BluetoothNewActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);
+                Glide.with(PunchActivity.this).asGif().load(R.raw.bluetooth_searching).into(anim);
 
-                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(BluetoothNewActivity.this);
+                BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(PunchActivity.this);
 
                 List<CellModel> headings = new ArrayList<>();
                 headings.add(new CellModel(getString(R.string.bluetooth_name)));
@@ -824,7 +836,7 @@ public class BluetoothNewActivity extends BaseActivity {
             public void onFinish() {
                 if (!mIsFound) {
                     finish();
-                    Intent intent = new Intent(BluetoothNewActivity.this, BluetoothFindActivity.class);
+                    Intent intent = new Intent(PunchActivity.this, BluetoothFindActivity.class);
                     intent.putExtra("NOT_FOUND", true);
                     startActivity(intent);
                 }
