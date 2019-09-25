@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="4dp"
->
+    >
         <!--
         Last Contract
 Contract Desc	Display only
@@ -114,16 +114,16 @@ Zone Desc	Display only
                 app:bootstrapSize="sm"
                 app:roundedCorners="true" />
 
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/barcode_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                app:bootstrapText="@string/barcode"
-                android:layout_weight="1"
-                app:bootstrapBrand="warning"
-                app:bootstrapSize="sm"
-                app:roundedCorners="true" />
+            <!--<com.beardedhen.androidbootstrap.BootstrapButton-->
+                <!--android:id="@+id/barcode_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="2dp"-->
+                <!--app:bootstrapText="@string/barcode"-->
+                <!--android:layout_weight="1"-->
+                <!--app:bootstrapBrand="warning"-->
+                <!--app:bootstrapSize="sm"-->
+                <!--app:roundedCorners="true" />-->
         </LinearLayout>
 
         <TextView
