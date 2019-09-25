@@ -32,6 +32,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     static final String BT_Name = "name";
     static final String BT_SyncTime = "sync_time";
     // Added Sep 2019
+    static final String BT_GPSLocation = "gps_location";
     static final String BT_EmploymentNumber = "employment_number";
     static final String BT_AuthMethod = "auth_method";
 
@@ -89,6 +90,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + BT_Description + " VARCHAR, "
                     + BT_Name + " VARCHAR, "
                     + BT_SyncTime + " VARCHAR, "
+                    + BT_GPSLocation + " VARCHAR, "
                     + BT_EmploymentNumber + " VARCHAR, "
                     + BT_AuthMethod + " VARCHAR)";
             database.execSQL(CREATE_TABLE7);

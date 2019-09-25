@@ -186,10 +186,12 @@ Zone Desc	Display only
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TableLayout
             android:layout_width="400dp"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
             android:layout_height="wrap_content"
             android:layout_above="@id/bottom3"
             android:layout_margin="10dp"

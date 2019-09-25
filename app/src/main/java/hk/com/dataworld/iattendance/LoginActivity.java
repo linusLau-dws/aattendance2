@@ -942,6 +942,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 mIsSupervisor = contentValues.getAsBoolean("isSupervisor");
                 Intent intent = null;
+                mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, false);
                 if (mIsSupervisor) {
                     intent = new Intent(LoginActivity.this, SupervisorActivity.class);
                     mPrefsEditor.putBoolean(PREF_HAS_SUPERVISOR_RIGHT, true);
