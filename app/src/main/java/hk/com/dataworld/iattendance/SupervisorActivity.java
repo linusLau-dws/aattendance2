@@ -44,13 +44,6 @@ import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.multi.ByQuadrantReader;
-import com.google.zxing.multi.GenericMultipleBarcodeReader;
-import com.google.zxing.qrcode.QRCodeReader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,6 +90,7 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.SV_StationCode;
 import static hk.com.dataworld.iattendance.SQLiteHelper.SV_ZoneCode;
 import static hk.com.dataworld.iattendance.Utility.extendBaseUrl;
 import static hk.com.dataworld.iattendance.Utility.getDayOfWeekSuffixedString;
+import static hk.com.dataworld.iattendance.Utility.getGenericErrorListener;
 import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
@@ -868,12 +862,7 @@ public class SupervisorActivity extends BaseActivity {
                                     public void onResponse(JSONObject response) {
                                         dismiss();
                                     }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Ignore
-                            }
-                        });
+                                }, getGenericErrorListener(SupervisorActivity.this, null));
                         mRequestQueue.add(req);
                     }
                 });
@@ -1196,43 +1185,6 @@ public class SupervisorActivity extends BaseActivity {
                 .show();
     }
 
-    private void readQrcode() {
-        QRCodeReader qrCodeReader = new QRCodeReader();
-        try {
-            qrCodeReader.decode(null);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (ChecksumException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readBarcode() {
-        MultiFormatReader multiReader = new MultiFormatReader();
-        GenericMultipleBarcodeReader byquadReader = new GenericMultipleBarcodeReader(new ByQuadrantReader(multiReader));
-//        Dictionary<DecodeHintType, object> hints = new Dictionary<DecodeHintType, object>();
-//        hints.Add(DecodeHintType.TRY_HARDER, true);
-//        List<BarcodeFormat> formats = new List<BarcodeFormat>();
-//        formats.Add(BarcodeFormat.All_1D);
-//        formats.Add(BarcodeFormat.QR_CODE);
-//        hints.Add(DecodeHintType.POSSIBLE_FORMATS, formats);
-//        byquadresults = byquadReader.decodeMultiple(binaryBitmap, hints);
-//        GenericMultipleBarcodeReader qrCodeReader = new GenericMultipleBarcodeReader();
-
-
-//        try {
-//            qrCodeReader.decode(null);
-//        } catch (NotFoundException e) {
-//            e.printStackTrace();
-//        } catch (ChecksumException e) {
-//            e.printStackTrace();
-//        } catch (FormatException e) {
-//            e.printStackTrace();
-//        }
-    }
-
     private void trySyncHistory() {
         try {
             JSONObject obj = new JSONObject();
@@ -1413,17 +1365,18 @@ public class SupervisorActivity extends BaseActivity {
                 boolean found = false;
                 for (int i =0; i<employmentsInSelectedZone.size(); i++) {
                     if (employmentsInSelectedZone.get(i).getAsString(SV_EmploymentNumber).equalsIgnoreCase(scanResult)) {
-                    dialogTableView.setSelectedRow(i);
-                    found = true;
+                        dialogTableView.setSelectedRow(i);
+                        found = true;
+                        break;
+                    }
+                    if (!found) {
+                        // Go to new staff
+                        relLayout2.setVisibility(View.GONE);
+                        relLayout3.setVisibility(View.VISIBLE);
+                        dialogEmploymentNumEdit.setText(scanResult);
+                    }
                     break;
                 }
-                if (!found) {
-                    // Go to new staff
-                    relLayout2.setVisibility(View.GONE);
-                    relLayout3.setVisibility(View.VISIBLE);
-                    dialogEmploymentNumEdit.setText(scanResult);
-                }
-                break;
         }
     }
 

@@ -848,7 +848,7 @@ public class LoginActivity extends BaseActivity {
                                             mPolicy_sym = tokContainer.getInt("policy_sym");
                                             mPolicy_upper = tokContainer.getInt("policy_upper");
                                             mPolicy_len = tokContainer.getInt("policy_len");
-                                            if (tokContainer.has("supervisor")) {
+                                            if (tokContainer.getInt("supervisor") == 1) {
                                                 mIsSupervisor = true;
                                             }
                                             Log.i("Success", tok);
