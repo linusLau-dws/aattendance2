@@ -145,6 +145,7 @@
     <string name="bluetooth_record_date_time">Date/Time</string>
     <string name="bluetooth_record_in_out">In/Out</string>
     <string name="bluetooth_record_status">Status</string>
+    <string name="bluetooth_gps_location">GPS Location</string>
     <string name="bluetooth_record_sync_time">Sync Date/Time</string>
 
     <string name="bluetooth_saved_receptor">Saved Receptors</string>

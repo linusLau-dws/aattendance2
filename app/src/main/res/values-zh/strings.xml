@@ -145,6 +145,7 @@
     <string name="bluetooth_record_date_time">日期/時間</string>
     <string name="bluetooth_record_in_out">入/出</string>
     <string name="bluetooth_record_status">同步狀態</string>
+    <string name="bluetooth_gps_location">GPS 位置</string>
     <string name="bluetooth_record_sync_time">同步時間</string>
 
     <string name="bluetooth_saved_receptor">已儲存的藍芽接收器</string>

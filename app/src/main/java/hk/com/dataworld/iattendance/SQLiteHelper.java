@@ -89,8 +89,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + BT_Status + " INT, "
                     + BT_Description + " VARCHAR, "
                     + BT_Name + " VARCHAR, "
-                    + BT_SyncTime + " VARCHAR, "
                     + BT_GPSLocation + " VARCHAR, "
+                    + BT_SyncTime + " VARCHAR, "
                     + BT_EmploymentNumber + " VARCHAR, "
                     + BT_AuthMethod + " VARCHAR)";
             database.execSQL(CREATE_TABLE7);
@@ -235,7 +235,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String employmentnumber, String authmethod) {
+    long insertLocalAttendance(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String gpslocation, String employmentnumber, String authmethod) {
         ContentValues values = new ContentValues();
         values.put(BT_DateTime, datetime);
         values.put(BT_InOut, inout);
@@ -247,10 +247,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(BT_Name, name);
         values.put(BT_EmploymentNumber, employmentnumber);
         values.put(BT_AuthMethod, authmethod);
+        values.put(BT_GPSLocation, gpslocation);
         return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
     }
 
-    long syncHistory(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String employmentnumber, String authmethod, String synctime) {
+    long syncHistory(String datetime, int inout, String address, String zonecode, String stationcode, String description, String name, String gpslocation, String employmentnumber, String authmethod, String synctime) {
         ContentValues values = new ContentValues();
         values.put(BT_DateTime, datetime);
         values.put(BT_InOut, inout);
@@ -262,6 +263,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(BT_Name, name);
         values.put(BT_EmploymentNumber, employmentnumber);
         values.put(BT_AuthMethod, authmethod);
+        values.put(BT_GPSLocation, gpslocation);
         values.put(BT_SyncTime, synctime);
         return myDB.insert(TABLE_BLUETOOTH_ATTENDANCE, null, values);
     }
@@ -326,9 +328,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             tmp.put(BT_Status, cur.getInt(5));
             tmp.put(BT_Description, cur.getString(6));
             tmp.put(BT_Name, cur.getString(7));
-            tmp.put(BT_SyncTime, cur.getString(8));
-            tmp.put(BT_EmploymentNumber, cur.getString(9));
-            tmp.put(BT_AuthMethod, cur.getString(10));
+            tmp.put(BT_GPSLocation, cur.getString(8));
+            tmp.put(BT_SyncTime, cur.getString(9));
+            tmp.put(BT_EmploymentNumber, cur.getString(10));
+            tmp.put(BT_AuthMethod, cur.getString(11));
             attendanceRecordContents.add(tmp);
         }
         cur.close();
@@ -350,9 +353,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             tmp.put(BT_Status, cur.getInt(5));
             tmp.put(BT_Description, cur.getString(6));
             tmp.put(BT_Name, cur.getString(7));
-            // No sync time: 8
-            tmp.put(BT_EmploymentNumber, cur.getString(9));
-            tmp.put(BT_AuthMethod, cur.getString(10));
+            tmp.put(BT_GPSLocation, cur.getString(8));
+            // No sync time: 9
+            tmp.put(BT_EmploymentNumber, cur.getString(10));
+            tmp.put(BT_AuthMethod, cur.getString(11));
             attendanceRecordContents.add(tmp);
         }
         cur.close();

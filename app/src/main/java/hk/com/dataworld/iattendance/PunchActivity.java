@@ -6,6 +6,7 @@
 package hk.com.dataworld.iattendance;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -17,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
 import android.os.Build;
@@ -47,12 +49,24 @@ import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.beardedhen.androidbootstrap.font.MaterialIcons;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApiRequest;
+import com.google.maps.PendingResult;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -79,6 +93,7 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Address;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_AuthMethod;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_DateTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Description;
+import static hk.com.dataworld.iattendance.SQLiteHelper.BT_GPSLocation;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_InOut;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Name;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_StationCode;
@@ -91,6 +106,101 @@ import static hk.com.dataworld.iattendance.Utility.getShortDayOfWeek;
 import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
 public class PunchActivity extends BaseActivity {
+
+
+    private GeoApiContext mGeoApiContext;
+    private String mGeocodedLocation = "";
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private Double mCurrentLatitude = null, mCurrentLongitude = null;
+    GoogleApiClient.OnConnectionFailedListener
+            mOnConnectionFailedListener = new GoogleApiClient.
+            OnConnectionFailedListener() {
+        @Override
+        public void onConnectionFailed(
+                @NonNull ConnectionResult connectionResult) {
+            Log.i("onConnected()", "SecurityException: "
+                    + connectionResult.toString());
+        }
+    };
+    LocationListener mLocationListener = new LocationListener() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onLocationChanged(Location location) {
+            if (location != null) {
+                /*
+                  Display the GPS update time and current location on screen.
+                 */
+                mCurrentLatitude = location.getLatitude();
+                mCurrentLongitude = location.getLongitude();
+                mGeoApiContext = new GeoApiContext.Builder().apiKey(getString(R.string.google_directions_key)).build();
+                GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(mGeoApiContext);
+                geocodingApiRequest.latlng(new LatLng(mCurrentLatitude, mCurrentLongitude));
+                geocodingApiRequest.language("zh-HK");
+                geocodingApiRequest.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
+                    @Override
+                    public void onResult(GeocodingResult[] result) {
+                        if (result.length > 0) {
+                            mGeocodedLocation = result[0].formattedAddress;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+
+                    }
+                });
+                try {
+                    geocodingApiRequest.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    GoogleApiClient.ConnectionCallbacks mConnectionCallbacks =
+            new GoogleApiClient.ConnectionCallbacks() {
+                @SuppressWarnings("deprecation")
+                @Override
+                public void onConnected(Bundle bundle) {
+                    Log.i("onConnected()", "start"); ///////////
+                    try {
+                        // Request location updates
+                        LocationServices.FusedLocationApi.
+                                requestLocationUpdates(
+                                        mGoogleApiClient, mLocationRequest,
+                                        mLocationListener);
+                    } catch (SecurityException e) {
+                        Log.i("onConnected()", "SecurityException:"
+                                + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                }
+            };
+
+    protected synchronized void setupLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(10000);
+        mLocationRequest.setPriority(
+                LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        // Set up Google API Client
+        mGoogleApiClient = new GoogleApiClient.Builder(PunchActivity.this)
+                .addConnectionCallbacks(mConnectionCallbacks)
+                .addOnConnectionFailedListener(
+                        mOnConnectionFailedListener)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
     private static final int REQUEST_CODE_GPS_PERMISSION = 102;
@@ -123,6 +233,7 @@ public class PunchActivity extends BaseActivity {
 
     private boolean mIsFound = false;
     private int mInOut = -1;
+
 
     private SharedPreferences mPrefs;
 
@@ -185,8 +296,13 @@ public class PunchActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dbHelper = new SQLiteHelper(this);
+
         mIsEnableRestartBehaviour = false;
         setContentView(R.layout.activity_bluetooth_new);
+
+        setupLocationRequest();
 
         BootstrapButton moreOptions = findViewById(R.id.more_options);
         moreOptions.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +351,6 @@ public class PunchActivity extends BaseActivity {
                                 android.Manifest.permission.NFC},
                         REQUEST_CODE_NFC_PERMISSION);
             } else {
-                dbHelper = new SQLiteHelper(this);
                 tryRefreshReceptors();
             }
         }
@@ -371,6 +486,7 @@ public class PunchActivity extends BaseActivity {
         headings.add(new CellModel(getString(R.string.bluetooth_description)));
         headings.add(new CellModel(getString(R.string.bluetooth_name)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_status)));
+        headings.add(new CellModel(getString(R.string.bluetooth_gps_location)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_sync_time)));
         headings.add(new CellModel(getString(R.string.method)));
 
@@ -415,6 +531,7 @@ public class PunchActivity extends BaseActivity {
             t3.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             TextView t4 = new TextView(PunchActivity.this);
+            tmp.add(new CellModel(c.getAsString(BT_GPSLocation)));
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
             t4.setText(c.getAsString(BT_SyncTime));
 
@@ -688,7 +805,7 @@ public class PunchActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), mGeocodedLocation, "", "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -748,7 +865,7 @@ public class PunchActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), mGeocodedLocation, "", "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -890,6 +1007,7 @@ public class PunchActivity extends BaseActivity {
                                             , ""
                                             , ""
                                             , ""
+                                            , ""
                                             , "Bluetooth"
                                             , obj.getString("CreateDate")
 //                                            , dbHelper.findDescriptionByZoneAndStation(obj.getString("ZoneCode"), obj.getString("StationCode"))
@@ -942,6 +1060,7 @@ public class PunchActivity extends BaseActivity {
                 innerObj.put("address", c.get(BT_Address));
                 innerObj.put("zonecode", c.get(BT_ZoneCode));
                 innerObj.put("stationcode", c.get(BT_StationCode));
+                innerObj.put("gpslocation", c.get(BT_GPSLocation));
                 innerObj.put("inout", c.get(BT_InOut));
                 innerObj.put("authmethod", c.get(BT_AuthMethod));
                 array.put(innerObj);

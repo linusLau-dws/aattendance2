@@ -1,6 +1,7 @@
 package hk.com.dataworld.iattendance;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
 import android.os.Build;
@@ -40,15 +42,28 @@ import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapDropDown;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApiRequest;
+import com.google.maps.PendingResult;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,6 +89,7 @@ import static hk.com.dataworld.iattendance.SQLiteHelper.BT_AuthMethod;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_DateTime;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Description;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_EmploymentNumber;
+import static hk.com.dataworld.iattendance.SQLiteHelper.BT_GPSLocation;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_InOut;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_Name;
 import static hk.com.dataworld.iattendance.SQLiteHelper.BT_StationCode;
@@ -96,6 +112,99 @@ import static hk.com.dataworld.iattendance.Utility.localizeMethod;
 
 public class SupervisorActivity extends BaseActivity {
 
+    private GeoApiContext mGeoApiContext;
+    private String mGeocodedLocation = "";
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private Double mCurrentLatitude = null, mCurrentLongitude = null;
+    GoogleApiClient.OnConnectionFailedListener
+            mOnConnectionFailedListener = new GoogleApiClient.
+            OnConnectionFailedListener() {
+        @Override
+        public void onConnectionFailed(
+                @NonNull ConnectionResult connectionResult) {
+            Log.i("onConnected()", "SecurityException: "
+                    + connectionResult.toString());
+        }
+    };
+    LocationListener mLocationListener = new LocationListener() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onLocationChanged(Location location) {
+            if (location != null) {
+                /*
+                  Display the GPS update time and current location on screen.
+                 */
+                mCurrentLatitude = location.getLatitude();
+                mCurrentLongitude = location.getLongitude();
+                mGeoApiContext = new GeoApiContext.Builder().apiKey(getString(R.string.google_directions_key)).build();
+                GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(mGeoApiContext);
+                geocodingApiRequest.latlng(new LatLng(mCurrentLatitude, mCurrentLongitude));
+                geocodingApiRequest.language("zh-HK");
+                geocodingApiRequest.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
+                    @Override
+                    public void onResult(GeocodingResult[] result) {
+                        if (result.length > 0) {
+                            mGeocodedLocation = result[0].formattedAddress;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+
+                    }
+                });
+                try {
+                    geocodingApiRequest.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    GoogleApiClient.ConnectionCallbacks mConnectionCallbacks =
+            new GoogleApiClient.ConnectionCallbacks() {
+                @SuppressWarnings("deprecation")
+                @Override
+                public void onConnected(Bundle bundle) {
+                    Log.i("onConnected()", "start"); ///////////
+                    try {
+                        // Request location updates
+                        LocationServices.FusedLocationApi.
+                                requestLocationUpdates(
+                                        mGoogleApiClient, mLocationRequest,
+                                        mLocationListener);
+                    } catch (SecurityException e) {
+                        Log.i("onConnected()", "SecurityException:"
+                                + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                }
+            };
+
+    protected synchronized void setupLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(10000);
+        mLocationRequest.setPriority(
+                LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        // Set up Google API Client
+        mGoogleApiClient = new GoogleApiClient.Builder(SupervisorActivity.this)
+                .addConnectionCallbacks(mConnectionCallbacks)
+                .addOnConnectionFailedListener(
+                        mOnConnectionFailedListener)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
     private static final int REQUEST_CODE_GPS_PERMISSION = 102;
     private static final int REQUEST_CODE_NFC_PERMISSION = 103;
@@ -201,13 +310,66 @@ public class SupervisorActivity extends BaseActivity {
         setContentView(R.layout.activity_bluetooth_new);
         mIsEnableRestartBehaviour = false;
 
+        setupLocationRequest();
+
         dbHelper = new SQLiteHelper(this);
 
         mInButton = findViewById(R.id.in_button);
         mOutButton = findViewById(R.id.out_button);
 
-        mInButton.setBackgroundColor(getResources().getColor(R.color.colorComplementary));
-        mOutButton.setBackgroundColor(getResources().getColor(R.color.colorComplementary));
+        BootstrapBrand supervisorBootstrapBrand = new BootstrapBrand() {
+            @Override
+            public int defaultFill(Context context) {
+                return context.getResources().getColor(R.color.colorComplementary);
+            }
+
+            @Override
+            public int defaultEdge(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int defaultTextColor(Context context) {
+                return context.getResources().getColor(android.R.color.white);
+            }
+
+            @Override
+            public int activeFill(Context context) {
+                return context.getResources().getColor(R.color.colorComplementary);
+            }
+
+            @Override
+            public int activeEdge(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int activeTextColor(Context context) {
+                return context.getResources().getColor(android.R.color.white);
+            }
+
+            @Override
+            public int disabledFill(Context context) {
+                return context.getResources().getColor(R.color.colorComplementaryLight);
+            }
+
+            @Override
+            public int disabledEdge(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int getColor() {
+                return 0;
+            }
+        };
+        mInButton.setBootstrapBrand(supervisorBootstrapBrand);
+        mOutButton.setBootstrapBrand(supervisorBootstrapBrand);
 
         BootstrapButton moreOptions = findViewById(R.id.more_options);
         moreOptions.setOnClickListener(new View.OnClickListener() {
@@ -388,6 +550,7 @@ public class SupervisorActivity extends BaseActivity {
         headings.add(new CellModel(getString(R.string.bluetooth_description)));
         headings.add(new CellModel(getString(R.string.bluetooth_name)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_status)));
+        headings.add(new CellModel(getString(R.string.bluetooth_gps_location)));
         headings.add(new CellModel(getString(R.string.bluetooth_record_sync_time)));
         headings.add(new CellModel(getString(R.string.employment_number)));
         headings.add(new CellModel(getString(R.string.method)));
@@ -437,6 +600,7 @@ public class SupervisorActivity extends BaseActivity {
             TextView t4 = new TextView(SupervisorActivity.this);
 
 
+            tmp.add(new CellModel(c.getAsString(BT_GPSLocation)));
             tmp.add(new CellModel(c.getAsString(BT_SyncTime) == null ? "" : c.getAsString(BT_SyncTime)));
 
 
@@ -600,7 +764,7 @@ public class SupervisorActivity extends BaseActivity {
 
                         List<CellModel> headings = new ArrayList<>();
                         headings.add(new CellModel(getString(R.string.HeadingEmploymentnumber)));
-                        headings.add(new CellModel(getString(R.string.HeadingHKID)));
+//                        headings.add(new CellModel(getString(R.string.HeadingHKID)));
                         headings.add(new CellModel(getString(R.string.HeadingName)));
                         headings.add(new CellModel(getString(R.string.HeadingContractcode)));
                         headings.add(new CellModel(getString(R.string.HeadingStationcode)));
@@ -612,7 +776,7 @@ public class SupervisorActivity extends BaseActivity {
                         for (ContentValues c : employmentsInSelectedZone) {
                             List<CellModel> tmp = new ArrayList<>();
                             tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
-                            tmp.add(new CellModel(c.getAsString(SV_HKID)));
+//                            tmp.add(new CellModel(c.getAsString(SV_HKID)));
                             tmp.add(new CellModel(c.getAsString(SV_Name)));
                             tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
                             tmp.add(new CellModel(c.getAsString(SV_StationCode)));
@@ -641,7 +805,7 @@ public class SupervisorActivity extends BaseActivity {
 
                 List<CellModel> headings = new ArrayList<>();
                 headings.add(new CellModel(getString(R.string.HeadingEmploymentnumber)));
-                headings.add(new CellModel(getString(R.string.HeadingHKID)));
+//                headings.add(new CellModel(getString(R.string.HeadingHKID)));
                 headings.add(new CellModel(getString(R.string.HeadingName)));
                 headings.add(new CellModel(getString(R.string.HeadingContractcode)));
                 headings.add(new CellModel(getString(R.string.HeadingStationcode)));
@@ -653,7 +817,7 @@ public class SupervisorActivity extends BaseActivity {
                 for (ContentValues c : employmentsInSelectedZone) {
                     List<CellModel> tmp = new ArrayList<>();
                     tmp.add(new CellModel(c.getAsString(SV_EmploymentNumber)));
-                    tmp.add(new CellModel(c.getAsString(SV_HKID)));
+//                    tmp.add(new CellModel(c.getAsString(SV_HKID)));
                     tmp.add(new CellModel(c.getAsString(SV_Name)));
                     tmp.add(new CellModel(c.getAsString(SV_ContractCode)));
                     tmp.add(new CellModel(c.getAsString(SV_StationCode)));
@@ -794,7 +958,7 @@ public class SupervisorActivity extends BaseActivity {
                     public void onClick(View view) {
 
                         dbHelper.openDB();
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, "--",  employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_ZoneCode), employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_StationCode), "--", "--", employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_EmploymentNumber), "Manual");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, "--",  employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_ZoneCode), employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_StationCode), "--", "--", "", employmentsInSelectedZone.get(selectedEmploymentOrder).getAsString(SV_EmploymentNumber), "Manual");
                         dbHelper.closeDB();
 
                         sync();
@@ -1017,7 +1181,7 @@ public class SupervisorActivity extends BaseActivity {
                     String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                     String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                     String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
+                    dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), mGeocodedLocation,"", "Bluetooth");
                     dbHelper.closeDB();
 
                     //Try sync
@@ -1077,7 +1241,7 @@ public class SupervisorActivity extends BaseActivity {
                         String zonecode = dbHelper.findZoneCodeByAddress(result.getDevice().getAddress());
                         String stationcode = dbHelper.findStationCodeByAddress(result.getDevice().getAddress());
                         String description = dbHelper.findDescriptionByAddress(result.getDevice().getAddress());
-                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), "", "Bluetooth");
+                        dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, result.getDevice().getAddress(), zonecode, stationcode, description, result.getDevice().getName(), mGeocodedLocation,"", "Bluetooth");
                         dbHelper.closeDB();
 
                         //Try sync
@@ -1217,6 +1381,7 @@ public class SupervisorActivity extends BaseActivity {
                                             , obj.getString("StationCode")
                                             , ""
                                             , ""
+                                            ,""
                                             , ""
                                             , "Bluetooth"
                                             , obj.getString("CreateDate")
@@ -1273,6 +1438,8 @@ public class SupervisorActivity extends BaseActivity {
                 innerObj.put("stationcode", c.get(BT_StationCode));
                 innerObj.put("inout", c.get(BT_InOut));
                 innerObj.put("authmethod", c.get(BT_AuthMethod));
+                innerObj.put("gpslocation", c.get(BT_GPSLocation));
+                innerObj.put("employmentnumber", c.get(BT_EmploymentNumber));
 
                 array.put(innerObj);
             }
@@ -1417,7 +1584,7 @@ public class SupervisorActivity extends BaseActivity {
                 String stationcode = dbHelper.findStationCodeByAddress(cardId);
                 String description = dbHelper.findDescriptionByAddress(cardId);
                 String name = dbHelper.findDescriptionByAddress(cardId); // TODO: Now same as description
-                dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, cardId, zonecode, stationcode, description, name, "", "NFC");
+                dbHelper.insertLocalAttendance(simpleDateFormat.format(Calendar.getInstance().getTime()), mInOut, cardId, zonecode, stationcode, description, name, mGeocodedLocation,"", "NFC");
                 dbHelper.closeDB();
 
                 //Try sync
