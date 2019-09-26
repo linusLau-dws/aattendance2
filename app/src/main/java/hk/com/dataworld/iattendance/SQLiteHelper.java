@@ -408,7 +408,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     ArrayList<String> getSupervisorMasterTableContract() {
         ArrayList<String> list = new ArrayList<>();
-        Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ContractCode + " FROM " + TABLE_SUPERVISOR_INFO, new String[]{});
+        Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ContractCode + " FROM " + TABLE_SUPERVISOR_INFO + " ORDER BY " + SV_ContractCode + " ASC", new String[]{});
 
         for (int x = 0; x < cur.getCount(); x++) {
             cur.moveToPosition(x);
@@ -421,7 +421,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     ArrayList<String> getSupervisorMasterTableZone(String contract) {
         ArrayList<String> list = new ArrayList<>();
         Cursor cur = myDB.rawQuery("SELECT DISTINCT " + SV_ZoneCode + " FROM " + TABLE_SUPERVISOR_INFO + " WHERE " + SV_ContractCode
-                + " = ?", new String[]{contract});
+                + " = ? ORDER BY " + SV_ZoneCode + " ASC", new String[]{contract});
 
         for (int x = 0; x < cur.getCount(); x++) {
             cur.moveToPosition(x);
